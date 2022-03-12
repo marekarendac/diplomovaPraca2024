@@ -1,0 +1,23 @@
+{
+  "name": "bakalarka",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "start": "lerna run start --stream"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marekarendac/bakalarka.git"
+  },
+  "author": "Marek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marekarendac/bakalarka/issues"
+  },
+  "homepage": "https://github.com/marekarendac/bakalarka#readme",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
