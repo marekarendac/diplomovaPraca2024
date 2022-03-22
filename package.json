@@ -19,5 +19,8 @@
   "homepage": "https://github.com/marekarendac/bakalarka#readme",
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "mysql": "^2.18.1"
   }
 }
