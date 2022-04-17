@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const sequelize = require('./models');
 const employeesRouter = require('./routes/employees');
 const carsRouter = require('./routes/cars');
+const equipmentRouter = require('./routes/equipment');
 const { populateDB } = require('./src/helpers');
+const { equipment } = require('./services');
 
 const app = express();
 const port = 2000;
@@ -24,6 +26,7 @@ app.use((req, _, next) => {
 
 app.use('/employees', employeesRouter);
 app.use('/cars', carsRouter);
+app.use('/equipment', equipmentRouter);
 
 // eslint-disable-next-line no-console
 sequelize.sync({ force: true }).then(() => {
