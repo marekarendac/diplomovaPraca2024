@@ -4,7 +4,19 @@ async function populateDB() {
   await sequelize.models.Employee.bulkCreate([
     {
       firstName: 'Jozef',
-      lastName: 'Gregus',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
     },
 
   ]);
@@ -29,9 +41,14 @@ async function populateDB() {
   ]);
   await sequelize.models.Equipment.bulkCreate([
     {
-      idNumber: '1',
+      idNumber: '100',
       brand: 'makita',
-      equipmentType: 'AKU',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
     },
 
   ]);

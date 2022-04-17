@@ -11,6 +11,7 @@ const employee = (sequelize) => {
       allowNull: false,
     },
   }, {
+    timestamps: false,
   });
 
   return employee;

@@ -27,6 +27,7 @@ const car = (sequelize) => {
       allowNull: false,
     },
   }, {
+    timestamps: false,
   });
 
   return car;

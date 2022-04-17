@@ -1,6 +1,7 @@
 const express = require('express');
 const pino = require('pino-http');
 const pinoPretty = require('pino-pretty');
+const bodyParser = require('body-parser');
 
 const sequelize = require('./models');
 const employeesRouter = require('./routes/employees');

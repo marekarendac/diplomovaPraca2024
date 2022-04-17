@@ -14,8 +14,8 @@ const equipment = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
   }, {
+    timestamps: false,
   });
 
   return equipment;
