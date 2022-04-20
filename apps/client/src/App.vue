@@ -1,11 +1,9 @@
-<script setup></script>
+<script setup>
+import Layout from "@/components/Layout.vue";
+</script>
 
 <template>
-  <div id="nav">
-    <router-link :to="{ name: 'Home' }">Home</router-link>
-    <router-link :to="{ name: 'Table' }">Table</router-link>
-    <router-view />
-  </div>
+  <body>
+    <Layout />
+  </body>
 </template>
-
-<style></style>
