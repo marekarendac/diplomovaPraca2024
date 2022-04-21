@@ -1,11 +1,5 @@
-<script setup>
-import Card from "@/components/Card.vue";
-</script>
+<script setup></script>
 
 <template>
-  <div>
-    <Card />
-    <Card />
-    <Card />
-  </div>
+  <div><NewLayout /></div>
 </template>
