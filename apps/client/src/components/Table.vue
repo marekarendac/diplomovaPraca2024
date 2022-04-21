@@ -1,12 +1,10 @@
 <template>
   <a-table :columns="columns" :data-source="data">
-    <template #action>
-      <a>Delete</a>
-    </template>
-    <template #expandedRowRender="{ record }">
-      <p style="margin: 0">
-        {{ record.description }}
-      </p>
+    <template #bodyCell="{ column }">
+      <template v-if="column.key === 'operation'">
+        <a style="padding-left: 5px">Edituj</a><br />
+        <a style="padding-left: 5px">Zmaž</a>
+      </template>
     </template>
   </a-table>
 </template>
@@ -14,57 +12,86 @@
 import { defineComponent } from "vue";
 const columns = [
   {
-    title: "Name",
+    title: "Full Name",
+    width: 100,
     dataIndex: "name",
     key: "name",
+    fixed: "left",
   },
   {
     title: "Age",
+    width: 100,
     dataIndex: "age",
     key: "age",
+    fixed: "left",
   },
   {
-    title: "Address",
+    title: "Column 1",
     dataIndex: "address",
-    key: "address",
+    key: "1",
+    width: 150,
+  },
+  {
+    title: "Column 2",
+    dataIndex: "address",
+    key: "2",
+    width: 150,
+  },
+  {
+    title: "Column 3",
+    dataIndex: "address",
+    key: "3",
+    width: 150,
+  },
+  {
+    title: "Column 4",
+    dataIndex: "address",
+    key: "4",
+    width: 150,
+  },
+  {
+    title: "Column 5",
+    dataIndex: "address",
+    key: "5",
+    width: 150,
+  },
+  {
+    title: "Column 6",
+    dataIndex: "address",
+    key: "6",
+    width: 150,
+  },
+  {
+    title: "Column 7",
+    dataIndex: "address",
+    key: "7",
+    width: 150,
+  },
+  {
+    title: "Column 8",
+    dataIndex: "address",
+    key: "8",
   },
   {
     title: "Action",
-    dataIndex: "",
-    key: "x",
-    slots: {
-      customRender: "action",
-    },
+    key: "operation",
+    fixed: "right",
+    width: 100,
   },
 ];
-const data = [
-  {
-    key: 1,
-    name: "John Brown",
+const data = [];
+
+for (let i = 0; i < 100; i++) {
+  data.push({
+    key: i,
+    name: `Edrward ${i}`,
     age: 32,
-    address: "New York No. 1 Lake Park",
-    description:
-      "My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.",
-  },
-  {
-    key: 2,
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    description:
-      "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.",
-  },
-  {
-    key: 3,
-    name: "Joe Black",
-    age: 32,
-    address: "Sidney No. 1 Lake Park",
-    description:
-      "My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.",
-  },
-];
+    address: `London Park no. ${i}`,
+  });
+}
+
 export default defineComponent({
-  setup() {
+  data() {
     return {
       data,
       columns,

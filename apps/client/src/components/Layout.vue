@@ -9,23 +9,12 @@ export default {
 </script>
 <template>
   <a-layout>
-    <a-layout-sider
-      ><h1
-        style="
-          color: white;
-          text-align: center;
-          padding: 1vh;
-          font-family: Arial, Helvetica, sans-serif;
-          font-size: 35px;
-          background-color: #1890ff;
-        "
-      >
-        Portál
-      </h1>
+    <a-layout-sider>
+      <p class="logo"><router-link to="/">Portál</router-link></p>
       <Navigation
     /></a-layout-sider>
     <a-layout>
-      <a-layout-header></a-layout-header>
+      <a-layout-header style="height: 9vh"></a-layout-header>
       <a-layout style="height: 100vh">
         <a-layout-content><router-view /></a-layout-content>
       </a-layout>
@@ -67,5 +56,14 @@ export default {
 }
 #components-layout-demo-basic > .code-box-demo > .ant-layout + .ant-layout {
   margin-top: 48px;
+}
+.logo {
+  color: white;
+  text-align: center;
+  padding: 1vh;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 35px;
+  background-color: #1890ff;
+  height: 9vh;
 }
 </style>

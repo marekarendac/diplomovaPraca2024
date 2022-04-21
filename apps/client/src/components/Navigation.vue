@@ -11,6 +11,14 @@
         <template #icon>
           <PieChartOutlined />
         </template>
+        <span
+          ><router-link to="/"
+            ><p style="color: white; margin: auto">Domov</p></router-link
+          ></span
+        >
+      </a-menu-item>
+      <a-menu-item key="13">
+        <template #icon><DesktopOutlined /> </template>
         <span>Zamestnanci</span>
       </a-menu-item>
       <a-menu-item key="2">

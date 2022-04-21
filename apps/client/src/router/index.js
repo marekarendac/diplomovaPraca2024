@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomeView.vue";
-import Table from "../views/TableView.vue";
+import Vehicles from "../views/TableVehicles.vue";
+import Employees from "../views/TableEmployees.vue";
+import Equipment from "../views/TableEquipment.vue";
 import Test from "../views/testView.vue";
 
 const router = createRouter({
@@ -12,9 +14,19 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: "/table",
-      name: "Table",
-      component: Table,
+      path: "/employees",
+      name: "Employees",
+      component: Employees,
+    },
+    {
+      path: "/equipment",
+      name: "Equipment",
+      component: Equipment,
+    },
+    {
+      path: "/vehicles",
+      name: "Vehicles",
+      component: Vehicles,
     },
     {
       path: "/test",
