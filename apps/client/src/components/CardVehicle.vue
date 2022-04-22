@@ -1,14 +1,10 @@
 <template>
-  <a-card hoverable>
+  <a-card hoverable style="width: 40vh">
     <template #cover>
-      <img style="padding: 50px" alt="example" src="truck.svg" />
+      <img style="padding: 20%" alt="example" src="truck.svg" />
     </template>
-    <template class="ant-card-actions" #actions>
-      <setting-outlined key="setting" />
-      <edit-outlined key="edit" />
-      <ellipsis-outlined key="ellipsis" />
-    </template>
-    <a-card-meta title="Vozidlá" description=""> </a-card-meta>
+
+    <p class="cardTitle">Vozidlá</p>
   </a-card>
 </template>
 <script>
@@ -26,3 +22,10 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+p.cardTitle {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+}
+</style>

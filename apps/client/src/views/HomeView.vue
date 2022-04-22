@@ -5,27 +5,21 @@ import CardVe from "@/components/CardVehicle.vue";
 </script>
 
 <template>
-  <div
+  <a-row
     style="
-      display: flex;
-      align-items: center;
       height: 100%;
-      justify-content: space-evenly;
+      justify-content: center;
+      align-items: center;
+      display: flex;
     "
-  >
-    <div>
-      <a-row style="height: 100%; justify-content: center; width: 200vh"
-        ><a-col :md="{ span: 4, offset: 1 }"
-          ><router-link to="/vehicles"><CardVe /></router-link
-        ></a-col>
-        <a-col :md="{ span: 4, offset: 1 }"
-          ><router-link to="/employees"><CardEm /></router-link
-        ></a-col>
-        <a-col :md="{ span: 4, offset: 1 }"
-          ><router-link to="/equipment"><CardEq /></router-link
-        ></a-col>
-        <router-view></router-view>
-      </a-row>
-    </div>
-  </div>
+    ><a-col style="padding-right: 5%"
+      ><router-link to="/vehicles"><CardVe /></router-link
+    ></a-col>
+    <a-col
+      ><router-link to="/employees"><CardEm /></router-link
+    ></a-col>
+    <a-col style="padding-left: 5%"
+      ><router-link to="/equipment"><CardEq /></router-link
+    ></a-col>
+  </a-row>
 </template>
