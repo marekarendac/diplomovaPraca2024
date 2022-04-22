@@ -26,6 +26,6 @@ export default defineComponent({
 p.cardTitle {
   text-align: center;
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 100;
 }
 </style>

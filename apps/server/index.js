@@ -16,6 +16,7 @@ const port = 2000;
 const logger = pino(pinoPretty());
 
 app.use(logger);
+app.use(bodyParser.json());
 
 app.use((req, _, next) => {
   req.context = {

@@ -9,11 +9,11 @@ export default {
 </script>
 <template>
   <a-layout style="height: 100vh">
-    <a-layout-header style="background-color: #1890ff"
-      ><p class="logo">Ezso</p></a-layout-header
-    >
+    <a-layout-header style="background-color: #1890ff">
+      <router-link class="logo" :to="{ path: '/' }">Ezso</router-link>
+    </a-layout-header>
 
-    <a-layout>
+    <a-layout has-sider>
       <a-layout-sider style="height: 100%"> <Navigation /></a-layout-sider>
 
       <a-layout>
@@ -66,5 +66,6 @@ export default {
   font-size: xx-large;
   background-color: #1890ff;
   font-weight: 300;
+  transition: none;
 }
 </style>

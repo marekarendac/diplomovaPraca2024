@@ -12,32 +12,42 @@
         <PieChartOutlined />
       </template>
       <span
-        ><router-link to="/"
-          ><p style="color: white; margin: auto">Domov</p></router-link
-        ></span
+        ><router-link to="/"><p class="navText">Domov</p></router-link></span
       >
     </a-menu-item>
     <a-menu-item key="13">
       <template #icon><DesktopOutlined /> </template>
-      <span>Zamestnanci</span>
+      <span
+        ><router-link to="/employees"
+          ><p class="navText">Zamestnanci</p></router-link
+        ></span
+      >
     </a-menu-item>
     <a-menu-item key="2">
       <template #icon>
         <DesktopOutlined />
       </template>
-      <span>Vozidlá</span>
+      <span
+        ><router-link to="/vehicles"
+          ><p class="navText">Vozidlá</p></router-link
+        ></span
+      >
     </a-menu-item>
     <a-menu-item key="3">
       <template #icon>
         <InboxOutlined />
       </template>
-      <span>Nástroje a materiál</span>
+      <span
+        ><router-link to="/equipment"
+          ><p class="navText">Nástroje</p></router-link
+        ></span
+      >
     </a-menu-item>
     <a-sub-menu key="sub1">
       <template #icon>
         <MailOutlined />
       </template>
-      <template #title>Odpracované hodiny</template>
+      <template #title><p class="navText">Dochádzka</p></template>
       <a-menu-item key="5">Option 5</a-menu-item>
       <a-menu-item key="6">Option 6</a-menu-item>
       <a-menu-item key="7">Option 7</a-menu-item>
@@ -47,7 +57,7 @@
       <template #icon>
         <AppstoreOutlined />
       </template>
-      <template #title>Navigation Two</template>
+      <template #title><p class="navText">Navigation Two</p></template>
       <a-menu-item key="9">Option 9</a-menu-item>
       <a-menu-item key="10">Option 10</a-menu-item>
       <a-sub-menu key="sub3" title="Submenu">
@@ -102,4 +112,10 @@ export default defineComponent({
   },
 });
 </script>
-<style></style>
+<style>
+.navText {
+  text-align: left;
+  color: white;
+  margin: auto;
+}
+</style>
