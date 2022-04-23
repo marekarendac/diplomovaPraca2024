@@ -2,19 +2,19 @@ const express = require('express');
 const pino = require('pino-http');
 const pinoPretty = require('pino-pretty');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const sequelize = require('./models');
 const employeesRouter = require('./routes/employees');
 const carsRouter = require('./routes/cars');
 const equipmentRouter = require('./routes/equipment');
 const { populateDB } = require('./src/helpers');
-const { equipment } = require('./services');
 
 const app = express();
 const port = 2000;
-
 const logger = pino(pinoPretty());
 
+app.use(cors());
 app.use(logger);
 app.use(bodyParser.json());
 

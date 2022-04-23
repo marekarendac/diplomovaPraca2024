@@ -3,7 +3,8 @@ import Home from "../views/HomeView.vue";
 import Vehicles from "../views/TableVehicles.vue";
 import Employees from "../views/TableEmployees.vue";
 import Equipment from "../views/TableEquipment.vue";
-import Test from "../views/SignupView.vue";
+import SignupView from "../views/SignupView.vue";
+import Test from "../views/Test.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), //createWebHistory -> aby sme mohli ist krok spat na predoslu pejdzu
@@ -27,6 +28,11 @@ const router = createRouter({
       path: "/vehicles",
       name: "Vehicles",
       component: Vehicles,
+    },
+    {
+      path: "/Signup",
+      name: "Signup",
+      component: SignupView,
     },
     {
       path: "/test",
