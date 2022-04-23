@@ -1,7 +1,7 @@
 <script setup>
-import CardEq from "@/components/CardEquipment.vue";
-import CardEm from "@/components/CardEmployee.vue";
-import CardVe from "@/components/CardVehicle.vue";
+import CardEq from "@/components/Cards/CardEquipment.vue";
+import CardEm from "@/components/Cards/CardEmployee.vue";
+import CardVe from "@/components/Cards/CardVehicle.vue";
 </script>
 
 <template>

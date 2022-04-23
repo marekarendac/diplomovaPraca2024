@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/HomeView.vue";
-import Vehicles from "../views/TableVehicles.vue";
-import Employees from "../views/TableEmployees.vue";
-import Equipment from "../views/TableEquipment.vue";
+import Vehicles from "../views/Tables/Vehicles.vue";
+import Employees from "../views/Tables/Employees.vue";
+import Equipment from "../views/Tables/Equipment.vue";
 import SignupView from "../views/SignupView.vue";
 import Test from "../views/Test.vue";
 
