@@ -1,6 +1,6 @@
 <template>
   <body>
-    <div><Layout> </Layout></div>
+    <div><Layout /></div>
   </body>
 </template>
 

@@ -9,14 +9,14 @@
   >
     <a-menu-item key="1">
       <template #icon>
-        <PieChartOutlined />
+        <HomeOutlined />
       </template>
       <span
         ><router-link to="/"><p class="navText">Domov</p></router-link></span
       >
     </a-menu-item>
     <a-menu-item key="13">
-      <template #icon><DesktopOutlined /> </template>
+      <template #icon><TeamOutlined /> </template>
       <span
         ><router-link to="/employees"
           ><p class="navText">Zamestnanci</p></router-link
@@ -25,7 +25,7 @@
     </a-menu-item>
     <a-menu-item key="2">
       <template #icon>
-        <DesktopOutlined />
+        <CarOutlined />
       </template>
       <span
         ><router-link to="/vehicles"
@@ -35,7 +35,7 @@
     </a-menu-item>
     <a-menu-item key="3">
       <template #icon>
-        <InboxOutlined />
+        <ToolOutlined />
       </template>
       <span
         ><router-link to="/equipment"
@@ -43,51 +43,34 @@
         ></span
       >
     </a-menu-item>
-
-    <!-- <a-sub-menu key="sub1">
+    <a-menu-item key="4">
       <template #icon>
-        <MailOutlined />
+        <ContactsOutlined />
       </template>
-      <template #title><p class="navText">Dochádzka</p></template>
-      <a-menu-item key="5">Option 5</a-menu-item>
-      <a-menu-item key="6">Option 6</a-menu-item>
-      <a-menu-item key="7">Option 7</a-menu-item>
-      <a-menu-item key="8">Option 8</a-menu-item>
-    </a-sub-menu>
-    <a-sub-menu key="sub2">
-      <template #icon>
-        <AppstoreOutlined />
-      </template>
-      <template #title><p class="navText">Navigation Two</p></template>
-      <a-menu-item key="9">Option 9</a-menu-item>
-      <a-menu-item key="10">Option 10</a-menu-item>
-      <a-sub-menu key="sub3" title="Submenu">
-        <a-menu-item key="11">Option 11</a-menu-item>
-        <a-menu-item key="12">Option 12</a-menu-item>
-      </a-sub-menu>
-    </a-sub-menu> -->
+      <span
+        ><router-link to="/signup"
+          ><p class="navText">Dochádzka</p></router-link
+        ></span
+      >
+    </a-menu-item>
   </a-menu>
 </template>
 <script>
-import { defineComponent, reactive, toRefs, watch } from "vue";
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  PieChartOutlined,
-  MailOutlined,
-  DesktopOutlined,
-  InboxOutlined,
-  AppstoreOutlined,
+  HomeOutlined,
+  TeamOutlined,
+  ToolOutlined,
+  CarOutlined,
+  ContactsOutlined,
 } from "@ant-design/icons-vue";
+import { defineComponent, reactive, toRefs, watch } from "vue";
 export default defineComponent({
   components: {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    PieChartOutlined,
-    MailOutlined,
-    DesktopOutlined,
-    InboxOutlined,
-    AppstoreOutlined,
+    HomeOutlined,
+    TeamOutlined,
+    CarOutlined,
+    ContactsOutlined,
+    ToolOutlined,
   },
 
   setup() {
