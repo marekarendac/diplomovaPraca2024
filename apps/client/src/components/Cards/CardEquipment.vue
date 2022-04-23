@@ -23,7 +23,7 @@ export default defineComponent({
 });
 </script>
 <style>
-p.cardTitle {
+.cardTitle {
   text-align: center;
   font-size: 30px;
   font-weight: 100;

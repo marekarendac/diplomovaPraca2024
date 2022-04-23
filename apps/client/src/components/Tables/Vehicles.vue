@@ -2,8 +2,8 @@
   <a-table :columns="columns" :data-source="postDetails">
     <template #bodyCell="{ column }">
       <template v-if="column.key === 'operation'">
-        <a style="padding-left: 5px">Edituj</a>
-        <a style="padding-left: 5px">Zmaž</a>
+        <a class="operationEdit">Edituj</a>
+        <a class="operationDelete">Zmaž</a>
       </template>
     </template>
   </a-table>
@@ -82,3 +82,24 @@ const columns = [
   },
 ];
 </script>
+<style>
+.operationDelete {
+  background: #db1111;
+  border: 0;
+  padding: 5px 5px;
+  margin-top: 10px;
+  color: white;
+  border-radius: 10px;
+  transition: none;
+}
+.operationEdit {
+  background: #3b8ce7;
+  border: 0;
+  padding: 5px 5px;
+  margin-top: 10px;
+  color: white;
+  border-radius: 10px;
+  transition: none;
+  margin-right: 1vh;
+}
+</style>

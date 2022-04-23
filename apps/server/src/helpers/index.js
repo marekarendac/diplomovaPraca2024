@@ -18,6 +18,54 @@ async function populateDB() {
       firstName: 'Maroš',
       lastName: 'Kramár',
     },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
 
   ]);
 

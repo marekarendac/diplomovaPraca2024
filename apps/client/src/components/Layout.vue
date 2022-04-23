@@ -18,7 +18,7 @@ export default {
 
       <a-layout>
         <a-layout-content><router-view /></a-layout-content>
-        <a-layout-footer style="background-color: white"></a-layout-footer>
+        <!-- <a-layout-footer style="background-color: white"></a-layout-footer> -->
       </a-layout>
     </a-layout>
   </a-layout>

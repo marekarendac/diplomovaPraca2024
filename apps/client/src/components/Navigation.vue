@@ -43,7 +43,8 @@
         ></span
       >
     </a-menu-item>
-    <a-sub-menu key="sub1">
+
+    <!-- <a-sub-menu key="sub1">
       <template #icon>
         <MailOutlined />
       </template>
@@ -64,7 +65,7 @@
         <a-menu-item key="11">Option 11</a-menu-item>
         <a-menu-item key="12">Option 12</a-menu-item>
       </a-sub-menu>
-    </a-sub-menu>
+    </a-sub-menu> -->
   </a-menu>
 </template>
 <script>
