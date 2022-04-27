@@ -66,6 +66,70 @@ async function populateDB() {
       firstName: 'Maroš',
       lastName: 'Kramár',
     },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
+    {
+      firstName: 'Jozef',
+      lastName: 'Greguš',
+    },
+    {
+      firstName: 'Peter',
+      lastName: 'Zborný',
+    },
+    {
+      firstName: 'Zinedine',
+      lastName: 'Zidane',
+    },
+    {
+      firstName: 'Maroš',
+      lastName: 'Kramár',
+    },
 
   ]);
 
@@ -97,6 +161,19 @@ async function populateDB() {
       idNumber: '200',
       brand: 'bosch',
       equipmentType: 'elektricka vrtacka',
+    },
+
+  ]);
+  await sequelize.models.Test.bulkCreate([
+    {
+      email: 'marek@example.sk',
+      password: 'zidan',
+
+    },
+    {
+      email: '2marek@example.com',
+      password: '1234',
+
     },
 
   ]);

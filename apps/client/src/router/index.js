@@ -3,7 +3,6 @@ import Home from "../views/HomeView.vue";
 import Vehicles from "../views/Tables/Vehicles.vue";
 import Employees from "../views/Tables/Employees.vue";
 import Equipment from "../views/Tables/Equipment.vue";
-import SignupView from "../views/SignupView.vue";
 import Test from "../views/Test.vue";
 import Login from "../views/Login.vue";
 
@@ -30,11 +29,7 @@ const router = createRouter({
       name: "Vehicles",
       component: Vehicles,
     },
-    {
-      path: "/Signup",
-      name: "Signup",
-      component: SignupView,
-    },
+
     {
       path: "/test",
       name: "Test",

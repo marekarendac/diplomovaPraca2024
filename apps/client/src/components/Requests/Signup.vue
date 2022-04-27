@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import Api from "@/services/Api.js";
 export default {
   data() {
     return {
@@ -29,8 +30,11 @@ export default {
         this.password.length > 5 ? "" : "Heslo musí mať viac ako 5 znakov";
 
       if (!this.passwordError) {
-        console.log("email:", this.email);
-        console.log("password:", this.password);
+        Api.post("/test", { email: this.email, password: this.password }).then(
+          (response) => {
+            console.log(response);
+          }
+        );
       }
     },
   },

@@ -8,6 +8,7 @@ const sequelize = require('./models');
 const employeesRouter = require('./routes/employees');
 const carsRouter = require('./routes/cars');
 const equipmentRouter = require('./routes/equipment');
+const testRouter = require('./routes/test');
 const { populateDB } = require('./src/helpers');
 
 const app = express();
@@ -28,6 +29,7 @@ app.use((req, _, next) => {
 app.use('/employees', employeesRouter);
 app.use('/cars', carsRouter);
 app.use('/equipment', equipmentRouter);
+app.use('/test', testRouter);
 
 // eslint-disable-next-line no-console
 sequelize.sync({ force: true }).then(() => {

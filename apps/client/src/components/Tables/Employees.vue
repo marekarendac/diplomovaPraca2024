@@ -1,5 +1,10 @@
 <template>
-  <a-table :columns="columns" :data-source="postDetails">
+  <a-table
+    :columns="columns"
+    :data-source="postDetails"
+    :pagination="{ pageSize: 10 }"
+    :scroll="{ x: 1000, y: 320 }"
+  >
     <template #bodyCell="{ column }">
       <template v-if="column.key === 'operation'">
         <a class="operationEdit">Edituj</a>

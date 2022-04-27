@@ -1,9 +1,9 @@
 <script setup>
-import PostDetails from "@/components/Requests/PostDetails.vue";
+import Signup from "@/components/Requests/Signup.vue";
 </script>
 
 <template>
-  <div style="text-align: center; margin-top: 250px"><PostDetails /></div>
+  <div style="text-align: center"><Signup /></div>
 </template>
 
 <style></style>
