@@ -5,16 +5,26 @@
     :pagination="{ pageSize: 10 }"
     :scroll="{ x: 1000, y: 320 }"
   >
-    <template #bodyCell="{ column }">
+    <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
-        <a class="operationEdit">Edituj</a>
-        <a class="operationDelete">Zmaž</a>
+        <button class="operationEdit">Edituj</button>
+        <a-button key="type" variant="primary" @click="showDeleteModal"
+          >Zmaž</a-button
+        >
+        <a-modal
+          v-model:visible="deleteModalVisible"
+          title="Title"
+          :confirm-loading="deleteInProgress"
+          @ok="handleDelete(record.id)"
+        >
+          {`Chces vymazat employee ${record.id} ?`}
+        </a-modal>
       </template>
     </template>
   </a-table>
 </template>
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import Api from "@/services/Api.js";
 export default defineComponent({
   data() {
@@ -23,6 +33,34 @@ export default defineComponent({
       columns,
     };
   },
+  setup() {
+    const deleteModalVisible = ref(false);
+    const deleteInProgress = ref(false);
+    const showDeleteModal = () => {
+      deleteModalVisible.value = true;
+    };
+    const handleDelete = (id) => {
+      // modalText.value = "The modal will be closed after two seconds";
+      deleteInProgress.value = true;
+      Api.delete("/employees/2")
+        .then((response) => {
+          deleteModalVisible.value = false;
+          deleteInProgress.value = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          deleteModalVisible.value = false;
+          deleteInProgress.value = false;
+        });
+    };
+    return {
+      showDeleteModal,
+      deleteModalVisible,
+      handleDelete,
+      deleteInProgress,
+    };
+  },
+
   mounted() {
     this.getPostDetails();
   },
