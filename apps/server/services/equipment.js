@@ -5,10 +5,16 @@ const findAll = async (req, res) => {
 };
 
 const destroy = async (req, res) => {
-  console.log('parameters => ', req.params);
-  const equipment = await req.context.models.Equipment.findAll();
+  const equipment = await req.context.models.Equipment.findByPk(req.params.id);
 
-  res.status(200).send(equipment);
+  if (!equipment) {
+    res.status(404).send(`equipment with ${req.params.id} not found`);
+
+    return;
+  }
+
+  await equipment.destroy();
+  res.status(200).send(`equipment with ${req.params.id} was destroyed`);
 };
 
 module.exports = { findAll, destroy };
