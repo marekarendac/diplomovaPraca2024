@@ -11,7 +11,7 @@ const test = (sequelize) => {
       allowNull: false,
     },
   }, {
-    timestamps: false,
+    timestamps: true,
   });
 
   return test;

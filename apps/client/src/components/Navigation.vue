@@ -48,7 +48,7 @@
         <ContactsOutlined />
       </template>
       <span
-        ><router-link to="/signup"
+        ><router-link to="/attendance"
           ><p class="navText">Dochádzka</p></router-link
         ></span
       >

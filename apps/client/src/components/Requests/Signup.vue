@@ -32,7 +32,7 @@ export default {
       if (!this.passwordError) {
         Api.post("/test", { email: this.email, password: this.password }).then(
           (response) => {
-            console.log(response);
+            console.log(response.data);
           }
         );
       }

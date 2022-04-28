@@ -4,7 +4,7 @@ import Vehicles from "../views/Tables/Vehicles.vue";
 import Employees from "../views/Tables/Employees.vue";
 import Equipment from "../views/Tables/Equipment.vue";
 import Test from "../views/Test.vue";
-import Login from "../views/Login.vue";
+import Attendance from "../views/Attendance.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), //createWebHistory -> aby sme mohli ist krok spat na predoslu pejdzu
@@ -36,9 +36,9 @@ const router = createRouter({
       component: Test,
     },
     {
-      path: "/login",
-      name: "Login",
-      component: Login,
+      path: "/attendance",
+      name: "Attendance",
+      component: Attendance,
     },
   ],
 });

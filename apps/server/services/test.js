@@ -1,9 +1,7 @@
-const register = [];
 const post = async (req, res) => {
-  const evidence = req.body;
-  console.log('zaznam bol pridany');
-  register.push(evidence);
-  res.send(evidence);
+  console.log('zaznam bol pridany', req.body);
+  const test = await req.context.models.Test.create(req.body);
+  res.status(200).send(test);
 };
 
 module.exports = { post };
