@@ -15,9 +15,9 @@
           v-model:visible="deleteModalVisible"
           title="Title"
           :confirm-loading="deleteInProgress"
-          @ok="handleDelete(record.id)"
+          @ok="handleDelete(key)"
         >
-          {`Chces vymazat employee ${record.id} ?`}
+          {{ `Chces vymazat employee ${record.id} ?` }}
         </a-modal>
       </template>
     </template>
@@ -40,9 +40,10 @@ export default defineComponent({
       deleteModalVisible.value = true;
     };
     const handleDelete = (id) => {
+      console.log(id);
       // modalText.value = "The modal will be closed after two seconds";
       deleteInProgress.value = true;
-      Api.delete("/employees/2")
+      Api.delete("/employees/id")
         .then((response) => {
           deleteModalVisible.value = false;
           deleteInProgress.value = false;
