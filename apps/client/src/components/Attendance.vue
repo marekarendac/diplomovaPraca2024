@@ -1,86 +1,44 @@
 <template>
-  <a-form
-    style="padding: 25px 25px 30px; margin-top: 5%; width: "
-    :model="formState"
-    v-bind="layout"
-    name="nest-messages"
-    :validate-messages="validateMessages"
-    @finish="onFinish"
-  >
-    <a-form-item
-      :name="['user', 'name']"
-      label="Name"
-      :rules="[{ required: true }]"
+  <div class="card">
+    <DataTable
+      :value="postDetails"
+      :scrollable="true"
+      scrollHeight="88vh"
+      :loading="loading"
     >
-      <a-input v-model:value="formState.user.name" />
-    </a-form-item>
-    <a-form-item
-      :name="['user', 'email']"
-      label="Email"
-      :rules="[{ type: 'email' }]"
-    >
-      <a-input v-model:value="formState.user.email" />
-    </a-form-item>
-    <a-form-item
-      :name="['user', 'age']"
-      label="Age"
-      :rules="[{ type: 'number', min: 0, max: 99 }]"
-    >
-      <a-input-number v-model:value="formState.user.age" />
-    </a-form-item>
-    <a-form-item :name="['user', 'website']" label="Website">
-      <a-input v-model:value="formState.user.website" />
-    </a-form-item>
-    <a-form-item :name="['user', 'introduction']" label="Introduction">
-      <a-textarea v-model:value="formState.user.introduction" />
-    </a-form-item>
-    <a-form-item :wrapper-col="{ ...layout.wrapperCol, offset: 8 }">
-      <a-button type="primary" html-type="submit">Submit</a-button>
-    </a-form-item>
-  </a-form>
+      <Column field="id" header="id" style="min-width: 200px"></Column>
+      <Column
+        field="idNumber"
+        header="idNumber"
+        style="min-width: 200px"
+      ></Column>
+      <Column field="brand" header="brand" style="min-width: 200px"></Column>
+      <Column
+        field="equipmentType"
+        header="equipmentType"
+        style="min-width: 200px"
+      ></Column>
+    </DataTable>
+  </div>
 </template>
+
 <script>
-import { defineComponent, reactive } from "vue";
-export default defineComponent({
-  setup() {
-    const layout = {
-      labelCol: {
-        span: 8,
-      },
-      wrapperCol: {
-        span: 16,
-      },
-    };
-    const validateMessages = {
-      required: "${label} is required!",
-      types: {
-        email: "${label} is not a valid email!",
-        number: "${label} is not a valid number!",
-      },
-      number: {
-        range: "${label} must be between ${min} and ${max}",
-      },
-    };
-    const formState = reactive({
-      user: {
-        name: "",
-        age: undefined,
-        email: "",
-        website: "",
-        introduction: "",
-      },
-    });
-
-    const onFinish = (values) => {
-      console.log("Success:", values);
-    };
-
+import Api from "@/services/Api.js";
+export default {
+  data() {
     return {
-      formState,
-      onFinish,
-      layout,
-      validateMessages,
+      postDetails: [],
     };
   },
-});
+  mounted() {
+    this.getPostDetails();
+  },
+  methods: {
+    getPostDetails() {
+      Api.get("/equipment").then((response) => {
+        this.postDetails = response.data;
+      });
+    },
+  },
+};
 </script>

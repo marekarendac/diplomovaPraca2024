@@ -162,6 +162,56 @@ async function populateDB() {
       brand: 'bosch',
       equipmentType: 'elektricka vrtacka',
     },
+    {
+      idNumber: '100',
+      brand: 'makita',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
+    },
+    {
+      idNumber: '100',
+      brand: 'makita',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
+    },
+    {
+      idNumber: '100',
+      brand: 'makita',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
+    },
+    {
+      idNumber: '100',
+      brand: 'makita',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
+    },
+    {
+      idNumber: '100',
+      brand: 'makita',
+      equipmentType: 'AKU vrtacka',
+    },
+    {
+      idNumber: '200',
+      brand: 'bosch',
+      equipmentType: 'elektricka vrtacka',
+    },
 
   ]);
   await sequelize.models.Test.bulkCreate([
