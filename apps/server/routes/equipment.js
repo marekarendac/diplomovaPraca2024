@@ -10,4 +10,6 @@ router.post('/', services.equipment.post);
 
 router.delete('/:id', services.equipment.destroy);
 
+router.put('/:id', services.equipment.update);
+
 module.exports = router;

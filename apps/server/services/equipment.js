@@ -22,4 +22,29 @@ const post = async (req, res) => {
   res.status(200).send(equipment);
 };
 
-module.exports = { findAll, destroy, post };
+const update = async (req, res) => {
+  const { id } = req.params;
+  req.context.models.Equipment.update(req.body, {
+    where: { id: req.body.id },
+  })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: 'Tutorial was updated successfully.',
+        });
+      } else {
+        res.send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`,
+        });
+      }
+    })
+    .catch((error) => {
+      res.status(500).send({
+        message: `Error updating Tutorial with id=${id}`,
+      });
+    });
+};
+
+module.exports = {
+  findAll, destroy, post, update,
+};

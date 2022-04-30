@@ -314,7 +314,7 @@ export default {
       this.postDetails = this.postDetails.filter(
         (val) => val.id !== this.product.id
       );
-      console.log(this.product.id);
+
       Api.delete("equipment/" + this.product.id);
       this.deleteProductDialog = false;
 
@@ -342,6 +342,7 @@ export default {
         if (this.product.id) {
           this.postDetails[this.findIndexById(this.product.id)] = this.product;
         }
+        console.log(this.product);
       }
       this.$toast.add({
         severity: "success",
