@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', services.equipment.findAll);
 
-router.post('/', async (res, _) => res.send('POST HTTP method on equipment resource'));
+router.post('/', services.equipment.post);
 
 router.delete('/:id', services.equipment.destroy);
 

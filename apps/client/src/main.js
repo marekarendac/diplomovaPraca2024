@@ -18,6 +18,8 @@ import PrimeFlex from "/node_modules/primeflex/primeflex.css";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
+import ToastService from "primevue/toastservice";
+import Toast from "primevue/toast";
 
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -40,5 +42,7 @@ app.component("PrimeFlex", PrimeFlex);
 app.component("InputText", InputText);
 app.component("Textarea", Textarea);
 app.component("InputNumber", InputNumber);
+app.component("ToastService", ToastService);
+app.component("Toast", Toast);
 
 app.mount("#app");
