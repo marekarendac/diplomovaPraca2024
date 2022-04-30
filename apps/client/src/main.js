@@ -11,6 +11,13 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ColumnGroup from "primevue/columngroup";
 import Row from "primevue/row";
+import Toolbar from "primevue/toolbar";
+import Button from "primevue/button";
+import FileUpload from "primevue/fileupload";
+import PrimeFlex from "/node_modules/primeflex/primeflex.css";
+import InputText from "primevue/inputtext";
+import Textarea from "primevue/textarea";
+import InputNumber from "primevue/inputnumber";
 
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -26,5 +33,12 @@ app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("ColumnGroup", ColumnGroup);
 app.component("Row", Row);
+app.component("Toolbar", Toolbar);
+app.component("Button", Button);
+app.component("FileUpload", FileUpload);
+app.component("PrimeFlex", PrimeFlex);
+app.component("InputText", InputText);
+app.component("Textarea", Textarea);
+app.component("InputNumber", InputNumber);
 
 app.mount("#app");
