@@ -17,7 +17,7 @@
         /> -->
       </template>
     </Toolbar>
-    <DataTable :value="postDetails" :scrollable="true" scrollHeight="73vh">
+    <DataTable :value="postDetails" :scrollable="true" scrollHeight="70vh">
       <Column field="id" header="id" style="min-width: 200px"></Column>
       <Column
         field="idNumber"
@@ -123,6 +123,7 @@ export default {
         equipmentType: this.equipmentType,
       }).then((response) => {
         console.log(response.data);
+        this.hideDialog();
       });
     },
 

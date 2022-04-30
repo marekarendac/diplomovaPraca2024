@@ -17,4 +17,10 @@ const destroy = async (req, res) => {
   res.status(200).send(`employee with ${req.params.id} was destroyed`);
 };
 
-module.exports = { findAll, destroy };
+const post = async (req, res) => {
+  console.log('zaznam bol pridany', req.body);
+  const employee = await req.context.models.Employee.create(req.body);
+  res.status(200).send(employee);
+};
+
+module.exports = { findAll, destroy, post };

@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', services.cars.findAll);
 
-router.post('/', async (res, _) => res.send('POST HTTP method on employee resource'));
+router.post('/', services.cars.post);
 
 router.delete('/:id', services.cars.destroy);
 

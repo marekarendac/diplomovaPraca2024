@@ -17,4 +17,10 @@ const destroy = async (req, res) => {
   res.status(200).send(`car with ${req.params.id} was destroyed`);
 };
 
-module.exports = { findAll, destroy };
+const post = async (req, res) => {
+  console.log('zaznam bol pridany', req.body);
+  const car = await req.context.models.Car.create(req.body);
+  res.status(200).send(car);
+};
+
+module.exports = { findAll, destroy, post };
