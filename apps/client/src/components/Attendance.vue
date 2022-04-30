@@ -275,6 +275,7 @@ export default {
     },
     deleteProduct() {
       this.products = this.products.filter((val) => val.id !== this.product.id);
+      console.log(this.product.id);
       this.deleteProductDialog = false;
       this.product = {};
       this.$toast.add({
