@@ -109,7 +109,6 @@
   </Dialog>
 
   <Dialog
-    @submit.prevent="handleEdit"
     v-model:visible="deleteProductDialog"
     :style="{ width: '450px' }"
     header="Zmazanie"
@@ -190,16 +189,16 @@
 
     <template #footer>
       <Button
-        label="Ukončiť"
+        label="Ukonči"
         icon="pi pi-times"
         class="p-button-text"
-        @click="hideDialog"
+        @click="hideDialogEdit"
       />
       <Button
-        label="Uložiť"
+        label="Edituj"
         icon="pi pi-check"
         class="p-button-text"
-        @click="handleSubmit"
+        @click="handleEdit"
       /><Toast />
     </template>
   </Dialog>
@@ -274,6 +273,11 @@ export default {
       this.submitted = false;
     },
 
+    hideDialogEdit() {
+      this.productDialogEdit = false;
+      this.submitted = false;
+    },
+
     handleSubmit() {
       this.submitted = true;
       if (
@@ -329,29 +333,34 @@ export default {
 
     handleEdit() {
       this.submitted = true;
+
       if (
         this.product.idNumber.trim() &&
         this.product.brand.trim() &&
         this.product.equipmentType.trim()
       ) {
-        Api.post("/equipment", {
-          idNumber: this.product.idNumber,
-          brand: this.product.brand,
-          equipmentType: this.product.equipmentType,
-        })
-          .then((response) => {
-            this.postDetails.push(response.data);
-            this.$toast.add({
-              severity: "success",
-              summary: "Successful",
-              detail: "Product Created",
-              life: 3000,
-            });
-          })
-          .catch((error) => console.log(error));
-
-        this.productDialogEdit = false;
+        if (this.product.id) {
+          this.postDetails[this.findIndexById(this.product.id)] = this.product;
+        }
       }
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Product Updated",
+        life: 3000,
+      });
+    },
+
+    findIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.postDetails.length; i++) {
+        if (this.postDetails[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+
+      return index;
     },
   },
 };
