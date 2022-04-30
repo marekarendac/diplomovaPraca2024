@@ -12,7 +12,6 @@ const destroy = async (req, res) => {
 
     return;
   }
-
   await equipment.destroy();
   res.status(200).send(`equipment with ${req.params.id} was destroyed`);
 };

@@ -26,10 +26,13 @@ import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 
 const app = createApp(App);
+
 app.use(Antd);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
+app.use(ToastService);
+
 app.component("Dialog", Dialog);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
@@ -42,7 +45,6 @@ app.component("PrimeFlex", PrimeFlex);
 app.component("InputText", InputText);
 app.component("Textarea", Textarea);
 app.component("InputNumber", InputNumber);
-app.component("ToastService", ToastService);
 app.component("Toast", Toast);
 
 app.mount("#app");
