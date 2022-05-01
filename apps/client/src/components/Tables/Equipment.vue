@@ -11,17 +11,30 @@
       </template>
     </Toolbar>
     <DataTable :value="postDetails" :scrollable="true" scrollHeight="70vh">
-      <Column field="id" header="ID" style="min-width: 1vh"></Column>
+      <Column
+        field="id"
+        header="ID"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
       <Column
         field="idNumber"
         header="Identifikačné číslo"
         style="min-width: 1vh"
+        :sortable="true"
+        ;
       ></Column>
-      <Column field="brand" header="Značka" style="min-width: 1vh"></Column>
+      <Column
+        field="brand"
+        header="Značka"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
       <Column
         field="equipmentType"
         header="Typ nástroja"
         style="min-width: 1vh"
+        :sortable="true"
       ></Column>
 
       <Column :exportable="false" style="min-width: 1vh">
@@ -342,13 +355,7 @@ export default {
           idNumber: this.product.idNumber,
           brand: this.product.brand,
           equipmentType: this.product.equipmentType,
-        })
-          .then((response) => {
-            this.postDetails.push(response.data);
-          })
-          .catch((error) => console.log(error));
-
-        console.log(this.product.id);
+        }).catch((error) => console.log(error));
       }
       this.$toast.add({
         severity: "success",
