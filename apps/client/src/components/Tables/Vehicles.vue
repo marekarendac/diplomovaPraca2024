@@ -27,25 +27,52 @@
       :scrollable="true"
       scrollHeight="70vh"
     >
-      <Column field="id" header="ID" style="min-width: 1vh"></Column>
+      <Column
+        field="id"
+        header="ID"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
 
-      <Column field="brand" header="Značka" style="min-width: 1vh"></Column>
+      <Column
+        field="brand"
+        header="Značka"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
 
-      <Column field="model" header="Model" style="min-width: 1vh"></Column
-      ><Column field="year" header="Rok výroby" style="min-width: 1vh"></Column>
-      <Column field="VIN" header="VIN číslo" style="min-width: 1vh"></Column>
+      <Column
+        field="model"
+        header="Model"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column
+      ><Column
+        field="year"
+        header="Rok výroby"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
+      <Column
+        field="VIN"
+        header="VIN číslo"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
       <Column
         field="lastService"
         header="Posledný servis"
         style="min-width: 1vh"
+        :sortable="true"
       ></Column>
       <Column
         field="tireSize"
         header="Veľkosť pneumatík"
         style="min-width: 1vh"
+        :sortable="true"
         ;
       ></Column>
-      <Column :exportable="false" style="min-width: 1vh">
+      <Column header="Operácia" :exportable="false" style="min-width: 1vh">
         <template #body="slotProps">
           <Button
             icon="pi pi-pencil"
@@ -132,7 +159,7 @@
         id="lastService"
         required="true"
         v-model="product.lastService"
-        dateFormat="yy.mm.dd"
+        dateFormat="yy-mm-dd"
         autofocus
         :class="{ 'p-invalid': submitted && !product.lastService }"
       />

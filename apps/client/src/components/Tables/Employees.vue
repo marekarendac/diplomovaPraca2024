@@ -27,20 +27,27 @@
       :scrollable="true"
       scrollHeight="70vh"
     >
-      <Column field="id" header="ID" style="min-width: 1vh"></Column>
+      <Column
+        field="id"
+        header="ID"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
       <Column
         field="firstName"
         header="Krstné meno"
         style="min-width: 1vh"
+        :sortable="true"
         ;
       ></Column>
       <Column
         field="lastName"
         header="Priezvisko"
         style="min-width: 1vh"
+        :sortable="true"
       ></Column>
 
-      <Column :exportable="false" style="min-width: 1vh">
+      <Column header="Operácia" :exportable="false" style="min-width: 1vh">
         <template #body="slotProps">
           <Button
             icon="pi pi-pencil"

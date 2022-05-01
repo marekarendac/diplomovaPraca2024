@@ -10,4 +10,6 @@ router.post('/', services.vehicles.post);
 
 router.delete('/:id', services.vehicles.destroy);
 
+router.put('/:id', services.vehicles.update);
+
 module.exports = router;

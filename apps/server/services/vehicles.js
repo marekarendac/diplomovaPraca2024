@@ -21,6 +21,7 @@ const post = async (req, res) => {
   const vehicle = await req.context.models.Vehicle.create(req.body);
   res.status(200).send(vehicle);
 };
+
 const update = async (req, res) => {
   const { id } = req.params;
   await req.context.models.Vehicle.update(req.body, {
