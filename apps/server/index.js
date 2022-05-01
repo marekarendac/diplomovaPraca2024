@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const sequelize = require('./models');
 const employeesRouter = require('./routes/employees');
-const carsRouter = require('./routes/cars');
+const vehiclesRouter = require('./routes/vehicles');
 const equipmentRouter = require('./routes/equipment');
 const testRouter = require('./routes/test');
 const { populateDB } = require('./src/helpers');
@@ -27,7 +27,7 @@ app.use((req, _, next) => {
 });
 
 app.use('/employees', employeesRouter);
-app.use('/cars', carsRouter);
+app.use('/vehicles', vehiclesRouter);
 app.use('/equipment', equipmentRouter);
 app.use('/test', testRouter);
 

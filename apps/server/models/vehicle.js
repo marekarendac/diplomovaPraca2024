@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
-const car = (sequelize) => {
-  const car = sequelize.define('Car', {
+const vehicle = (sequelize) => {
+  const vehicle = sequelize.define('Vehicle', {
     brand: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -30,7 +30,7 @@ const car = (sequelize) => {
     timestamps: false,
   });
 
-  return car;
+  return vehicle;
 };
 
-module.exports = car;
+module.exports = vehicle;

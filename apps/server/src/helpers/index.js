@@ -133,7 +133,7 @@ async function populateDB() {
 
   ]);
 
-  await sequelize.models.Car.bulkCreate([
+  await sequelize.models.Vehicle.bulkCreate([
     {
       brand: 'Mercedes',
       model: 'Vito',

@@ -10,4 +10,6 @@ router.post('/', services.employees.post);
 
 router.delete('/:id', services.employees.destroy);
 
+router.put('/:id', services.employees.update);
+
 module.exports = router;

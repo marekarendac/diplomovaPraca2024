@@ -4,10 +4,10 @@ const services = require('../services');
 
 const router = express.Router();
 
-router.get('/', services.cars.findAll);
+router.get('/', services.vehicles.findAll);
 
-router.post('/', services.cars.post);
+router.post('/', services.vehicles.post);
 
-router.delete('/:id', services.cars.destroy);
+router.delete('/:id', services.vehicles.destroy);
 
 module.exports = router;

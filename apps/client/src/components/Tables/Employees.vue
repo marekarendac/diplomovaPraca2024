@@ -1,64 +1,244 @@
 <template>
-  <a-table
-    :columns="columns"
-    :data-source="postDetails"
-    :pagination="{ pageSize: 10 }"
-    :scroll="{ x: 1000, y: 320 }"
-  >
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'operation'">
-        <button class="operationEdit">Edituj</button>
-        <a-button key="type" variant="primary" @click="showDeleteModal"
-          >Zmaž</a-button
-        >
-        <a-modal
-          v-model:visible="deleteModalVisible"
-          title="Title"
-          :confirm-loading="deleteInProgress"
-          @ok="handleDelete(key)"
-        >
-          {{ `Chces vymazat employee ${record.id} ?` }}
-        </a-modal>
+  <div class="card">
+    <Toolbar class="mb-4">
+      <template #start>
+        <Button
+          label="Nový"
+          icon="pi pi-plus"
+          class="p-button-success mr-2"
+          @click="openNew"
+        />
+        <!-- <div class="text-left">
+          <div class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <InputText
+              v-model="filters1['global']"
+              placeholder="Global Search"
+              size="100"
+            />
+          </div>
+        </div> -->
       </template>
+    </Toolbar>
+    <DataTable
+      :value="postDetails"
+      :filters="filters1"
+      filterMode="lenient"
+      :scrollable="true"
+      scrollHeight="70vh"
+    >
+      <Column field="id" header="ID" style="min-width: 1vh"></Column>
+      <Column
+        field="firstName"
+        header="Krstné meno"
+        style="min-width: 1vh"
+        ;
+      ></Column>
+      <Column
+        field="lastName"
+        header="Priezvisko"
+        style="min-width: 1vh"
+      ></Column>
+
+      <Column :exportable="false" style="min-width: 1vh">
+        <template #body="slotProps">
+          <Button
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            @click="editProduct(slotProps.data)"
+          />
+
+          <Button
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning"
+            @click="confirmDeleteProduct(slotProps.data)"
+          />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
+
+  <Dialog
+    @submit.prevent="handleSubmit"
+    v-model:visible="productDialog"
+    :style="{ width: '450px' }"
+    header="Pridaj nový záznam"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="firstName">Krstné meno</label>
+      <InputText
+        id="firstName"
+        required="true"
+        v-model.trim="product.firstName"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.firstName }"
+      />
+      <small class="p-error" v-if="submitted && !product.firstName"
+        >firstName is required.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="lastName">Priezvisko</label>
+      <InputText
+        id="lastName"
+        required="true"
+        v-model.trim="product.lastName"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.lastName }"
+      />
+      <small class="p-error" v-if="submitted && !product.lastName"
+        >Značka is required.</small
+      >
+    </div>
+
+    <template #footer>
+      <Button
+        label="Ukončiť"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="hideDialog"
+      />
+      <Button
+        label="Uložiť"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="handleSubmit"
+      /><Toast />
     </template>
-  </a-table>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="deleteProductDialog"
+    :style="{ width: '450px' }"
+    header="Zmazanie"
+    :modal="true"
+  >
+    <div class="confirmation-content">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <span v-if="product"
+        >Chceš zmazať záznam s ID číslom <b>{{ product.idNumber }}</b
+        >?</span
+      >
+    </div>
+    <template #footer>
+      <Button
+        label="Nie"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="deleteProductDialog = false"
+      />
+      <Button
+        label="Áno"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="deleteProduct"
+      />
+      <Toast />
+    </template>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="productDialogEdit"
+    :style="{ width: '450px' }"
+    header="Edituj vybraný záznam"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="firstName">Krstné meno</label>
+      <InputText
+        id="firstName"
+        required="true"
+        v-model="product.firstName"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.firstName }"
+      />
+      <small class="p-error" v-if="submitted && !product.firstName"
+        >firstName is required.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="lastName">Značka</label>
+      <InputText
+        id="lastName"
+        required="true"
+        v-model.trim="product.lastName"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.lastName }"
+      />
+      <small class="p-error" v-if="submitted && !product.lastName"
+        >lastName is required.</small
+      >
+    </div>
+
+    <template #footer>
+      <Button
+        label="Ukonči"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="hideDialogEdit"
+      />
+      <Button
+        label="Edituj"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="handleEdit"
+      /><Toast />
+    </template>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="deleteProductDialog"
+    :style="{ width: '450px' }"
+    header="Zmazanie"
+    :modal="true"
+  >
+    <div class="confirmation-content">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <span v-if="product"
+        >Chceš zmazať záznam s ID číslom <b>{{ product.idNumber }}</b
+        >?</span
+      >
+    </div>
+    <template #footer>
+      <Button
+        label="Nie"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="deleteProductDialog = false"
+      />
+      <Button
+        label="Áno"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="deleteProduct"
+      />
+      <Toast />
+    </template>
+  </Dialog>
 </template>
+
 <script>
-import { defineComponent, ref } from "vue";
 import Api from "@/services/Api.js";
-export default defineComponent({
+
+export default {
   data() {
     return {
-      postDetails: [],
-      columns,
-    };
-  },
-  setup() {
-    const deleteModalVisible = ref(false);
-    const deleteInProgress = ref(false);
-    const showDeleteModal = () => {
-      deleteModalVisible.value = true;
-    };
-    const handleDelete = (id) => {
-      console.log(id);
-      // modalText.value = "The modal will be closed after two seconds";
-      deleteInProgress.value = true;
-      Api.delete("/employees/id")
-        .then((response) => {
-          deleteModalVisible.value = false;
-          deleteInProgress.value = false;
-        })
-        .catch((error) => {
-          console.log(error);
-          deleteModalVisible.value = false;
-          deleteInProgress.value = false;
-        });
-    };
-    return {
-      showDeleteModal,
-      deleteModalVisible,
-      handleDelete,
-      deleteInProgress,
+      postDetails: null,
+      submitted: false,
+      productDialog: false,
+      productDialogEdit: false,
+      product: {},
+      deleteProductDialog: false,
+      idNumber: "",
+      brand: "",
+      equipmentType: "",
+      filters1: {},
+      filters2: {},
     };
   },
 
@@ -71,56 +251,147 @@ export default defineComponent({
         this.postDetails = response.data;
       });
     },
-  },
-});
-const columns = [
-  {
-    title: "ID",
-    width: 100,
-    dataIndex: "id",
-    key: "id",
-    fixed: "left",
-  },
-  {
-    title: "Meno",
-    width: 100,
-    dataIndex: "firstName",
-    key: "age",
-    fixed: "left",
-  },
-  {
-    title: "Priezvisko",
-    dataIndex: "lastName",
-    key: "1",
-    width: 150,
-  },
+    openNew() {
+      this.product = {};
+      this.submitted = false;
+      this.productDialog = true;
+    },
 
-  {
-    title: "Operácia",
-    key: "operation",
-    fixed: "right",
-    width: 100,
+    hideDialog() {
+      this.productDialog = false;
+      this.submitted = false;
+    },
+
+    hideDialogEdit() {
+      this.productDialogEdit = false;
+      this.submitted = false;
+    },
+
+    handleSubmit() {
+      this.submitted = true;
+      if (this.product.firstName.trim() && this.product.lastName.trim()) {
+        Api.post("/employees", {
+          firstName: this.product.firstName,
+          lastName: this.product.lastName,
+        })
+          .then((response) => {
+            this.postDetails.push(response.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: "Product Created",
+              life: 3000,
+            });
+          })
+          .catch((error) => console.log(error));
+
+        this.productDialog = false;
+      }
+    },
+
+    confirmDeleteProduct(product) {
+      this.product = product;
+      this.deleteProductDialog = true;
+    },
+
+    deleteProduct() {
+      this.postDetails = this.postDetails.filter(
+        (val) => val.id !== this.product.id
+      );
+
+      Api.delete("employees/" + this.product.id);
+      this.deleteProductDialog = false;
+
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Product Deleted",
+        life: 3000,
+      });
+    },
+
+    editProduct(product) {
+      this.product = { ...product };
+      this.productDialogEdit = true;
+    },
+
+    handleEdit() {
+      this.submitted = true;
+
+      if (this.product.firstName.trim() && this.product.lastName.trim());
+
+      {
+        if (this.product.id) {
+          this.postDetails[this.findIndexById(this.product.id)] = this.product;
+        }
+
+        Api.put("employees/" + this.product.id, {
+          id: this.product.id,
+          firstName: this.product.firstName,
+          lastName: this.product.lastName,
+        }).catch((error) => console.log(error));
+      }
+      this.$toast.add({
+        severity: "success",
+        summary: "Úspech",
+        detail: "Záznam bol editovaný!",
+        life: 3000,
+      });
+    },
+
+    findIndexById(id) {
+      let index = -1;
+      for (let i = 0; i < this.postDetails.length; i++) {
+        if (this.postDetails[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+
+      return index;
+    },
   },
-];
+};
 </script>
-<style>
-.operationDelete {
-  background: #db1111;
-  border: 0;
-  padding: 5px 5px;
-  margin-top: 10px;
-  color: white;
-  border-radius: 10px;
-  transition: none;
+
+<style lang="scss" scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media screen and (max-width: 960px) {
+    align-items: start;
+  }
 }
-.operationEdit {
-  background: #3b8ce7;
-  border: 0;
-  padding: 5px 5px;
-  margin-top: 10px;
-  color: white;
-  border-radius: 10px;
-  transition: none;
-  margin-right: 1vh;
+@media screen and (max-width: 960px) {
+  ::v-deep(.p-toolbar) {
+    flex-wrap: wrap;
+
+    .p-button {
+      margin-bottom: 0.25rem;
+    }
+  }
+  .confirmation-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media screen and (max-width: 960px) {
+    ::v-deep(.p-toolbar) {
+      flex-wrap: wrap;
+
+      .p-button {
+        margin-bottom: 0.25rem;
+      }
+    }
+  }
+  .p-filter-column {
+    .p-multiselect,
+    .p-dropdown,
+    .p-inputtext {
+      width: 100%;
+    }
+  }
 }
 </style>

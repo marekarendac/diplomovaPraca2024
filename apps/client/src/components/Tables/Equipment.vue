@@ -8,33 +8,37 @@
           class="p-button-success mr-2"
           @click="openNew"
         />
+        <!-- <div class="text-left">
+          <div class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <InputText
+              v-model="filters1['global']"
+              placeholder="Global Search"
+              size="100"
+            />
+          </div>
+        </div> -->
       </template>
     </Toolbar>
-    <DataTable :value="postDetails" :scrollable="true" scrollHeight="70vh">
-      <Column
-        field="id"
-        header="ID"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
+    <DataTable
+      :value="postDetails"
+      :filters="filters1"
+      filterMode="lenient"
+      :scrollable="true"
+      scrollHeight="70vh"
+    >
+      <Column field="id" header="ID" style="min-width: 1vh"></Column>
       <Column
         field="idNumber"
         header="Identifikačné číslo"
         style="min-width: 1vh"
-        :sortable="true"
         ;
       ></Column>
-      <Column
-        field="brand"
-        header="Značka"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
+      <Column field="brand" header="Značka" style="min-width: 1vh"></Column>
       <Column
         field="equipmentType"
         header="Typ nástroja"
         style="min-width: 1vh"
-        :sortable="true"
       ></Column>
 
       <Column :exportable="false" style="min-width: 1vh">
@@ -253,7 +257,7 @@ import Api from "@/services/Api.js";
 export default {
   data() {
     return {
-      postDetails: [],
+      postDetails: null,
       submitted: false,
       productDialog: false,
       productDialogEdit: false,
@@ -262,7 +266,8 @@ export default {
       idNumber: "",
       brand: "",
       equipmentType: "",
-      filters: {},
+      filters1: {},
+      filters2: {},
     };
   },
 
@@ -410,6 +415,13 @@ export default {
       .p-button {
         margin-bottom: 0.25rem;
       }
+    }
+  }
+  .p-filter-column {
+    .p-multiselect,
+    .p-dropdown,
+    .p-inputtext {
+      width: 100%;
     }
   }
 }

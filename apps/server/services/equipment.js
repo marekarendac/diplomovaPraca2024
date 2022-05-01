@@ -30,17 +30,17 @@ const update = async (req, res) => {
     .then((num) => {
       if (num == 1) {
         res.send({
-          message: 'Tutorial was updated successfully.',
+          message: 'Equipment was updated successfully.',
         });
       } else {
         res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`,
+          message: `Cannot update Equipment with id=${id}. Maybe Equipment was not found or req.body is empty!`,
         });
       }
     })
     .catch((error) => {
       res.status(500).send({
-        message: `Error updating Tutorial with id=${id}`,
+        message: `Error updating Equipment with id=${id}`,
       });
     });
 };

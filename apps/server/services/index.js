@@ -1,8 +1,8 @@
 const employees = require('./employees');
-const cars = require('./cars');
+const vehicles = require('./vehicles');
 const equipment = require('./equipment');
 const test = require('./test');
 
 module.exports = {
-  employees, cars, equipment, test,
+  employees, vehicles, equipment, test,
 };

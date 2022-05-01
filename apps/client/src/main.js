@@ -20,6 +20,7 @@ import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
+import Calendar from "primevue/calendar";
 
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -32,6 +33,8 @@ app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
+
+app.component("Calendar", Calendar);
 
 app.component("Dialog", Dialog);
 app.component("DataTable", DataTable);

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 const employee = require('./employee');
-const car = require('./car');
+const vehicle = require('./vehicle');
 const equipment = require('./equipment');
 const test = require('./test');
 
@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
   logging: false,
 });
 
-const models = [employee, car, equipment, test];
+const models = [employee, vehicle, equipment, test];
 
 models.forEach((model) => model(sequelize));
 
