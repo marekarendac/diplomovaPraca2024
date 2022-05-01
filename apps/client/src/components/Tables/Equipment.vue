@@ -150,7 +150,7 @@
       <InputText
         id="idNumber"
         required="true"
-        v-model.trim="product.idNumber"
+        v-model="product.idNumber"
         autofocus
         :class="{ 'p-invalid': submitted && !product.idNumber }"
       />
@@ -280,11 +280,7 @@ export default {
 
     handleSubmit() {
       this.submitted = true;
-      if (
-        this.product.idNumber.trim() &&
-        this.product.brand.trim() &&
-        this.product.equipmentType.trim()
-      ) {
+      if (this.product.brand.trim() && this.product.equipmentType.trim()) {
         Api.post("/equipment", {
           idNumber: this.product.idNumber,
           brand: this.product.brand,
@@ -334,20 +330,30 @@ export default {
     handleEdit() {
       this.submitted = true;
 
-      if (
-        this.product.idNumber.trim() &&
-        this.product.brand.trim() &&
-        this.product.equipmentType.trim()
-      ) {
+      if (this.product.brand.trim() && this.product.equipmentType.trim());
+
+      {
         if (this.product.id) {
           this.postDetails[this.findIndexById(this.product.id)] = this.product;
         }
-        console.log(this.product);
+
+        Api.put("equipment/" + this.product.id, {
+          id: this.product.id,
+          idNumber: this.product.idNumber,
+          brand: this.product.brand,
+          equipmentType: this.product.equipmentType,
+        })
+          .then((response) => {
+            this.postDetails.push(response.data);
+          })
+          .catch((error) => console.log(error));
+
+        console.log(this.product.id);
       }
       this.$toast.add({
         severity: "success",
-        summary: "Successful",
-        detail: "Product Updated",
+        summary: "Úspech",
+        detail: "Záznam bol editovaný!",
         life: 3000,
       });
     },
