@@ -24,7 +24,7 @@ const post = async (req, res) => {
 
 const update = async (req, res) => {
   const { id } = req.params;
-  req.context.models.Equipment.update(req.body, {
+  await req.context.models.Equipment.update(req.body, {
     where: { id: req.body.id },
   })
     .then((num) => {

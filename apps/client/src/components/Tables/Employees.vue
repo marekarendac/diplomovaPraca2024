@@ -8,16 +8,16 @@
           class="p-button-success mr-2"
           @click="openNew"
         />
-        <!-- <div class="text-left">
+        <div class="text-left">
           <div class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <InputText
-              v-model="filters1['global']"
+              v-model="filters1['global'].value"
               placeholder="Global Search"
               size="100"
             />
           </div>
-        </div> -->
+        </div>
       </template>
     </Toolbar>
     <DataTable
@@ -96,13 +96,13 @@
 
     <template #footer>
       <Button
-        label="Ukončiť"
+        label="Ukonči"
         icon="pi pi-times"
         class="p-button-text"
         @click="hideDialog"
       />
       <Button
-        label="Uložiť"
+        label="Pridaj"
         icon="pi pi-check"
         class="p-button-text"
         @click="handleSubmit"
@@ -113,13 +113,14 @@
   <Dialog
     v-model:visible="deleteProductDialog"
     :style="{ width: '450px' }"
-    header="Zmazanie"
+    header="Vymaž vybraný záznam"
     :modal="true"
   >
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <span v-if="product"
-        >Chceš zmazať záznam s ID číslom <b>{{ product.idNumber }}</b
+        >Chceš vymazať záznam
+        <b>{{ product.firstName + " " + product.lastName }}</b
         >?</span
       >
     </div>
@@ -157,7 +158,7 @@
         :class="{ 'p-invalid': submitted && !product.firstName }"
       />
       <small class="p-error" v-if="submitted && !product.firstName"
-        >firstName is required.</small
+        >Krstné meno je povinný údaj.</small
       >
     </div>
 
@@ -171,7 +172,7 @@
         :class="{ 'p-invalid': submitted && !product.lastName }"
       />
       <small class="p-error" v-if="submitted && !product.lastName"
-        >lastName is required.</small
+        >Priezvisko je povinný údaj.</small
       >
     </div>
 
@@ -190,41 +191,11 @@
       /><Toast />
     </template>
   </Dialog>
-
-  <Dialog
-    v-model:visible="deleteProductDialog"
-    :style="{ width: '450px' }"
-    header="Zmazanie"
-    :modal="true"
-  >
-    <div class="confirmation-content">
-      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-      <span v-if="product"
-        >Chceš zmazať záznam s ID číslom <b>{{ product.idNumber }}</b
-        >?</span
-      >
-    </div>
-    <template #footer>
-      <Button
-        label="Nie"
-        icon="pi pi-times"
-        class="p-button-text"
-        @click="deleteProductDialog = false"
-      />
-      <Button
-        label="Áno"
-        icon="pi pi-check"
-        class="p-button-text"
-        @click="deleteProduct"
-      />
-      <Toast />
-    </template>
-  </Dialog>
 </template>
 
 <script>
 import Api from "@/services/Api.js";
-
+import { FilterMatchMode } from "primevue/api";
 export default {
   data() {
     return {
@@ -238,8 +209,10 @@ export default {
       brand: "",
       equipmentType: "",
       filters1: {},
-      filters2: {},
     };
+  },
+  created() {
+    this.initFilters1();
   },
 
   mounted() {
@@ -278,14 +251,15 @@ export default {
             this.postDetails.push(response.data);
             this.$toast.add({
               severity: "success",
-              summary: "Successful",
-              detail: "Product Created",
-              life: 3000,
+              summary: "Úspech",
+              detail: "Záznam bol vytvorený!",
+              life: 1200,
             });
           })
           .catch((error) => console.log(error));
-
-        this.productDialog = false;
+        setTimeout(() => {
+          this.productDialog = false;
+        }, 1200);
       }
     },
 
@@ -300,14 +274,16 @@ export default {
       );
 
       Api.delete("employees/" + this.product.id);
-      this.deleteProductDialog = false;
 
       this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Product Deleted",
-        life: 3000,
+        severity: "warn",
+        summary: "Vymazané",
+        detail: "Záznam bol vymazaný.",
+        life: 1200,
       });
+      setTimeout(() => {
+        this.deleteProductDialog = false;
+      }, 1200);
     },
 
     editProduct(product) {
@@ -335,8 +311,11 @@ export default {
         severity: "success",
         summary: "Úspech",
         detail: "Záznam bol editovaný!",
-        life: 3000,
+        life: 1200,
       });
+      setTimeout(() => {
+        this.productDialogEdit = false;
+      }, 1200);
     },
 
     findIndexById(id) {
@@ -349,6 +328,11 @@ export default {
       }
 
       return index;
+    },
+    initFilters1() {
+      this.filters1 = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
     },
   },
 };

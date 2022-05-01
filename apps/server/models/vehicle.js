@@ -19,7 +19,7 @@ const vehicle = (sequelize) => {
       allowNull: false,
     },
     lastService: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     tireSize: {
