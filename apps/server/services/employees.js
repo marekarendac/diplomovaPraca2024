@@ -1,4 +1,11 @@
 const findAll = async (req, res) => {
+  if (req.query.position) {
+    const employees = await req.context.models.Employee.findAll({
+      where: { position: 'majster' },
+    });
+    res.status(200).send(employees);
+    return;
+  }
   const employees = await req.context.models.Employee.findAll();
 
   res.status(200).send(employees);

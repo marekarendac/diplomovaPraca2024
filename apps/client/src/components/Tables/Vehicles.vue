@@ -156,6 +156,7 @@
     <div class="field col">
       <label for="lastService">Posledný servis</label
       ><Calendar
+        showIcon
         id="lastService"
         required="true"
         v-model="product.lastService"

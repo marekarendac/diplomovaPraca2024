@@ -34,17 +34,38 @@
         :sortable="true"
       ></Column>
       <Column
-        field="firstName"
-        header="Krstné meno"
+        field="name"
+        header="Meno"
         style="min-width: 1vh"
         :sortable="true"
         ;
       ></Column>
       <Column
-        field="lastName"
-        header="Priezvisko"
+        field="position"
+        header="Pozícia"
         style="min-width: 1vh"
         :sortable="true"
+      ></Column>
+      <Column
+        field="phoneNumber"
+        header="Telefón"
+        style="min-width: 1vh"
+        :sortable="true"
+        ;
+      ></Column>
+      <Column
+        field="contractType"
+        header="Typ úväzku"
+        style="min-width: 1vh"
+        :sortable="true"
+        ;
+      ></Column
+      ><Column
+        field="healthExam"
+        header="Zdravotná prehliadka"
+        style="min-width: 1vh"
+        :sortable="true"
+        ;
       ></Column>
 
       <Column header="Operácia" :exportable="false" style="min-width: 1vh">
@@ -74,30 +95,74 @@
     class="p-fluid"
   >
     <div class="field col">
-      <label for="firstName">Krstné meno</label>
+      <label for="name">Meno</label>
       <InputText
-        id="firstName"
+        id="name"
         required="true"
-        v-model.trim="product.firstName"
+        v-model.trim="product.name"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.firstName }"
+        :class="{ 'p-invalid': submitted && !product.name }"
       />
-      <small class="p-error" v-if="submitted && !product.firstName"
-        >firstName is required.</small
+      <small class="p-error" v-if="submitted && !product.name"
+        >Meno je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
-      <label for="lastName">Priezvisko</label>
-      <InputText
-        id="lastName"
+      <label for="position">Pozícia</label>
+      <Dropdown
+        id="position"
         required="true"
-        v-model.trim="product.lastName"
+        :options="positions"
+        optionLabel="position"
+        v-model="product.position"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.lastName }"
+        :class="{ 'p-invalid': submitted && !product.position }"
       />
-      <small class="p-error" v-if="submitted && !product.lastName"
-        >Značka is required.</small
+      <small class="p-error" v-if="submitted && !product.position"
+        >Pozícia je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="phoneNumber">Telefón</label>
+      <InputText
+        id="phoneNumber"
+        required="true"
+        v-model.trim="product.phoneNumber"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+      />
+      <small class="p-error" v-if="submitted && !product.phoneNumber"
+        >Telefón je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="contractType">Typ úväzku</label>
+      <Dropdown
+        id="contractType"
+        required="true"
+        :options="contracts"
+        optionLabel="contractType"
+        v-model="product.contractType"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.contractType }"
+      />
+      <small class="p-error" v-if="submitted && !product.contractType"
+        >Typ úväzku je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="healthExam">Zdravotná prehliadka</label>
+      <Calendar
+        showIcon
+        id="healthExam"
+        required="true"
+        v-model="product.healthExam"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.healthExam }"
+      />
+      <small class="p-error" v-if="submitted && !product.healthExam"
+        >Zdravotná prehliadka je povinný údaj.</small
       >
     </div>
 
@@ -126,8 +191,7 @@
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <span v-if="product"
-        >Chceš vymazať záznam
-        <b>{{ product.firstName + " " + product.lastName }}</b
+        >Chceš vymazať záznam <b>{{ product.name }}</b
         >?</span
       >
     </div>
@@ -156,33 +220,76 @@
     class="p-fluid"
   >
     <div class="field col">
-      <label for="firstName">Krstné meno</label>
+      <label for="name">Meno</label>
       <InputText
-        id="firstName"
+        id="name"
         required="true"
-        v-model="product.firstName"
+        v-model.trim="product.name"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.firstName }"
+        :class="{ 'p-invalid': submitted && !product.name }"
       />
-      <small class="p-error" v-if="submitted && !product.firstName"
-        >Krstné meno je povinný údaj.</small
+      <small class="p-error" v-if="submitted && !product.name"
+        >Meno je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
-      <label for="lastName">Značka</label>
-      <InputText
-        id="lastName"
+      <label for="position">Pozícia</label>
+      <Dropdown
+        id="position"
         required="true"
-        v-model.trim="product.lastName"
+        :options="positions"
+        optionLabel="position"
+        v-model="product.position"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.lastName }"
+        :class="{ 'p-invalid': submitted && !product.position }"
       />
-      <small class="p-error" v-if="submitted && !product.lastName"
-        >Priezvisko je povinný údaj.</small
+      <small class="p-error" v-if="submitted && !product.position"
+        >Pozícia je povinný údaj.</small
       >
     </div>
-
+    <div class="field col">
+      <label for="phoneNumber">Telefón</label>
+      <InputText
+        id="phoneNumber"
+        required="true"
+        v-model.trim="product.phoneNumber"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+      />
+      <small class="p-error" v-if="submitted && !product.phoneNumber"
+        >Telefón je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="contractType">Typ úväzku</label>
+      <Dropdown
+        id="contractType"
+        required="true"
+        :options="contracts"
+        optionLabel="contractType"
+        v-model="product.contractType"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.contractType }"
+      />
+      <small class="p-error" v-if="submitted && !product.contractType"
+        >Typ úväzku je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="healthExam">Zdravotná prehliadka</label>
+      <Calendar
+        showIcon
+        id="healthExam"
+        required="true"
+        v-model="product.healthExam"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.healthExam }"
+      />
+      <small class="p-error" v-if="submitted && !product.healthExam"
+        >Zdravotná prehliadka je povinný údaj.</small
+      >
+    </div>
     <template #footer>
       <Button
         label="Ukonči"
@@ -212,10 +319,17 @@ export default {
       productDialogEdit: false,
       product: {},
       deleteProductDialog: false,
-      idNumber: "",
-      brand: "",
-      equipmentType: "",
+      name: "",
+      healthExam: "",
+      position: "",
+      contractType: "",
+      phoneNumber: "",
       filters1: {},
+      positions: [{ position: "Majster" }, { position: "Pracovník" }],
+      contracts: [
+        { contractType: "Zamestnanec" },
+        { contractType: "Živnostník" },
+      ],
     };
   },
   created() {
@@ -249,10 +363,13 @@ export default {
 
     handleSubmit() {
       this.submitted = true;
-      if (this.product.firstName.trim() && this.product.lastName.trim()) {
+      if (this.product.name.trim()) {
         Api.post("/employees", {
-          firstName: this.product.firstName,
-          lastName: this.product.lastName,
+          name: this.product.name,
+          position: this.product.position.position,
+          phoneNumber: this.product.phoneNumber,
+          contractType: this.product.contractType.contractType,
+          healthExam: this.product.healthExam,
         })
           .then((response) => {
             this.postDetails.push(response.data);
@@ -301,7 +418,7 @@ export default {
     handleEdit() {
       this.submitted = true;
 
-      if (this.product.firstName.trim() && this.product.lastName.trim());
+      if (this.product.name.trim());
 
       {
         if (this.product.id) {
@@ -310,9 +427,16 @@ export default {
 
         Api.put("employees/" + this.product.id, {
           id: this.product.id,
-          firstName: this.product.firstName,
-          lastName: this.product.lastName,
-        }).catch((error) => console.log(error));
+          name: this.product.name,
+          position: this.product.position.position,
+          phoneNumber: this.product.phoneNumber,
+          contractType: this.product.contractType.contractType,
+          healthExam: this.product.healthExam,
+        })
+          .then((response) => {
+            this.postDetails.push(response.data);
+          })
+          .catch((error) => console.log(error));
       }
       this.$toast.add({
         severity: "success",

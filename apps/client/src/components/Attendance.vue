@@ -17,8 +17,8 @@
                 >
                   Zodpovedný:<br />
                   <Dropdown
-                    v-model="sefino"
-                    :options="cities"
+                    v-model="responsible"
+                    :options="this.getResponsible"
                     optionLabel="name"
                     placeholder="Zadaj zodpovedného"
                     style="width: 100%"
@@ -43,9 +43,7 @@
                   Dátum:
                   <Calendar
                     showIcon
-                    v-model="value"
-                    :options="cities"
-                    optionLabel="name"
+                    v-model="date"
                     placeholder="Zadaj dátum"
                     style="width: 100%"
                   />
@@ -85,8 +83,8 @@
           >
             Zamestnanec:<br />
             <Dropdown
-              v-model="selectedCity"
-              :options="cities"
+              v-model="responsible"
+              :options="getResponsiblesDetails.name"
               optionLabel="name"
               placeholder="Meno zamestnanca"
               style="width: 100%"
@@ -237,18 +235,39 @@
   </div>
 </template>
 <script>
+import Api from "@/services/Api.js";
 export default {
   data() {
     return {
-      value: null,
+      date: null,
       workDescription: null,
       workHours1: 8,
       workHours2: 8,
       workHours3: 8,
       workHours4: 8,
       workHours5: 8,
-      sefino: {},
+      getResponsible: {},
+      getPlaces: {},
+      responsible: null,
     };
+  },
+  mounted() {
+    this.getResponsiblesDetails();
+  },
+  methods: {
+    async getResponsiblesDetails() {
+      await Api.get("/employees", { params: { position: "majster" } }).then(
+        (response) => {
+          this.getResponsible = response.data;
+        }
+      );
+    },
+  },
+  async getPlacesDetails() {
+    await Api.get("/workplace").then((response) => {
+      this.getPlaces = response.data;
+      console.log(response.data);
+    });
   },
 };
 </script>

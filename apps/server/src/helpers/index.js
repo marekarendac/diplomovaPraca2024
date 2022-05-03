@@ -3,134 +3,33 @@ const sequelize = require('../../models');
 async function populateDB() {
   await sequelize.models.Employee.bulkCreate([
     {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
+      name: 'Jozef Gabor',
+      position: 'majster',
+      phoneNumber: '0902369765',
+      contractType: 'Zamestnanec',
+      healthExam: '2022-01-17',
     },
     {
-      firstName: 'Peter',
-      lastName: 'Zborný',
+      name: 'Peter Zborný',
+      position: 'pracovník',
+      phoneNumber: '0902369765',
+      contractType: 'Živnostník',
+      healthExam: '2019-01-17',
     },
     {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
+      name: 'Steven Twisted',
+      position: 'majster',
+      phoneNumber: '0902369765',
+      contractType: 'Zamestnanec',
+      healthExam: '2017-01-17',
     },
     {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
+      name: 'František Bobor',
+      position: 'pracovník',
+      phoneNumber: '0902369765',
+      contractType: 'Živnostník',
+      healthExam: '2021-01-17',
     },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-    {
-      firstName: 'Jozef',
-      lastName: 'Greguš',
-    },
-    {
-      firstName: 'Peter',
-      lastName: 'Zborný',
-    },
-    {
-      firstName: 'Zinedine',
-      lastName: 'Zidane',
-    },
-    {
-      firstName: 'Maroš',
-      lastName: 'Kramár',
-    },
-
   ]);
 
   await sequelize.models.Vehicle.bulkCreate([
@@ -223,6 +122,72 @@ async function populateDB() {
     {
       email: '2marek@example.com',
       password: '1234',
+
+    },
+
+  ]);
+  await sequelize.models.WorkPlace.bulkCreate([
+    {
+      company: 'USS',
+      placeShort: 'A1',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'A2',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'A3',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'A4',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'B1',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'B2',
+
+    },
+    {
+      company: 'USS',
+      placeShort: 'B3',
+
+    },
+
+  ]);
+  await sequelize.models.Customer.bulkCreate([
+    {
+      name: 'USS',
+      phoneNumber: '090237574',
+
+    },
+    {
+      name: 'KAPTIVA',
+      phoneNumber: '090237574',
+
+    },
+    {
+      name: 'SURI',
+      phoneNumber: '090237574',
+
+    },
+    {
+      name: 'LEKE',
+      phoneNumber: '090237574',
+
+    },
+    {
+      name: 'PLeNO',
+      phoneNumber: '090237574',
 
     },
 

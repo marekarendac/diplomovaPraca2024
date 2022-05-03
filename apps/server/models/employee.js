@@ -2,12 +2,24 @@ const { DataTypes } = require('sequelize');
 
 const employee = (sequelize) => {
   const employee = sequelize.define('Employee', {
-    firstName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lastName: {
+    position: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    contractType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    healthExam: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
   }, {
