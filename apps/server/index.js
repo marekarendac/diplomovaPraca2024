@@ -33,7 +33,7 @@ app.use('/employees', employeesRouter);
 app.use('/vehicles', vehiclesRouter);
 app.use('/equipment', equipmentRouter);
 app.use('/test', testRouter);
-app.use('/workplace', workplacesRouter);
+app.use('/workPlaces', workplacesRouter);
 app.use('/customers', customersRouter);
 app.use('/workDays', workDaysRouter);
 

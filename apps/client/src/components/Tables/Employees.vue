@@ -417,33 +417,26 @@ export default {
 
     handleEdit() {
       this.submitted = true;
-
-      if (this.product.name.trim());
-
-      {
-        if (this.product.id) {
-          this.postDetails[this.findIndexById(this.product.id)] = this.product;
-        }
-
-        Api.put("employees/" + this.product.id, {
-          id: this.product.id,
-          name: this.product.name,
-          position: this.product.position.position,
-          phoneNumber: this.product.phoneNumber,
-          contractType: this.product.contractType.contractType,
-          healthExam: this.product.healthExam,
+      const updatedEmployee = {
+        ...this.product,
+        position: this.product.position.position,
+        contractType: this.product.contractType.contractType,
+      };
+      Api.put("employees/" + this.product.id, updatedEmployee)
+        .then(() => {
+          if (this.product.id) {
+            this.postDetails[this.findIndexById(this.product.id)] =
+              updatedEmployee;
+          }
+          this.$toast.add({
+            severity: "success",
+            summary: "Úspech",
+            detail: "Záznam bol editovaný!",
+            life: 1200,
+          });
         })
-          .then((response) => {
-            this.postDetails.push(response.data);
-          })
-          .catch((error) => console.log(error));
-      }
-      this.$toast.add({
-        severity: "success",
-        summary: "Úspech",
-        detail: "Záznam bol editovaný!",
-        life: 1200,
-      });
+        .catch((error) => console.log(error));
+
       setTimeout(() => {
         this.productDialogEdit = false;
       }, 1200);

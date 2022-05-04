@@ -4,7 +4,14 @@ async function populateDB() {
   await sequelize.models.Employee.bulkCreate([
     {
       name: 'Jozef Gabor',
-      position: 'majster',
+      position: 'Pracovník',
+      phoneNumber: '0902369765',
+      contractType: 'Zamestnanec',
+      healthExam: '2022-01-17',
+    },
+    {
+      name: 'Jozef Vasiľ',
+      position: 'Majster',
       phoneNumber: '0902369765',
       contractType: 'Zamestnanec',
       healthExam: '2022-01-17',
@@ -18,7 +25,7 @@ async function populateDB() {
     },
     {
       name: 'Steven Twisted',
-      position: 'majster',
+      position: 'Majster',
       phoneNumber: '0902369765',
       contractType: 'Zamestnanec',
       healthExam: '2017-01-17',

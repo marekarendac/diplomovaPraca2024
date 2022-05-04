@@ -17,8 +17,8 @@
                 >
                   Zodpovedný:<br />
                   <Dropdown
-                    v-model="responsible"
-                    :options="this.getResponsible"
+                    v-model="selectedResEmployee"
+                    :options="responsibleEmployees"
                     optionLabel="name"
                     placeholder="Zadaj zodpovedného"
                     style="width: 100%"
@@ -29,9 +29,9 @@
                 >
                   Miesto práce:
                   <Dropdown
-                    v-model="selectedCity"
-                    :options="cities"
-                    optionLabel="name"
+                    v-model="selectedPlace"
+                    :options="places"
+                    optionLabel="placeShort"
                     placeholder="Zadaj miesto práce"
                     style="width: 100%"
                   />
@@ -55,8 +55,8 @@
                 >
                   Objednávateľ: <br />
                   <Dropdown
-                    v-model="selectedCity"
-                    :options="cities"
+                    v-model="selectedCustomer"
+                    :options="customers"
                     optionLabel="name"
                     placeholder="Zadaj objednávateľa"
                     style="width: 50%"
@@ -83,8 +83,8 @@
           >
             Zamestnanec:<br />
             <Dropdown
-              v-model="responsible"
-              :options="getResponsiblesDetails.name"
+              v-model="selectedEmployee"
+              :options="employees"
               optionLabel="name"
               placeholder="Meno zamestnanca"
               style="width: 100%"
@@ -113,8 +113,8 @@
               style="margin-bottom: 5px"
             >
               <Dropdown
-                v-model="selectedCity"
-                :options="cities"
+                v-model="selectedEmployee1"
+                :options="employees"
                 optionLabel="name"
                 placeholder="Meno zamestnanca"
                 style="width: 100%"
@@ -142,8 +142,8 @@
                 style="margin-bottom: 5px"
               >
                 <Dropdown
-                  v-model="selectedCity"
-                  :options="cities"
+                  v-model="selectedEmployee2"
+                  :options="employees"
                   optionLabel="name"
                   placeholder="Meno zamestnanca"
                   style="width: 100%"
@@ -171,8 +171,8 @@
                   style="margin-bottom: 5px"
                 >
                   <Dropdown
-                    v-model="selectedCity"
-                    :options="cities"
+                    v-model="selectedEmployee3"
+                    :options="employees"
                     optionLabel="name"
                     placeholder="Meno zamestnanca"
                     style="width: 100%"
@@ -201,8 +201,8 @@
                   style="margin-bottom: 5px"
                 >
                   <Dropdown
-                    v-model="selectedCity"
-                    :options="cities"
+                    v-model="selectedEmployee4"
+                    :options="employees"
                     optionLabel="name"
                     placeholder="Meno zamestnanca"
                     style="width: 100%"
@@ -246,28 +246,49 @@ export default {
       workHours3: 8,
       workHours4: 8,
       workHours5: 8,
-      getResponsible: {},
-      getPlaces: {},
-      responsible: null,
+      responsibleEmployees: {},
+      places: {},
+      selectedResEmployee: null,
+      selectedPlace: null,
+      customers: null,
+      selectedCustomer: null,
+      employees: null,
+      selectedEmployee: null,
+      selectedEmployee1: null,
+      selectedEmployee2: null,
+      selectedEmployee3: null,
+      selectedEmployee4: null,
     };
   },
   mounted() {
+    this.getPlacesDetails();
     this.getResponsiblesDetails();
+    this.getCustomerDetails();
+    this.getAllEmployees();
   },
   methods: {
+    async getAllEmployees() {
+      await Api.get("/employees").then((response) => {
+        this.employees = response.data;
+      });
+    },
+    async getPlacesDetails() {
+      await Api.get("/workPlaces").then((response) => {
+        this.places = response.data;
+      });
+    },
     async getResponsiblesDetails() {
-      await Api.get("/employees", { params: { position: "majster" } }).then(
+      await Api.get("/employees", { params: { position: "Majster" } }).then(
         (response) => {
-          this.getResponsible = response.data;
+          this.responsibleEmployees = response.data;
         }
       );
     },
-  },
-  async getPlacesDetails() {
-    await Api.get("/workplace").then((response) => {
-      this.getPlaces = response.data;
-      console.log(response.data);
-    });
+    async getCustomerDetails() {
+      await Api.get("/customers").then((response) => {
+        this.customers = response.data;
+      });
+    },
   },
 };
 </script>
