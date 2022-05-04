@@ -83,7 +83,7 @@
           >
             Zamestnanec:<br />
             <Dropdown
-              v-model="selectedEmployee"
+              v-model="selectedEmployee1"
               :options="employees"
               optionLabel="name"
               placeholder="Meno zamestnanca"
@@ -113,7 +113,7 @@
               style="margin-bottom: 5px"
             >
               <Dropdown
-                v-model="selectedEmployee1"
+                v-model="selectedEmployee2"
                 :options="employees"
                 optionLabel="name"
                 placeholder="Meno zamestnanca"
@@ -142,7 +142,7 @@
                 style="margin-bottom: 5px"
               >
                 <Dropdown
-                  v-model="selectedEmployee2"
+                  v-model="selectedEmployee3"
                   :options="employees"
                   optionLabel="name"
                   placeholder="Meno zamestnanca"
@@ -171,7 +171,7 @@
                   style="margin-bottom: 5px"
                 >
                   <Dropdown
-                    v-model="selectedEmployee3"
+                    v-model="selectedEmployee4"
                     :options="employees"
                     optionLabel="name"
                     placeholder="Meno zamestnanca"
@@ -201,7 +201,7 @@
                   style="margin-bottom: 5px"
                 >
                   <Dropdown
-                    v-model="selectedEmployee4"
+                    v-model="selectedEmployee5"
                     :options="employees"
                     optionLabel="name"
                     placeholder="Meno zamestnanca"
@@ -222,7 +222,7 @@
                     style="margin-left: 10px"
                   /><Button
                     label="Ulož záznamy"
-                    @click="handleClick($event)"
+                    @click="handleSubmit()"
                     style="margin-left: 50px"
                   />
                 </div>
@@ -253,11 +253,11 @@ export default {
       customers: null,
       selectedCustomer: null,
       employees: null,
-      selectedEmployee: null,
       selectedEmployee1: null,
       selectedEmployee2: null,
       selectedEmployee3: null,
       selectedEmployee4: null,
+      selectedEmployee5: null,
     };
   },
   mounted() {
@@ -288,6 +288,61 @@ export default {
       await Api.get("/customers").then((response) => {
         this.customers = response.data;
       });
+    },
+
+    formatSingleEmployee(employee, hours) {
+      if (employee && hours) {
+        return {
+          id: employee.id,
+          hours,
+        };
+      }
+
+      return null;
+    },
+
+    formatEmployeeData() {
+      const formattedEmployee1 = this.formatSingleEmployee(
+        this.selectedEmployee1,
+        this.workHours1
+      );
+      const formattedEmployee2 = this.formatSingleEmployee(
+        this.selectedEmployee2,
+        this.workHours2
+      );
+      const formattedEmployee3 = this.formatSingleEmployee(
+        this.selectedEmployee3,
+        this.workHours3
+      );
+      const formattedEmployee4 = this.formatSingleEmployee(
+        this.selectedEmployee4,
+        this.workHours4
+      );
+      const formattedEmployee5 = this.formatSingleEmployee(
+        this.selectedEmployee5,
+        this.workHours5
+      );
+
+      return [
+        formattedEmployee1,
+        formattedEmployee2,
+        formattedEmployee3,
+        formattedEmployee4,
+        formattedEmployee5,
+      ].filter((employee) => employee);
+    },
+
+    async handleSubmit() {
+      const payload = {
+        date: this.date,
+        workPlaceId: this.selectedPlace.id,
+        responsibleId: this.selectedResEmployee.id,
+        customerId: this.selectedCustomer.id,
+        employees: this.formatEmployeeData(),
+      };
+      await Api.post("/attendances", payload)
+        .then((response) => console.log(response.data))
+        .catch((error) => console.log(error));
     },
   },
 };

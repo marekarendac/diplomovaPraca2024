@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.get('/', services.attendances.findAll);
 
+router.post('/', services.attendances.post);
+
 module.exports = router;

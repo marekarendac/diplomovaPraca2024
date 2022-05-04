@@ -1,22 +1,26 @@
 const { DataTypes } = require('sequelize');
 
 const equipment = (sequelize) => {
-  const equipment = sequelize.define('Equipment', {
-    idNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+  const equipment = sequelize.define(
+    'Equipment',
+    {
+      idNumber: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      brand: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      equipmentType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    brand: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    equipmentType: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  }, {
-    timestamps: false,
-  });
+    {
+      timestamps: false,
+    }
+  );
 
   return equipment;
 };

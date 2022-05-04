@@ -199,6 +199,13 @@ async function populateDB() {
     },
 
   ]);
+  await sequelize.models.Attendance.create(
+    {
+      date: '2022-01-17',
+
+    },
+
+  );
 }
 
 module.exports = { populateDB };

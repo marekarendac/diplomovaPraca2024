@@ -12,6 +12,7 @@ const testRouter = require('./routes/test');
 const customersRouter = require('./routes/customers');
 const workplacesRouter = require('./routes/workPlaces');
 const workDaysRouter = require('./routes/workDays');
+const attendancesRouter = require('./routes/attendances');
 const { populateDB } = require('./src/helpers');
 
 const app = express();
@@ -36,6 +37,7 @@ app.use('/test', testRouter);
 app.use('/workPlaces', workplacesRouter);
 app.use('/customers', customersRouter);
 app.use('/workDays', workDaysRouter);
+app.use('/attendances', attendancesRouter);
 
 // eslint-disable-next-line no-console
 sequelize.sync({ force: true }).then(() => {

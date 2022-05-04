@@ -1,27 +1,18 @@
 const { DataTypes } = require('sequelize');
 
 const attendance = (sequelize) => {
-  const attendance = sequelize.define('Attendance', {
-    placeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+  const attendance = sequelize.define(
+    'Attendance',
+    {
+      date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
     },
-    employeeId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+    {
+      timestamps: false,
     },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
-    hours: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-
-  }, {
-    timestamps: false,
-  });
+  );
 
   return attendance;
 };
