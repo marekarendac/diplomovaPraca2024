@@ -8,6 +8,10 @@ const attendance = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       timestamps: false,

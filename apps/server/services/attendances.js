@@ -8,7 +8,91 @@ const findAll = async (req, res) => {
     ],
   });
 
-  res.status(200).send(attendances);
+  const mappedAtendaces = attendances.reduce((acc, cur) => {
+    cur.employees.forEach((employee) =>
+      acc.push({
+        id: cur.id,
+        date: cur.date,
+        description: cur.description,
+        employeeName: employee.name,
+        employeeHours: employee.EmployeeAttendance.hours,
+      }),
+    );
+    return acc;
+  }, []);
+
+  res.status(200).send(mappedAtendaces);
+};
+
+const getMonthlyHours = async (req, res) => {
+  const employeeAttendances =
+    await req.context.models.EmployeeAttendance.findAll({
+      include: [{ model: req.context.models.Attendance }],
+    });
+
+  const monthlyAttendances = employeeAttendances.reduce((acc, cur) => {
+    const currentDate = new Date(cur.Attendance.date);
+
+    const formattedMonth = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }`;
+
+    const monthItemIdx = acc.findIndex((item) => item.month === formattedMonth);
+
+    if (monthItemIdx !== -1) {
+      acc[monthItemIdx].hours += cur.hours;
+
+      return acc;
+    }
+
+    acc.push({
+      month: formattedMonth,
+      hours: cur.hours,
+    });
+
+    return acc;
+  }, []);
+
+  res.status(200).send(monthlyAttendances);
+};
+
+const getMonthlyEmployeeHours = async (req, res) => {
+  const employeeAttendances =
+    await req.context.models.EmployeeAttendance.findAll({
+      include: [
+        { model: req.context.models.Attendance },
+        { model: req.context.models.Employee },
+      ],
+    });
+
+  const monthlyAttendances = employeeAttendances.reduce((acc, cur) => {
+    const currentDate = new Date(cur.Attendance.date);
+
+    const formattedMonth = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }`;
+
+    const monthItemIdx = acc.findIndex(
+      (item) =>
+        item.month === formattedMonth && item.employee === cur.Employee.name,
+    );
+
+    if (monthItemIdx !== -1) {
+      acc[monthItemIdx].hours += cur.hours;
+
+      return acc;
+    }
+
+    acc.push({
+      month: formattedMonth,
+      employee: cur.Employee.name,
+      hours: cur.hours,
+    });
+
+    return acc;
+  }, []);
+
+  res.status(200).send(monthlyAttendances);
 };
 
 const post = async (req, res) => {
@@ -17,6 +101,7 @@ const post = async (req, res) => {
     WorkPlaceId: req.body.workPlaceId,
     CustomerId: req.body.customerId,
     responsibleId: req.body.responsibleId,
+    description: req.body.description,
   });
 
   req.body.employees?.forEach(async (employee) => {
@@ -33,4 +118,6 @@ const post = async (req, res) => {
 module.exports = {
   findAll,
   post,
+  getMonthlyHours,
+  getMonthlyEmployeeHours,
 };

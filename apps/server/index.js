@@ -13,6 +13,7 @@ const customersRouter = require('./routes/customers');
 const workplacesRouter = require('./routes/workPlaces');
 const workDaysRouter = require('./routes/workDays');
 const attendancesRouter = require('./routes/attendances');
+const notificationsRouter = require('./routes/notifications');
 const { populateDB } = require('./src/helpers');
 
 const app = express();
@@ -38,10 +39,13 @@ app.use('/workPlaces', workplacesRouter);
 app.use('/customers', customersRouter);
 app.use('/workDays', workDaysRouter);
 app.use('/attendances', attendancesRouter);
+app.use('/notifications', notificationsRouter);
 
 // eslint-disable-next-line no-console
 sequelize.sync({ force: true }).then(() => {
-  app.listen(port, () => populateDB().then(() => {
-    console.log(`Example app listening on port ${port}!`);
-  }));
+  app.listen(port, () =>
+    populateDB().then(() => {
+      console.log(`Example app listening on port ${port}!`);
+    }),
+  );
 });

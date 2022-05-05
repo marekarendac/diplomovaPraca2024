@@ -5,6 +5,7 @@ import Employees from "../views/Tables/Employees.vue";
 import Equipment from "../views/Tables/Equipment.vue";
 import Test from "../views/Test.vue";
 import Attendance from "../views/Attendance.vue";
+import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), //createWebHistory -> aby sme mohli ist krok spat na predoslu pejdzu
@@ -39,6 +40,11 @@ const router = createRouter({
       path: "/attendance",
       name: "Attendance",
       component: Attendance,
+    },
+    {
+      path: "/report",
+      name: "AttendanceReport",
+      component: AttendanceReport,
     },
   ],
 });

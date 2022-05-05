@@ -42,6 +42,9 @@ const applyRelations = () => {
     through: EmployeeAttendance,
     as: 'employees',
   });
+
+  EmployeeAttendance.belongsTo(Attendance);
+  EmployeeAttendance.belongsTo(Employee);
 };
 
 const models = [

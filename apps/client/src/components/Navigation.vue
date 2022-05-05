@@ -53,6 +53,16 @@
         ></span
       >
     </a-menu-item>
+    <a-menu-item key="5">
+      <template #icon>
+        <AuditOutlined />
+      </template>
+      <span
+        ><router-link to="/report"
+          ><p class="navText">Prehľad dochádzky</p></router-link
+        ></span
+      >
+    </a-menu-item>
   </a-menu>
 </template>
 <script>
@@ -62,6 +72,7 @@ import {
   ToolOutlined,
   CarOutlined,
   ContactsOutlined,
+  AuditOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 export default defineComponent({
@@ -71,6 +82,7 @@ export default defineComponent({
     CarOutlined,
     ContactsOutlined,
     ToolOutlined,
+    AuditOutlined,
   },
 
   setup() {

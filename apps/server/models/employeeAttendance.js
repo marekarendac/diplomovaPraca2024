@@ -11,7 +11,7 @@ const employeeAttendance = (sequelize) => {
     },
     {
       timestamps: false,
-    }
+    },
   );
 
   return employeeAttendance;

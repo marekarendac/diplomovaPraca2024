@@ -45,7 +45,7 @@ async function populateDB() {
       model: 'Vito',
       VIN: '1234567890',
       year: '2010',
-      lastService: '2022-01-17',
+      lastService: '2020-01-17',
       tireSize: '215x55xR17',
     },
     {
@@ -118,94 +118,107 @@ async function populateDB() {
       brand: 'bosch',
       equipmentType: 'elektricka vrtacka',
     },
-
   ]);
   await sequelize.models.Test.bulkCreate([
     {
       email: 'marek@example.sk',
       password: 'zidan',
-
     },
     {
       email: '2marek@example.com',
       password: '1234',
-
     },
-
   ]);
   await sequelize.models.WorkPlace.bulkCreate([
     {
       company: 'USS',
       placeShort: 'A1',
-
     },
     {
       company: 'USS',
       placeShort: 'A2',
-
     },
     {
       company: 'USS',
       placeShort: 'A3',
-
     },
     {
       company: 'USS',
       placeShort: 'A4',
-
     },
     {
       company: 'USS',
       placeShort: 'B1',
-
     },
     {
       company: 'USS',
       placeShort: 'B2',
-
     },
     {
       company: 'USS',
       placeShort: 'B3',
-
     },
-
   ]);
   await sequelize.models.Customer.bulkCreate([
     {
       name: 'USS',
       phoneNumber: '090237574',
-
     },
     {
       name: 'KAPTIVA',
       phoneNumber: '090237574',
-
     },
     {
       name: 'SURI',
       phoneNumber: '090237574',
-
     },
     {
       name: 'LEKE',
       phoneNumber: '090237574',
-
     },
     {
       name: 'PLeNO',
       phoneNumber: '090237574',
-
     },
-
   ]);
-  await sequelize.models.Attendance.create(
+  await sequelize.models.Attendance.bulkCreate([
     {
       date: '2022-01-17',
-
+      description: 'praca na oprave vysokej pece',
+      responsibleId: 2,
+      WorkPlaceId: 4,
+      CustomerId: 3,
     },
-
-  );
+    {
+      date: '2022-01-02',
+      description: 'praca na oprave nizkej pece',
+      responsibleId: 1,
+      WorkPlaceId: 1,
+      CustomerId: 2,
+    },
+  ]);
+  await sequelize.models.EmployeeAttendance.bulkCreate([
+    {
+      hours: 20.0,
+      EmployeeId: 1,
+      AttendanceId: 2,
+    },
+    {
+      hours: 20.5,
+      EmployeeId: 3,
+      AttendanceId: 2,
+    },
+    {
+      hours: 8.0,
+      EmployeeId: 1,
+      AttendanceId: 1,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 4,
+      AttendanceId: 1,
+    },
+  ]);
 }
 
 module.exports = { populateDB };

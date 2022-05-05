@@ -339,10 +339,12 @@ export default {
         responsibleId: this.selectedResEmployee.id,
         customerId: this.selectedCustomer.id,
         employees: this.formatEmployeeData(),
+        description: this.workDescription,
       };
       await Api.post("/attendances", payload)
         .then((response) => console.log(response.data))
         .catch((error) => console.log(error));
+      location.reload();
     },
   },
 };
