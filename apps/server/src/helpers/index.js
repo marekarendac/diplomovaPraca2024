@@ -21,21 +21,28 @@ async function populateDB() {
       position: 'pracovník',
       phoneNumber: '0902369765',
       contractType: 'Živnostník',
-      healthExam: '2019-01-17',
+      healthExam: '2022-01-17',
     },
     {
       name: 'Steven Twisted',
       position: 'Majster',
       phoneNumber: '0902369765',
       contractType: 'Zamestnanec',
-      healthExam: '2017-01-17',
+      healthExam: '2022-01-17',
     },
     {
       name: 'František Bobor',
       position: 'pracovník',
       phoneNumber: '0902369765',
       contractType: 'Živnostník',
-      healthExam: '2021-01-17',
+      healthExam: '2022-01-17',
+    },
+    {
+      name: 'Peter Kováč',
+      position: 'pracovník',
+      phoneNumber: '0902369765',
+      contractType: 'Živnostník',
+      healthExam: '2022-01-05',
     },
   ]);
 
@@ -46,6 +53,14 @@ async function populateDB() {
       VIN: '1234567890',
       year: '2010',
       lastService: '2020-01-17',
+      tireSize: '215x55xR17',
+    },
+    {
+      brand: 'Skoda',
+      model: 'Octavia',
+      VIN: '1234567890',
+      year: '2010',
+      lastService: '2015-01-17',
       tireSize: '215x55xR17',
     },
     {
@@ -196,6 +211,13 @@ async function populateDB() {
       WorkPlaceId: 1,
       CustomerId: 2,
     },
+    {
+      date: '2022-01-10',
+      description: 'praca na oprave vysokej pece',
+      responsibleId: 1,
+      WorkPlaceId: 2,
+      CustomerId: 2,
+    },
   ]);
   await sequelize.models.EmployeeAttendance.bulkCreate([
     {
@@ -217,6 +239,36 @@ async function populateDB() {
       hours: 5.5,
       EmployeeId: 4,
       AttendanceId: 1,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 1,
+      AttendanceId: 3,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 2,
+      AttendanceId: 3,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 3,
+      AttendanceId: 3,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 4,
+      AttendanceId: 3,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 5,
+      AttendanceId: 3,
+    },
+    {
+      hours: 5.5,
+      EmployeeId: 6,
+      AttendanceId: 3,
     },
   ]);
 }

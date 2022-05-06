@@ -23,6 +23,8 @@ import Toast from "primevue/toast";
 import Calendar from "primevue/calendar";
 import Dropdown from "primevue/dropdown";
 import AutoComplete from "primevue/autocomplete";
+import Tag from "primevue/tag";
+import Card from "primevue/card";
 
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
@@ -36,6 +38,8 @@ app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
 
+app.component("Card", Card);
+app.component("Tag", Tag);
 app.component("AutoComplete", AutoComplete);
 app.component("Calendar", Calendar);
 app.component("Dropdown", Dropdown);

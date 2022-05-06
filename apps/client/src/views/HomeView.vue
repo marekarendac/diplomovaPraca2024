@@ -12,13 +12,47 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
       align-items: center;
       display: flex;
     "
-    ><a-col style="padding-right: 5%"
-      ><router-link to="/vehicles"><CardVe /></router-link
+    ><a-col style="padding-right: 5%">
+      <Tag
+        v-if="this.vehiclesErrors"
+        style="width: 100%"
+        severity="warning"
+        value="POZOR"
+        icon="pi pi-exclamation-triangle"
+      ></Tag>
+      <Tag
+        v-else
+        style="width: 100%"
+        severity="success"
+        value="OK"
+        icon="pi pi-check-square"
+      ></Tag>
+      <router-link to="/vehicles"><CardVe /></router-link
     ></a-col>
-    <a-col
-      ><router-link to="/employees"><CardEm /></router-link
+    <a-col>
+      <Tag
+        v-if="this.employeesErrors"
+        style="width: 100%"
+        severity="warning"
+        value="POZOR"
+        icon="pi pi-exclamation-triangle"
+      ></Tag>
+      <Tag
+        v-else
+        style="width: 100%"
+        severity="success"
+        value="OK"
+        icon="pi pi-check-square"
+      ></Tag>
+      <router-link to="/employees"><CardEm /></router-link
     ></a-col>
     <a-col style="padding-left: 5%"
+      ><Tag
+        style="width: 100%"
+        severity="success"
+        value="OK"
+        icon="pi pi-check-square"
+      ></Tag
       ><router-link to="/equipment"><CardEq /></router-link
     ></a-col>
   </a-row>
@@ -30,6 +64,8 @@ export default {
   data() {
     return {
       postDetails: null,
+      vehiclesErrors: false,
+      employeesErrors: false,
     };
   },
 
@@ -39,9 +75,8 @@ export default {
   methods: {
     getPostDetails() {
       Api.get("/notifications").then((response) => {
-        this.postDetails = response.data;
-
-        console.log(response.data);
+        this.vehiclesErrors = response.data.vehiclesErrors;
+        this.employeesErrors = response.data.employeesErrors;
       });
     },
   },
