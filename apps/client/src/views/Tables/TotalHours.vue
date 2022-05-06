@@ -1,5 +1,5 @@
 <script setup>
-import AttendanceReport from "@/components/Tables/AttendanceReport.vue";
+import AttendanceReport from "@/components/Tables/totalAttendance.vue";
 import Total from "@/components/Cards/Total.vue";
 </script>
 <template>
@@ -10,7 +10,7 @@ import Total from "@/components/Cards/Total.vue";
       </div>
       <div class="card">
         <div>
-          <div class="inline-block text-left w-20rem ml-4 mr-4 mt-4">
+          <div class="inline-block text-left w-20rem ml-4">
             <Total />
           </div>
         </div>

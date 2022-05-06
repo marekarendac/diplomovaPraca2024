@@ -7,12 +7,21 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="2022-mesiac"
-              size="25"
+              placeholder="Global Search"
+              size="50"
             />
           </div>
         </div>
+        <Button
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Clear"
+          class="p-button-outlined ml-2"
+          @click="clearFilter1()"
+        />
       </template>
+      <template #empty> No customers found. </template>
+      <template #loading> Loading customers data. Please wait. </template>
     </Toolbar>
 
     <DataTable
@@ -29,6 +38,13 @@
         header="Mesiac"
         style="min-width: 5%"
         :sortable="true"
+      ></Column
+      ><Column
+        field="employee"
+        header="Meno"
+        style="min-width: 20%"
+        :sortable="true"
+        ;
       ></Column>
       <Column
         field="hours"
@@ -62,16 +78,24 @@ export default {
   },
   methods: {
     getPostDetails() {
-      Api.get("/attendances/months").then((response) => {
+      Api.get("/attendances/months/employees").then((response) => {
         this.postDetails = response.data;
-        console.log(response.data, "total hours");
+        console.log(response.data, "employeesTotalHours");
       });
     },
 
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        date: {
+          operator: FilterOperator.AND,
+          constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+        },
       };
+    },
+
+    clearFilter1() {
+      this.initFilters1();
     },
   },
 };

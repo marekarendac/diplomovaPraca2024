@@ -14,7 +14,14 @@
             <InputText
               v-model="filters1['global'].value"
               placeholder="Global Search"
-              size="100"
+              size="50"
+            />
+            <Button
+              class="p-button-outlined ml-2"
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              @click="clearFilter1()"
             />
           </div>
         </div>
@@ -375,6 +382,9 @@ export default {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+    },
+    clearFilter1() {
+      this.initFilters1();
     },
   },
 };

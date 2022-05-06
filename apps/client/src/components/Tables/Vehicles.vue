@@ -14,7 +14,14 @@
             <InputText
               v-model="filters1['global'].value"
               placeholder="Global Search"
-              size="100"
+              size="50"
+            />
+            <Button
+              class="p-button-outlined ml-2"
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              @click="clearFilter1()"
             />
           </div>
         </div>
@@ -292,10 +299,12 @@
     </div>
     <div class="field col">
       <label for="lastService">Posledný servis</label>
-      <InputText
+      <Calendar
+        showIcon
         id="lastService"
         required="true"
-        v-model.trim="product.lastService"
+        v-model="product.lastService"
+        dateFormat="yy-mm-dd"
         autofocus
         :class="{ 'p-invalid': submitted && !product.lastService }"
       />
@@ -482,6 +491,9 @@ export default {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+    },
+    clearFilter1() {
+      this.initFilters1();
     },
   },
 };

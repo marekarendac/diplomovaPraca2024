@@ -8,39 +8,50 @@
             <InputText
               v-model="filters1['global'].value"
               placeholder="Global Search"
-              size="25"
+              size="50"
             />
           </div>
         </div>
+        <Button
+          class="p-button-outlined ml-2"
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Clear"
+          @click="clearFilter1()"
+        />
       </template>
     </Toolbar>
+
     <DataTable
       :value="postDetails"
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="70vh"
-    >
-      <Column
-        field="id"
-        header="ID"
-        style="min-width: 5%"
-        :sortable="true"
-      ></Column
       ><Column
+        field="date"
+        header="Dátum"
+        style="min-width: 15%"
+        :sortable="true"
+        ;
+      >
+        <!-- <template> </template>
+        <template #filter="{ filterModel }">
+          <Calendar
+            v-model="filterModel.value"
+            dateFormat="mm/dd/yy"
+            placeholder="mm/dd/yyyy"
+          />
+        </template> -->
+      </Column>
+      <Column
         field="employeeName"
         header="Meno"
         style="min-width: 20%"
         :sortable="true"
         ;
       ></Column>
-      <Column
-        field="date"
-        header="Dátum"
-        style="min-width: 15%"
-        :sortable="true"
-        ;
-      ></Column>
+
       <Column
         field="description"
         header="Popis práce"
@@ -79,15 +90,31 @@ export default {
     getPostDetails() {
       Api.get("/attendances").then((response) => {
         this.postDetails = response.data;
-
         console.log(response.data);
+        // this.postDetails.forEach(
+        //   (attendance) => (attendance.date = new Date(attendance.date))
+        // );
       });
     },
 
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        // date: {
+        //   operator: FilterOperator.AND,
+        //   constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+        // },
       };
+    },
+    // formatDate(value) {
+    //   return value.toLocaleDateString("en-US", {
+    //     day: "2-digit",
+    //     month: "2-digit",
+    //     year: "numeric",
+    //   });
+    // },
+    clearFilter1() {
+      this.initFilters1();
     },
   },
 };

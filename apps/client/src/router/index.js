@@ -3,7 +3,7 @@ import Home from "../views/HomeView.vue";
 import Vehicles from "../views/Tables/Vehicles.vue";
 import Employees from "../views/Tables/Employees.vue";
 import Equipment from "../views/Tables/Equipment.vue";
-import Test from "../views/Test.vue";
+import TotalHours from "../views/Tables/TotalHours.vue";
 import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 
@@ -32,9 +32,9 @@ const router = createRouter({
     },
 
     {
-      path: "/test",
-      name: "Test",
-      component: Test,
+      path: "/TotalHours",
+      name: "TotalHours",
+      component: TotalHours,
     },
     {
       path: "/attendance",

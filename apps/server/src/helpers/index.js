@@ -205,14 +205,14 @@ async function populateDB() {
       CustomerId: 3,
     },
     {
-      date: '2022-01-02',
+      date: '2022-02-02',
       description: 'praca na oprave nizkej pece',
       responsibleId: 1,
       WorkPlaceId: 1,
       CustomerId: 2,
     },
     {
-      date: '2022-01-10',
+      date: '2022-03-10',
       description: 'praca na oprave vysokej pece',
       responsibleId: 1,
       WorkPlaceId: 2,

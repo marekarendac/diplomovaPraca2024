@@ -63,6 +63,14 @@
         ></span
       >
     </a-menu-item>
+    <a-menu-item key="6">
+      <template #icon> <FieldTimeOutlined /> </template>
+      <span
+        ><router-link to="/TotalHours"
+          ><p class="navText">Odpracované hodiny</p></router-link
+        ></span
+      >
+    </a-menu-item>
   </a-menu>
 </template>
 <script>
@@ -73,6 +81,7 @@ import {
   CarOutlined,
   ContactsOutlined,
   AuditOutlined,
+  FieldTimeOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 export default defineComponent({
@@ -83,6 +92,7 @@ export default defineComponent({
     ContactsOutlined,
     ToolOutlined,
     AuditOutlined,
+    FieldTimeOutlined,
   },
 
   setup() {

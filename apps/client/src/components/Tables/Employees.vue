@@ -14,7 +14,14 @@
             <InputText
               v-model="filters1['global'].value"
               placeholder="Global Search"
-              size="100"
+              size="50"
+            />
+            <Button
+              class="p-button-outlined ml-2"
+              type="button"
+              icon="pi pi-filter-slash"
+              label="Clear"
+              @click="clearFilter1()"
             />
           </div>
         </div>
@@ -344,6 +351,9 @@ export default {
       Api.get("/employees").then((response) => {
         this.postDetails = response.data;
       });
+    },
+    clearFilter1() {
+      this.initFilters1();
     },
     openNew() {
       this.product = {};
