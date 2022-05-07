@@ -3,6 +3,13 @@ const sequelize = require('../../models');
 async function populateDB() {
   await sequelize.models.Employee.bulkCreate([
     {
+      name: 'Sona Sokolovnaja',
+      position: 'Pracovník',
+      phoneNumber: '0902369765',
+      contractType: 'Zamestnanec',
+      healthExam: '2010-01-17',
+    },
+    {
       name: 'Jozef Gabor',
       position: 'Pracovník',
       phoneNumber: '0902369765',
