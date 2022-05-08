@@ -38,30 +38,42 @@
       <Column
         field="id"
         header="ID"
-        style="max-width: 14%"
+        style="max-width: 7%"
         :sortable="true"
       ></Column>
       <Column
         field="idNumber"
-        header="Identifikačné číslo"
-        style="min-width: 1vh"
+        header="ID číslo"
+        style="max-width: 11%"
         :sortable="true"
         ;
       ></Column>
       <Column
         field="brand"
         header="Značka"
-        style="min-width: 1vh"
+        style="max-width: 10%"
         :sortable="true"
       ></Column>
       <Column
         field="equipmentType"
         header="Typ nástroja"
-        style="min-width: 1vh"
+        style="max-width: 14%"
+        :sortable="true"
+      ></Column>
+      <Column
+        field="description"
+        header="Popis"
+        style="max-width: 44%"
+        :sortable="true"
+      ></Column
+      ><Column
+        field="status"
+        header="Stav"
+        style="max-width: 12%"
         :sortable="true"
       ></Column>
 
-      <Column header="Operácia" :exportable="false" style="max-width: 14%">
+      <Column header="Operácia" :exportable="false" style="max-width: 13%">
         <template #body="slotProps">
           <Button
             icon="pi pi-pencil"
@@ -97,7 +109,7 @@
         :class="{ 'p-invalid': submitted && !product.idNumber }"
       />
       <small class="p-error" v-if="submitted && !product.idNumber"
-        >idNumber is required.</small
+        >idNumber je povinné pole.</small
       >
     </div>
 
@@ -111,21 +123,53 @@
         :class="{ 'p-invalid': submitted && !product.brand }"
       />
       <small class="p-error" v-if="submitted && !product.brand"
-        >Značka is required.</small
+        >Značka je povinné pole.</small
       >
     </div>
 
     <div class="field col">
       <label for="equipmentType">Typ nástroja</label>
-      <InputText
+      <Dropdown
         id="equipmentType"
         required="true"
-        v-model.trim="product.equipmentType"
+        :options="types"
+        optionLabel="type"
+        v-model="product.equipmentType"
         autofocus
         :class="{ 'p-invalid': submitted && !product.equipmentType }"
       />
       <small class="p-error" v-if="submitted && !product.equipmentType"
-        >Typ nástroja is required.</small
+        >Typ nástroja je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="description">Popis nástroja</label>
+      <InputText
+        id="description"
+        required="true"
+        v-model.trim="product.description"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.description }"
+      />
+      <small class="p-error" v-if="submitted && !product.description"
+        >Popis je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="status">Stav nástroja</label>
+      <Dropdown
+        id="status"
+        :options="statuses"
+        optionLabel="status"
+        required="true"
+        v-model="product.status"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.status }"
+      />
+      <small class="p-error" v-if="submitted && !product.status"
+        >Stav je povinné pole.</small
       >
     </div>
 
@@ -224,6 +268,34 @@
       >
     </div>
 
+    <div class="field col">
+      <label for="description">Popis nástroja</label>
+      <InputText
+        id="description"
+        required="true"
+        v-model.trim="product.description"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.description }"
+      />
+      <small class="p-error" v-if="submitted && !product.description"
+        >Popis je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="status">Stav nástroja</label>
+      <InputText
+        id="status"
+        required="true"
+        v-model.trim="product.status"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.status }"
+      />
+      <small class="p-error" v-if="submitted && !product.status"
+        >Stav je povinné pole.</small
+      >
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
@@ -256,7 +328,19 @@ export default {
       idNumber: "",
       brand: "",
       equipmentType: "",
+      description: "",
+      statuses: [
+        { status: "Záruka" },
+        { status: "OK" },
+        { status: "Pokazené" },
+      ],
       filters1: {},
+      types: [
+        { type: "Vŕtačka" },
+        { type: "AKU vŕtačka" },
+        { type: "Zváračka" },
+        { type: "Karbobrúska" },
+      ],
     };
   },
   created() {
@@ -290,11 +374,13 @@ export default {
 
     handleSubmit() {
       this.submitted = true;
-      if (this.product.brand.trim() && this.product.equipmentType.trim()) {
+      if (this.product.brand.trim()) {
         Api.post("/equipment", {
           idNumber: this.product.idNumber,
           brand: this.product.brand,
-          equipmentType: this.product.equipmentType,
+          equipmentType: this.product.equipmentType.type,
+          description: this.product.description,
+          status: this.product.status.status,
         })
           .then((response) => {
             this.postDetails.push(response.data);
@@ -355,6 +441,8 @@ export default {
           idNumber: this.product.idNumber,
           brand: this.product.brand,
           equipmentType: this.product.equipmentType,
+          description: this.product.description,
+          status: this.product.status,
         }).catch((error) => console.log(error));
       }
       this.$toast.add({
