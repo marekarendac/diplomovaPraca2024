@@ -3,7 +3,7 @@ const { Op } = require('sequelize');
 const findAll = async (req, res) => {
   const lastAllowedVehicleCheckDate = new Date();
   lastAllowedVehicleCheckDate.setMonth(
-    lastAllowedVehicleCheckDate.getMonth() - 11,
+    lastAllowedVehicleCheckDate.getMonth() - 22,
   );
 
   const vehicles = await req.context.models.Vehicle.count({
@@ -16,7 +16,7 @@ const findAll = async (req, res) => {
 
   const lastAllowedEmployeeMedicalDate = new Date();
   lastAllowedEmployeeMedicalDate.setMonth(
-    lastAllowedEmployeeMedicalDate.getMonth() - 23,
+    lastAllowedEmployeeMedicalDate.getMonth() - 21,
   );
 
   const employees = await req.context.models.Employee.count({

@@ -19,7 +19,7 @@ const equipment = (sequelize) => {
     },
     {
       timestamps: false,
-    }
+    },
   );
 
   return equipment;

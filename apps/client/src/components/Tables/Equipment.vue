@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Toolbar class="mb-4">
+    <Toolbar class="mb-2">
       <template #start>
         <Button
           label="Nový"
@@ -13,14 +13,13 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Global Search"
+              placeholder="Klikni a hľadaj"
               size="50"
             />
             <Button
               class="p-button-outlined ml-2"
               type="button"
               icon="pi pi-filter-slash"
-              label="Clear"
               @click="clearFilter1()"
             />
           </div>
@@ -32,12 +31,14 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="70vh"
+      scrollHeight="63vh"
+      :paginator="true"
+      :rows="10"
     >
       <Column
         field="id"
         header="ID"
-        style="min-width: 1vh"
+        style="max-width: 14%"
         :sortable="true"
       ></Column>
       <Column
@@ -60,7 +61,7 @@
         :sortable="true"
       ></Column>
 
-      <Column header="Operácia" :exportable="false" style="min-width: 1vh">
+      <Column header="Operácia" :exportable="false" style="max-width: 14%">
         <template #body="slotProps">
           <Button
             icon="pi pi-pencil"

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Toolbar class="mb-4">
+    <Toolbar class="mb-2">
       <template #start>
         <Button
           label="Nový"
@@ -13,14 +13,13 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Global Search"
+              placeholder="Klikni a hľadaj"
               size="50"
             />
             <Button
               class="p-button-outlined ml-2"
               type="button"
               icon="pi pi-filter-slash"
-              label="Clear"
               @click="clearFilter1()"
             />
           </div>
@@ -32,53 +31,54 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="70vh"
+      scrollHeight="73vh"
     >
       <Column
         field="id"
         header="ID"
-        style="min-width: 1vh"
+        style="max-width: 8%"
         :sortable="true"
       ></Column>
 
       <Column
         field="brand"
         header="Značka"
-        style="min-width: 1vh"
+        style="max-width: 12%"
         :sortable="true"
       ></Column>
 
       <Column
         field="model"
         header="Model"
-        style="min-width: 1vh"
+        style="max-width: 12%"
         :sortable="true"
       ></Column
       ><Column
         field="year"
-        header="Rok výroby"
-        style="min-width: 1vh"
+        header="Rok"
+        style="max-width: 10%"
         :sortable="true"
       ></Column>
       <Column
         field="VIN"
         header="VIN číslo"
-        style="min-width: 1vh"
+        style="min-width: 19%"
         :sortable="true"
-      ></Column>
-      <Column
-        field="lastService"
-        header="Posledný servis"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
-      <Column
+      ></Column
+      ><Column
         field="tireSize"
-        header="Veľkosť pneumatík"
+        header="Pneumatiky"
         style="min-width: 1vh"
         :sortable="true"
         ;
       ></Column>
+      <Column
+        field="lastService"
+        header="Servis"
+        style="min-width: 1vh"
+        :sortable="true"
+      ></Column>
+
       <Column header="Operácia" :exportable="false" style="min-width: 1vh">
         <template #body="slotProps">
           <Button
@@ -160,6 +160,20 @@
         >VIN je povinný údaj.</small
       >
     </div>
+
+    <div class="field col">
+      <label for="tireSize">Veľkosť pneumatík</label>
+      <InputText
+        id="tireSize"
+        required="true"
+        v-model.trim="product.tireSize"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.tireSize }"
+      />
+      <small class="p-error" v-if="submitted && !product.tireSize"
+        >Veľkosť pneumatík je povinný údaj.</small
+      >
+    </div>
     <div class="field col">
       <label for="lastService">Posledný servis</label
       ><Calendar
@@ -173,19 +187,6 @@
       />
       <small class="p-error" v-if="submitted && !product.lastService"
         >Posledný servis je povinný údaj.</small
-      >
-    </div>
-    <div class="field col">
-      <label for="tireSize">Veľkosť pneumatík</label>
-      <InputText
-        id="tireSize"
-        required="true"
-        v-model.trim="product.tireSize"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.tireSize }"
-      />
-      <small class="p-error" v-if="submitted && !product.tireSize"
-        >Veľkosť pneumatík je povinný údaj.</small
       >
     </div>
 
@@ -269,6 +270,21 @@
         >Model je povinný údaj.</small
       >
     </div>
+    <div class="field col">
+      <label for="lastService">Posledný servis</label>
+      <Calendar
+        showIcon
+        id="lastService"
+        required="true"
+        v-model="product.lastService"
+        dateFormat="yy-mm-dd"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.lastService }"
+      />
+      <small class="p-error" v-if="submitted && !product.lastService"
+        >Posledný servis je povinný údaj.</small
+      >
+    </div>
 
     <div class="field col">
       <label for="year">Rok výroby</label>
@@ -297,21 +313,7 @@
         >VIN je povinný údaj.</small
       >
     </div>
-    <div class="field col">
-      <label for="lastService">Posledný servis</label>
-      <Calendar
-        showIcon
-        id="lastService"
-        required="true"
-        v-model="product.lastService"
-        dateFormat="yy-mm-dd"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.lastService }"
-      />
-      <small class="p-error" v-if="submitted && !product.lastService"
-        >Posledný servis je povinný údaj.</small
-      >
-    </div>
+
     <div class="field col">
       <label for="tireSize">Veľkosť pneumatík</label>
       <InputText

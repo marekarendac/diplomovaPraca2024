@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <Toolbar class="mb-4">
+    <Toolbar class="mb-2">
       <template #start>
         <Button
           label="Nový"
@@ -13,14 +13,13 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Global Search"
+              placeholder="Klikni a hľadaj"
               size="50"
             />
             <Button
               class="p-button-outlined ml-2"
               type="button"
               icon="pi pi-filter-slash"
-              label="Clear"
               @click="clearFilter1()"
             />
           </div>
@@ -32,12 +31,12 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="70vh"
+      scrollHeight="73vh"
     >
       <Column
         field="id"
         header="ID"
-        style="min-width: 1vh"
+        style="max-width: 8%"
         :sortable="true"
       ></Column>
       <Column
@@ -50,7 +49,7 @@
       <Column
         field="position"
         header="Pozícia"
-        style="min-width: 1vh"
+        style="max-width: 13%"
         :sortable="true"
       ></Column>
       <Column
@@ -69,13 +68,13 @@
       ></Column
       ><Column
         field="healthExam"
-        header="Zdravotná prehliadka"
+        header="ZP"
         style="min-width: 1vh"
         :sortable="true"
         ;
       ></Column>
 
-      <Column header="Operácia" :exportable="false" style="min-width: 1vh">
+      <Column header="Operácia" :exportable="false" style="max-width: 14%">
         <template #body="slotProps">
           <Button
             icon="pi pi-pencil"
@@ -116,6 +115,20 @@
     </div>
 
     <div class="field col">
+      <label for="phoneNumber">Telefón</label>
+      <InputText
+        id="phoneNumber"
+        required="true"
+        v-model.trim="product.phoneNumber"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+      />
+      <small class="p-error" v-if="submitted && !product.phoneNumber"
+        >Telefón je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
       <label for="position">Pozícia</label>
       <Dropdown
         id="position"
@@ -130,19 +143,7 @@
         >Pozícia je povinný údaj.</small
       >
     </div>
-    <div class="field col">
-      <label for="phoneNumber">Telefón</label>
-      <InputText
-        id="phoneNumber"
-        required="true"
-        v-model.trim="product.phoneNumber"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-      />
-      <small class="p-error" v-if="submitted && !product.phoneNumber"
-        >Telefón je povinný údaj.</small
-      >
-    </div>
+
     <div class="field col">
       <label for="contractType">Typ úväzku</label>
       <Dropdown
@@ -158,6 +159,7 @@
         >Typ úväzku je povinný údaj.</small
       >
     </div>
+
     <div class="field col">
       <label for="healthExam">Zdravotná prehliadka</label>
       <Calendar
@@ -241,49 +243,6 @@
     </div>
 
     <div class="field col">
-      <label for="position">Pozícia</label>
-      <Dropdown
-        id="position"
-        required="true"
-        :options="positions"
-        optionLabel="position"
-        v-model="product.position"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.position }"
-      />
-      <small class="p-error" v-if="submitted && !product.position"
-        >Pozícia je povinný údaj.</small
-      >
-    </div>
-    <div class="field col">
-      <label for="phoneNumber">Telefón</label>
-      <InputText
-        id="phoneNumber"
-        required="true"
-        v-model.trim="product.phoneNumber"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-      />
-      <small class="p-error" v-if="submitted && !product.phoneNumber"
-        >Telefón je povinný údaj.</small
-      >
-    </div>
-    <div class="field col">
-      <label for="contractType">Typ úväzku</label>
-      <Dropdown
-        id="contractType"
-        required="true"
-        :options="contracts"
-        optionLabel="contractType"
-        v-model="product.contractType"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.contractType }"
-      />
-      <small class="p-error" v-if="submitted && !product.contractType"
-        >Typ úväzku je povinný údaj.</small
-      >
-    </div>
-    <div class="field col">
       <label for="healthExam">Zdravotná prehliadka</label>
       <Calendar
         showIcon
@@ -297,6 +256,53 @@
         >Zdravotná prehliadka je povinný údaj.</small
       >
     </div>
+
+    <div class="field col">
+      <label for="phoneNumber">Telefón</label>
+      <InputText
+        id="phoneNumber"
+        required="true"
+        v-model.trim="product.phoneNumber"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+      />
+      <small class="p-error" v-if="submitted && !product.phoneNumber"
+        >Telefón je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="position">Pozícia</label>
+      <InputText
+        id="position"
+        required="true"
+        :options="positions"
+        optionLabel="position"
+        v-model="product.position"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.position }"
+      />
+      <small class="p-error" v-if="submitted && !product.position"
+        >Pozícia je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="contractType">Typ úväzku</label>
+      <InputText
+        id="contractType"
+        required="true"
+        :options="contracts"
+        optionLabel="contractType"
+        v-model="product.contractType"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.contractType }"
+      />
+      <small class="p-error" v-if="submitted && !product.contractType"
+        >Typ úväzku je povinný údaj.</small
+      >
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
