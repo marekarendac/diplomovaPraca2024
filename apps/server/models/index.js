@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const employee = require('./employee');
 const vehicle = require('./vehicle');
 const equipment = require('./equipment');
-const test = require('./test');
 const workPlace = require('./workPlace');
 const customer = require('./customer');
 const employeeAttendance = require('./employeeAttendance');
@@ -19,7 +18,6 @@ const applyRelations = () => {
   const { Attendance, Employee, WorkPlace, EmployeeAttendance, Customer } =
     sequelize.models;
 
-  // asociacia attendance a responsibleEmployee - mozem si to volat podla "as"
   Employee.hasMany(Attendance, {
     as: 'responsibleAttendances',
     foreignKey: 'responsibleId',
@@ -29,11 +27,9 @@ const applyRelations = () => {
     foreignKey: 'responsibleId',
   });
 
-  // asociacia attendance a responsibleEmployee - mozem si to volat podla "as"
   WorkPlace.hasMany(Attendance);
   Attendance.belongsTo(WorkPlace);
 
-  // asociacia attendance a responsibleEmployee - mozem si to volat podla "as"
   Customer.hasMany(Attendance);
   Attendance.belongsTo(Customer);
 
@@ -51,7 +47,6 @@ const models = [
   employee,
   vehicle,
   equipment,
-  test,
   workPlace,
   customer,
   employeeAttendance,

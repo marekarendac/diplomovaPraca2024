@@ -16,7 +16,7 @@ const findAll = async (req, res) => {
 
   const lastAllowedEmployeeMedicalDate = new Date();
   lastAllowedEmployeeMedicalDate.setMonth(
-    lastAllowedEmployeeMedicalDate.getMonth() - 21,
+    lastAllowedEmployeeMedicalDate.getMonth() - 22,
   );
 
   const employees = await req.context.models.Employee.count({

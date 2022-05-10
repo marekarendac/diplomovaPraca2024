@@ -8,7 +8,7 @@ import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL), //createWebHistory -> aby sme mohli ist krok spat na predoslu pejdzu
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",

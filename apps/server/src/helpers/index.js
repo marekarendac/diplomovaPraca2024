@@ -416,7 +416,7 @@ async function populateDB() {
   ]);
   await sequelize.models.Attendance.bulkCreate([
     {
-      date: '2022-02-1',
+      date: '2022-02-01',
       description: 'Udrzba zariadenia c.U445',
       responsibleId: 3,
       WorkPlaceId: 4,
@@ -557,7 +557,7 @@ async function populateDB() {
     },
 
     {
-      date: '2022-02-1',
+      date: '2022-02-01',
       description: 'Standardna udrzba systemov a zariadeni',
       responsibleId: 3,
       WorkPlaceId: 4,
