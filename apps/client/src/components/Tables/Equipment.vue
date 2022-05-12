@@ -31,7 +31,7 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="63vh"
+      scrollHeight="77vh"
       :paginator="true"
       :rows="10"
     >

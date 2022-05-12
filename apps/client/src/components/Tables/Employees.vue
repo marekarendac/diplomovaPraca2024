@@ -31,7 +31,7 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="73vh"
+      scrollHeight="83vh"
     >
       <Column
         field="id"

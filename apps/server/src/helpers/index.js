@@ -56,7 +56,7 @@ async function populateDB() {
       position: 'Pracovník',
       phoneNumber: '0902369765',
       contractType: 'Zamestnanec',
-      healthExam: '2020-01-17',
+      healthExam: '2022-01-17',
     },
     {
       name: 'Richard Milečkin',
@@ -91,7 +91,7 @@ async function populateDB() {
       position: 'Pracovník',
       phoneNumber: '0902369765',
       contractType: 'Zamestnanec',
-      healthExam: '2020-01-18',
+      healthExam: '2022-01-18',
     },
     {
       name: 'Samuel Lakatoš',
