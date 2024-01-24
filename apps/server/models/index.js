@@ -8,10 +8,9 @@ const customer = require('./customer');
 const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'db.sqlite',
-  logging: false,
+const sequelize = new Sequelize('diplomka', 'root', 'root', {
+  host: 'localhost',
+  dialect: 'mysql',
 });
 
 const applyRelations = () => {
@@ -58,3 +57,9 @@ models.forEach((model) => model(sequelize));
 applyRelations();
 
 module.exports = sequelize;
+
+/* sequelize
+  .sync()
+  .then(() => console.log('Tables have been created'))
+  .catch((error) => console.log(error));
+  */
