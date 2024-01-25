@@ -5,6 +5,7 @@ const workplaces = require('./workPlaces');
 const customers = require('./customers');
 const attendances = require('./attendances');
 const notifications = require('./notifications');
+const login = require('./login');
 
 module.exports = {
   employees,
@@ -14,4 +15,5 @@ module.exports = {
   customers,
   attendances,
   notifications,
+  login,
 };

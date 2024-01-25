@@ -7,6 +7,7 @@ const workPlace = require('./workPlace');
 const customer = require('./customer');
 const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
+const login = require('./login');
 
 const sequelize = new Sequelize('diplomka', 'root', 'root', {
   host: 'localhost',
@@ -50,6 +51,7 @@ const models = [
   customer,
   employeeAttendance,
   attendance,
+  login,
 ];
 
 models.forEach((model) => model(sequelize));

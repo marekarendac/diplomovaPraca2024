@@ -1,6 +1,13 @@
 const sequelize = require('../../models');
 
 async function populateDB() {
+  await sequelize.models.Login.bulkCreate([
+    {
+      username: 'Palo',
+      password: 'jebek',
+    },
+  ]);
+
   await sequelize.models.Employee.bulkCreate([
     {
       name: 'Peter Zborný',

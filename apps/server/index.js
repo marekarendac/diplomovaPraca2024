@@ -12,10 +12,11 @@ const customersRouter = require('./routes/customers');
 const workplacesRouter = require('./routes/workPlaces');
 const attendancesRouter = require('./routes/attendances');
 const notificationsRouter = require('./routes/notifications');
+const loginRouter = require('./routes/login');
 // const { populateDB } = require('./src/helpers');
 
 const app = express();
-const port = 2000;
+const port = 8080;
 const logger = pino(pinoPretty());
 
 app.use(cors());
@@ -36,7 +37,8 @@ app.use('/workPlaces', workplacesRouter);
 app.use('/customers', customersRouter);
 app.use('/attendances', attendancesRouter);
 app.use('/notifications', notificationsRouter);
+app.use('/login', loginRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}!`);
+  console.log(`App listening on port ${port}!`);
 });

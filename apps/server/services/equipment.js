@@ -46,5 +46,8 @@ const update = async (req, res) => {
 };
 
 module.exports = {
-  findAll, destroy, post, update,
+  findAll,
+  destroy,
+  post,
+  update,
 };
