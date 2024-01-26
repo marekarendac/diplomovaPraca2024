@@ -31,25 +31,29 @@ const post = async (req, res) => {
 };
 const update = async (req, res) => {
   const { id } = req.params;
-  req.context.models.Employee.update(req.body, {
-    where: { id: req.body.id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: 'Employee was updated successfully.',
-        });
-      } else {
-        res.send({
-          message: `Cannot update Employee with id=${id}. Maybe Employee was not found or req.body is empty!`,
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error updating Employee with id=${id}`,
-      });
+  console.log('Request body:', req.body); // log the request body
+  console.log('ID:', id); // log the id
+
+  try {
+    const [num] = await req.context.models.Employee.update(req.body, {
+      where: { id },
     });
+
+    if (num === 1) {
+      res.send({
+        message: 'Employee was updated successfully.',
+      });
+    } else {
+      res.send({
+        message: `Cannot update Employee with id=${id}. Maybe Employee was not found or req.body is empty!`,
+      });
+    }
+  } catch (error) {
+    console.error('Error:', error); // log the error
+    res.status(500).send({
+      message: `Error updating Employee with id=${id}`,
+    });
+  }
 };
 
 module.exports = {
