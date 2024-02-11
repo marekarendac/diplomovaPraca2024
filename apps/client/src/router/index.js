@@ -7,7 +7,9 @@ import Equipment from "../views/Tables/Equipment.vue";
 import TotalHours from "../views/Tables/TotalHours.vue";
 import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
-import LoginPage from "@/components/LoginPage.vue";
+import LoginPage from "../views/LoginPage.vue";
+import LogoutPage from "../views/LogoutPage.vue";
+import UserProfile from "../views/UserProfile.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +18,16 @@ const router = createRouter({
       path: "/login",
       name: "Login",
       component: LoginPage,
+    },
+    {
+      path: "/userprofile",
+      name: "UserProfile",
+      component: UserProfile,
+    },
+    {
+      path: "/logout",
+      name: "Logout",
+      component: LogoutPage,
     },
     {
       path: "/",
