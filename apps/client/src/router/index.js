@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { authGuard } from "@auth0/auth0-vue";
 import Layout from "@/components/Layout.vue";
 import Home from "../views/HomeView.vue";
 import Vehicles from "../views/Tables/Vehicles.vue";
@@ -7,7 +8,7 @@ import Equipment from "../views/Tables/Equipment.vue";
 import TotalHours from "../views/Tables/TotalHours.vue";
 import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
-import LoginPage from "@/components/LoginPage.vue";
+import LoginPage from "../views/LoginPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,9 +18,11 @@ const router = createRouter({
       name: "Login",
       component: LoginPage,
     },
+
     {
       path: "/",
       component: Layout,
+      beforeEnter: authGuard,
       children: [
         {
           path: "",

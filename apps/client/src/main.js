@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { createAuth0 } from "@auth0/auth0-vue";
 
 import App from "./App.vue";
 import router from "./router";
@@ -56,5 +57,17 @@ app.component("InputText", InputText);
 app.component("Textarea", Textarea);
 app.component("InputNumber", InputNumber);
 app.component("Toast", Toast);
+
+//AUTENTICACION PLUGIN
+
+app.use(
+  createAuth0({
+    domain: "dev-fd07so3o34m67ppo.us.auth0.com",
+    clientId: "E3yvYAehXBpdjXIV8KSpBPkMk4YlwyKJ",
+    authorizationParams: {
+      redirect_uri: window.location.origin,
+    },
+  })
+);
 
 app.mount("#app");
