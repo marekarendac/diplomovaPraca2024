@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="login-button" @click="login">Log in</button>
+    <button class="login-button" @click="handleLogin">Log in</button>
   </div>
 </template>
 
@@ -8,8 +8,12 @@
 // Options API
 export default {
   methods: {
-    login() {
-      this.$auth0.loginWithRedirect();
+    handleLogin() {
+      this.$auth0.loginWithRedirect({
+        appState: {
+          target: "/",
+        },
+      });
     },
   },
 };
@@ -17,7 +21,7 @@ export default {
 
 <style scoped>
 .login-button {
-  background-color: blue;
+  background-color: #1890ff;
   color: white;
   padding: 15px 30px;
   font-size: 20px;

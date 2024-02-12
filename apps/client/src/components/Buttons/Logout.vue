@@ -10,7 +10,7 @@ export default {
     logout() {
       this.$auth0.logout({
         logoutParams: {
-          returnTo: "http://localhost:3000/logout",
+          returnTo: "http://localhost:3000/login",
         },
       });
     },

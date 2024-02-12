@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { authGuard } from "@auth0/auth0-vue";
 import Layout from "@/components/Layout.vue";
 import Home from "../views/HomeView.vue";
 import Vehicles from "../views/Tables/Vehicles.vue";
@@ -8,8 +9,6 @@ import TotalHours from "../views/Tables/TotalHours.vue";
 import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 import LoginPage from "../views/LoginPage.vue";
-import LogoutPage from "../views/LogoutPage.vue";
-import UserProfile from "../views/UserProfile.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,19 +18,11 @@ const router = createRouter({
       name: "Login",
       component: LoginPage,
     },
-    {
-      path: "/userprofile",
-      name: "UserProfile",
-      component: UserProfile,
-    },
-    {
-      path: "/logout",
-      name: "Logout",
-      component: LogoutPage,
-    },
+
     {
       path: "/",
       component: Layout,
+      beforeEnter: authGuard,
       children: [
         {
           path: "",
