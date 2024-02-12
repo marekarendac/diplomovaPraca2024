@@ -45,7 +45,7 @@
 
 <script>
 import Api from "@/services/Api.js";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { FilterMatchMode } from "primevue/api";
 export default {
   data() {
     return {

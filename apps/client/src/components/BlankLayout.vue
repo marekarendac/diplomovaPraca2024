@@ -15,7 +15,7 @@
 <style scoped>
 .logo {
   color: white;
-  text-align: left;
+  text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   font-size: xx-large;
   background-color: #1890ff;
