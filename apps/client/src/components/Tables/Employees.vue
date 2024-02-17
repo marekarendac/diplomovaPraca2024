@@ -273,7 +273,7 @@
 
     <div class="field col">
       <label for="position">Pozícia</label>
-      <Dropdown
+      <InputText
         id="position"
         required="true"
         :options="positions"
@@ -289,7 +289,7 @@
 
     <div class="field col">
       <label for="contractType">Typ úväzku</label>
-      <Dropdown
+      <InputText
         id="contractType"
         required="true"
         :options="contracts"
@@ -345,32 +345,6 @@ export default {
       ],
     };
   },
-
-  computed: {
-    selectedPosition: {
-      get() {
-        return this.product.position ? this.product.position.position : null;
-      },
-      set(value) {
-        this.product.position = this.positions.find(
-          (pos) => pos.position === value
-        );
-      },
-    },
-    selectedContractType: {
-      get() {
-        return this.product.contractType
-          ? this.product.contractType.contractType
-          : null;
-      },
-      set(value) {
-        this.product.contractType = this.contracts.find(
-          (contract) => contract.contractType === value
-        );
-      },
-    },
-  },
-
   created() {
     this.initFilters1();
   },
@@ -453,14 +427,8 @@ export default {
     },
 
     editProduct(product) {
-      console.log("Original product:", product); // log the original product
-      this.product = {
-        ...product,
-        position: product.position.position, // extract the position value
-        contractType: product.contractType.contractType, // extract the contractType value
-      };
+      this.product = { ...product };
       this.productDialogEdit = true;
-      console.log("Product to be edited:", this.product); // log the product to be edited
     },
 
     handleEdit() {
@@ -470,7 +438,6 @@ export default {
         position: this.product.position.position,
         contractType: this.product.contractType.contractType,
       };
-      console.log("Updated employee:", updatedEmployee); // log the updated employee
       Api.put("employees/" + this.product.id, updatedEmployee)
         .then(() => {
           if (this.product.id) {

@@ -1,6 +1,5 @@
 <template>
   <a-menu
-    style="height: 100%"
     v-model:openKeys="openKeys"
     v-model:selectedKeys="selectedKeys"
     mode="inline"
@@ -15,7 +14,7 @@
         ><router-link to="/"><p class="navText">Domov</p></router-link></span
       >
     </a-menu-item>
-    <a-menu-item key="13">
+    <a-menu-item key="2">
       <template #icon><TeamOutlined /> </template>
       <span
         ><router-link to="/employees"
@@ -23,7 +22,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="2">
+    <a-menu-item key="3">
       <template #icon>
         <CarOutlined />
       </template>
@@ -33,7 +32,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="3">
+    <a-menu-item key="4">
       <template #icon>
         <ToolOutlined />
       </template>
@@ -43,7 +42,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="4">
+    <a-menu-item key="5">
       <template #icon>
         <ContactsOutlined />
       </template>
@@ -53,7 +52,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="5">
+    <a-menu-item key="6">
       <template #icon>
         <AuditOutlined />
       </template>
@@ -63,7 +62,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="6">
+    <a-menu-item key="7">
       <template #icon> <FieldTimeOutlined /> </template>
       <span
         ><router-link to="/TotalHours"
@@ -84,6 +83,8 @@ import {
   FieldTimeOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
+import { useRoute } from "vue-router";
+
 export default defineComponent({
   components: {
     HomeOutlined,
@@ -96,16 +97,36 @@ export default defineComponent({
   },
 
   setup() {
+    const route = useRoute();
+
+    const routeKeyMapping = {
+      "/": "1",
+      "/employees": "2",
+      "/vehicles": "3",
+      "/equipment": "4",
+      "/attendance": "5",
+      "/report": "6",
+      "/TotalHours": "7",
+    };
+
     const state = reactive({
       collapsed: false,
-      selectedKeys: ["1"],
+      selectedKeys: [routeKeyMapping[route.path]], // Set initial selected key based on current route
       openKeys: ["sub1"],
       preOpenKeys: ["sub1"],
     });
+
     watch(
       () => state.openKeys,
       (_val, oldVal) => {
         state.preOpenKeys = oldVal;
+      }
+    );
+
+    watch(
+      () => route.path, // Watch for changes in route
+      (newPath) => {
+        state.selectedKeys = [routeKeyMapping[newPath]];
       }
     );
 
