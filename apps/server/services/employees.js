@@ -1,13 +1,15 @@
 const findAll = async (req, res) => {
+  let employees;
+
   if (req.query.position) {
-    const employees = await req.context.models.Employee.findAll({
+    employees = await req.context.models.Employee.findAll({
       where: { position: 'Majster' },
     });
-    res.status(200).send(employees);
-    return;
+  } else {
+    employees = await req.context.models.Employee.findAll();
   }
-  const employees = await req.context.models.Employee.findAll();
 
+  console.log(employees[0]); // Log the first employee data
   res.status(200).send(employees);
 };
 
@@ -25,10 +27,18 @@ const destroy = async (req, res) => {
 };
 
 const post = async (req, res) => {
-  console.log('zaznam bol pridany', req.body);
-  const employee = await req.context.models.Employee.create(req.body);
-  res.status(200).send(employee);
+  console.log('Received data:', req.body);
+  try {
+    const employee = await req.context.models.Employee.create(req.body);
+    res.status(200).send(employee);
+  } catch (error) {
+    console.error('Error creating employee:', error);
+    res
+      .status(500)
+      .send({ message: 'Error creating employee', error: error.message });
+  }
 };
+
 const update = async (req, res) => {
   const { id } = req.params;
   console.log('Request body:', req.body); // log the request body

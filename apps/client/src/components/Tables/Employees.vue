@@ -31,7 +31,7 @@
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="83vh"
+      scrollHeight="72vh"
     >
       <Column
         field="id"
@@ -39,13 +39,14 @@
         style="max-width: 8%"
         :sortable="true"
       ></Column>
+
       <Column
-        field="name"
+        field="fullName"
         header="Meno"
         style="min-width: 1vh"
         :sortable="true"
-        ;
       ></Column>
+
       <Column
         field="position"
         header="Pozícia"
@@ -57,21 +58,18 @@
         header="Telefón"
         style="min-width: 1vh"
         :sortable="true"
-        ;
       ></Column>
       <Column
         field="contractType"
         header="Typ úväzku"
         style="min-width: 1vh"
         :sortable="true"
-        ;
-      ></Column
-      ><Column
+      ></Column>
+      <Column
         field="healthExam"
         header="ZP"
         style="min-width: 1vh"
         :sortable="true"
-        ;
       ></Column>
 
       <Column header="Operácia" :exportable="false" style="max-width: 14%">
@@ -108,21 +106,44 @@
         v-model.trim="product.name"
         autofocus
         :class="{ 'p-invalid': submitted && !product.name }"
+        maxlength="20"
+        placeholder="Krstné meno"
       />
       <small class="p-error" v-if="submitted && !product.name"
         >Meno je povinný údaj.</small
       >
     </div>
+    <div class="field col">
+      <label for="surname">Priezvisko</label>
+      <InputText
+        id="surname"
+        required="true"
+        v-model.trim="product.surname"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.surname }"
+        maxlength="20"
+        placeholder="Priezvisko"
+      />
+      <small class="p-error" v-if="submitted && !product.surname"
+        >Priezvisko je povinný údaj.</small
+      >
+    </div>
 
     <div class="field col">
       <label for="phoneNumber">Telefón</label>
-      <InputText
-        id="phoneNumber"
-        required="true"
-        v-model.trim="product.phoneNumber"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-      />
+      <div style="display: flex; align-items: center">
+        <span>+421</span>
+        <InputText
+          id="phoneNumber"
+          required="true"
+          v-model="product.phoneNumber"
+          @input="removeWhitespace('phoneNumber')"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+          :maxlength="9"
+          placeholder="9 čísel bez medzier"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"
         >Telefón je povinný údaj.</small
       >
@@ -236,9 +257,26 @@
         v-model.trim="product.name"
         autofocus
         :class="{ 'p-invalid': submitted && !product.name }"
+        maxlength="20"
+        placeholder="Krstné meno"
       />
       <small class="p-error" v-if="submitted && !product.name"
         >Meno je povinný údaj.</small
+      >
+    </div>
+    <div class="field col">
+      <label for="surname">Priezvisko</label>
+      <InputText
+        id="surname"
+        required="true"
+        v-model.trim="product.surname"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.surname }"
+        maxlength="20"
+        placeholder="Priezvisko"
+      />
+      <small class="p-error" v-if="submitted && !product.surname"
+        >Priezvisko je povinný údaj.</small
       >
     </div>
 
@@ -259,13 +297,19 @@
 
     <div class="field col">
       <label for="phoneNumber">Telefón</label>
-      <InputText
-        id="phoneNumber"
-        required="true"
-        v-model.trim="product.phoneNumber"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-      />
+      <div style="display: flex; align-items: center">
+        <span>+421</span>
+        <InputText
+          id="phoneNumber"
+          required="true"
+          v-model="phoneNumberWithoutPrefix"
+          @input="removeWhitespace('phoneNumber')"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.phoneNumber }"
+          :maxlength="9"
+          placeholder="9 čísel bez medzier"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"
         >Telefón je povinný údaj.</small
       >
@@ -333,6 +377,7 @@ export default {
       product: {},
       deleteProductDialog: false,
       name: "",
+      surname: "",
       healthExam: "",
       position: "",
       contractType: "",
@@ -345,6 +390,7 @@ export default {
       ],
     };
   },
+
   created() {
     this.initFilters1();
   },
@@ -352,17 +398,34 @@ export default {
   mounted() {
     this.getPostDetails();
   },
+  computed: {
+    phoneNumberWithoutPrefix: {
+      get() {
+        return this.product.phoneNumber.slice(4);
+      },
+      set(newValue) {
+        this.product.phoneNumber = "+421" + newValue;
+      },
+    },
+  },
   methods: {
     getPostDetails() {
       Api.get("/employees").then((response) => {
-        this.postDetails = response.data;
+        this.postDetails = response.data.map((employee) => ({
+          ...employee,
+          fullName: `${employee.name} ${employee.surname}`,
+        }));
       });
     },
+
     clearFilter1() {
       this.initFilters1();
     },
     openNew() {
       this.product = {};
+      this.product.position = this.positions[1]; // pre-set to the second position
+      this.product.contractType = this.contracts[1]; // pre-set to the second position
+      this.product.healthExam = new Date().toISOString().slice(0, 10); // pre-set to today's date
       this.submitted = false;
       this.productDialog = true;
     },
@@ -380,15 +443,24 @@ export default {
     handleSubmit() {
       this.submitted = true;
       if (this.product.name.trim()) {
-        Api.post("/employees", {
+        const data = {
           name: this.product.name,
+          surname: this.product.surname,
           position: this.product.position.position,
-          phoneNumber: this.product.phoneNumber,
+          phoneNumber: "+421" + this.product.phoneNumber,
           contractType: this.product.contractType.contractType,
           healthExam: this.product.healthExam,
-        })
+        };
+
+        Api.post("/employees", data)
           .then((response) => {
-            this.postDetails.push(response.data);
+            const newEmployee = {
+              ...response.data,
+              fullName: `${response.data.name} ${response.data.surname}`,
+            };
+
+            this.postDetails.push(newEmployee);
+
             this.$toast.add({
               severity: "success",
               summary: "Úspech",
@@ -397,6 +469,7 @@ export default {
             });
           })
           .catch((error) => console.log(error));
+
         setTimeout(() => {
           this.productDialog = false;
         }, 1200);
@@ -436,8 +509,10 @@ export default {
       const updatedEmployee = {
         ...this.product,
         position: this.product.position.position,
-        contractType: this.product.contractType.contractType,
+        contractType: this.product.contractType,
+        phoneNumber: "+421" + this.phoneNumberWithoutPrefix,
       };
+
       Api.put("employees/" + this.product.id, updatedEmployee)
         .then(() => {
           if (this.product.id) {
@@ -473,6 +548,9 @@ export default {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+    },
+    removeWhitespace(field) {
+      this.product[field] = this.product[field].replace(/\s/g, "");
     },
   },
 };
