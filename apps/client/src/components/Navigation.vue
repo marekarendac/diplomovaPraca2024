@@ -42,6 +42,16 @@
         ></span
       >
     </a-menu-item>
+
+    <a-menu-item key="8">
+      <template #icon> <FieldTimeOutlined /> </template>
+      <span
+        ><router-link to="/projects"
+          ><p class="navText">Projekty</p></router-link
+        ></span
+      >
+    </a-menu-item>
+
     <a-menu-item key="5">
       <template #icon>
         <ContactsOutlined />

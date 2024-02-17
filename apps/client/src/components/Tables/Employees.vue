@@ -220,10 +220,13 @@
   >
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-      <span v-if="product"
-        >Chceš vymazať záznam <b>{{ product.name }}</b
-        >?</span
-      >
+      <b>Chceš vymazať tento záznam ?</b>
+      <div style="text-align: center">
+        <span v-if="product">
+          {{ product.fullName }} <br />
+          {{ product.phoneNumber }}
+        </span>
+      </div>
     </div>
     <template #footer>
       <Button
@@ -317,7 +320,7 @@
 
     <div class="field col">
       <label for="position">Pozícia</label>
-      <InputText
+      <Dropdown
         id="position"
         required="true"
         :options="positions"
@@ -333,7 +336,7 @@
 
     <div class="field col">
       <label for="contractType">Typ úväzku</label>
-      <InputText
+      <Dropdown
         id="contractType"
         required="true"
         :options="contracts"
@@ -501,6 +504,8 @@ export default {
 
     editProduct(product) {
       this.product = { ...product };
+      this.product.position = product.position.position;
+      this.product.contractType = product.contractType.contractType;
       this.productDialogEdit = true;
     },
 
@@ -509,7 +514,7 @@ export default {
       const updatedEmployee = {
         ...this.product,
         position: this.product.position.position,
-        contractType: this.product.contractType,
+        contractType: this.product.contractType.contractType,
         phoneNumber: "+421" + this.phoneNumberWithoutPrefix,
       };
 

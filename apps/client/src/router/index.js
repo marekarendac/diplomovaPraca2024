@@ -9,6 +9,7 @@ import TotalHours from "../views/Tables/TotalHours.vue";
 import Attendance from "../views/Attendance.vue";
 import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 import LoginPage from "../views/LoginPage.vue";
+import Projects from "../views/Projects.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,11 @@ const router = createRouter({
           path: "report",
           name: "AttendanceReport",
           component: AttendanceReport,
+        },
+        {
+          path: "projects",
+          name: "Projects",
+          component: Projects,
         },
       ],
     },
