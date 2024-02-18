@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/marekarendac/bakalarka#readme",
   "devDependencies": {
-    "lerna": "^4.0.0",
+    "lerna": "^8.1.2",
     "vue-cli-plugin-vuestic-ui": "~1.0.5"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "bootstrap-vue": "^2.23.1",
     "express-session": "^1.17.3",
     "mysql2": "^3.8.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "vue": "^3.2.31"
   }
 }
