@@ -141,7 +141,7 @@
           autofocus
           :class="{ 'p-invalid': submitted && !product.phoneNumber }"
           :maxlength="9"
-          placeholder="9 čísel bez medzier"
+          placeholder="000-000-000"
         />
       </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"
@@ -310,7 +310,7 @@
           autofocus
           :class="{ 'p-invalid': submitted && !product.phoneNumber }"
           :maxlength="9"
-          placeholder="9 čísel bez medzier"
+          placeholder="000-000-000"
         />
       </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"

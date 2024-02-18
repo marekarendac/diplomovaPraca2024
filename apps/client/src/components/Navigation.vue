@@ -44,7 +44,7 @@
     </a-menu-item>
 
     <a-menu-item key="8">
-      <template #icon> <FieldTimeOutlined /> </template>
+      <template #icon> <CodepenOutlined /> </template>
       <span
         ><router-link to="/projects"
           ><p class="navText">Projekty</p></router-link
@@ -91,6 +91,7 @@ import {
   ContactsOutlined,
   AuditOutlined,
   FieldTimeOutlined,
+  CodepenOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -104,6 +105,7 @@ export default defineComponent({
     ToolOutlined,
     AuditOutlined,
     FieldTimeOutlined,
+    CodepenOutlined,
   },
 
   setup() {
