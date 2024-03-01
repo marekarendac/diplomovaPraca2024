@@ -28,6 +28,22 @@ const employee = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
+      documentNumber: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+      },
+      iban: {
+        type: DataTypes.STRING(24),
+        allowNull: false,
+      },
+      wage: {
+        type: DataTypes.DECIMAL(4, 2),
+        allowNull: false,
+      },
     },
     {
       timestamps: false,

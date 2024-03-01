@@ -33,50 +33,33 @@
       :scrollable="true"
       scrollHeight="72vh"
     >
-      <Column
-        field="id"
-        header="ID"
-        style="max-width: 8%"
-        :sortable="true"
-      ></Column>
-
-      <Column
-        field="fullName"
-        header="Meno"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
-
-      <Column
-        field="position"
-        header="Pozícia"
-        style="max-width: 13%"
-        :sortable="true"
-      ></Column>
-      <Column
-        field="phoneNumber"
-        header="Telefón"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
+      <Column field="fullName" header="Meno" :sortable="true"></Column>
+      <Column field="position" header="Pozícia" :sortable="true"></Column>
       <Column
         field="contractType"
         header="Typ úväzku"
-        style="min-width: 1vh"
         :sortable="true"
       ></Column>
       <Column
-        field="healthExam"
-        header="ZP"
-        style="min-width: 1vh"
+        field="email"
+        header="Email"
         :sortable="true"
-      ></Column>
+        style="min-width: 230px"
+      ></Column
+      ><Column field="phoneNumber" header="Telefón" :sortable="true"></Column
+      ><Column field="healthExam" header="ZP" :sortable="true"></Column>
 
-      <Column header="Operácia" :exportable="false" style="max-width: 14%">
+      <Column header="Operácie" :exportable="false" style="max-width: 13%">
         <template #body="slotProps">
           <Button
+            icon="pi pi-eye"
+            class="p-button-rounded mr-1"
+            @click="showProduct(slotProps.data)"
+          />
+
+          <Button
             icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
+            class="p-button-rounded p-button-success mr-1"
             @click="editProduct(slotProps.data)"
           />
 
@@ -89,6 +72,79 @@
       </Column>
     </DataTable>
   </div>
+
+  <Dialog
+    v-model:visible="showProductDialog"
+    :style="{ width: '450px' }"
+    header="Zobraziť záznam"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="name">Meno</label
+      ><AutoComplete id="name" v-model.trim="product.name" disabled />
+    </div>
+    <div class="field col">
+      <label for="surname">Priezvisko</label
+      ><AutoComplete id="surname" v-model.trim="product.surname" disabled />
+    </div>
+    <div class="field col">
+      <label for="phoneNumber">Telefón</label
+      ><AutoComplete
+        id="phoneNumber"
+        v-model.trim="product.phoneNumber"
+        disabled
+      />
+    </div>
+    <div class="field col">
+      <label for="position">Pozícia</label
+      ><AutoComplete id="position" v-model.trim="product.position" disabled />
+    </div>
+    <div class="field col">
+      <label for="contractType">Typ úväzku</label
+      ><AutoComplete
+        id="contractType"
+        v-model.trim="product.contractType"
+        disabled
+      />
+    </div>
+    <div class="field col">
+      <label for="healthExam">Zdravotná prehliadka</label
+      ><AutoComplete
+        id="healthExam"
+        v-model.trim="product.healthExam"
+        disabled
+      />
+    </div>
+    <div class="field col">
+      <label for="documentNumber">Číslo OP</label
+      ><AutoComplete
+        id="documentNumber"
+        v-model.trim="product.documentNumber"
+        disabled
+      />
+    </div>
+    <div class="field col">
+      <label for="email">Email</label
+      ><AutoComplete id="email" v-model.trim="product.email" disabled />
+    </div>
+    <div class="field col">
+      <label for="iban">IBAN</label
+      ><AutoComplete id="iban" v-model.trim="product.iban" disabled />
+    </div>
+    <div class="field col">
+      <label for="wage">Hodinová mzda</label
+      ><AutoComplete id="wage" v-model.trim="product.wage" disabled />
+    </div>
+    <template #footer>
+      <Button
+        label="Ukonči"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="showProductDialog = false"
+      />
+    </template>
+  </Dialog>
 
   <Dialog
     @submit.prevent="handleSubmit"
@@ -132,16 +188,14 @@
     <div class="field col">
       <label for="phoneNumber">Telefón</label>
       <div style="display: flex; align-items: center">
-        <span>+421</span>
-        <InputText
+        <InputMask
           id="phoneNumber"
           required="true"
           v-model="product.phoneNumber"
-          @input="removeWhitespace('phoneNumber')"
+          mask="+421999999999"
+          placeholder="+421 000 000 000"
           autofocus
           :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-          :maxlength="9"
-          placeholder="000-000-000"
         />
       </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"
@@ -196,6 +250,79 @@
       >
     </div>
 
+    <div class="field col">
+      <label for="documentNumber">Číslo OP</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="documentNumber"
+          required="true"
+          v-model="product.documentNumber"
+          mask="aa999999"
+          placeholder="XX112233"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.documentNumber }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.documentNumber"
+        >Číslo OP je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="email">Email</label>
+      <div style="display: flex; align-items: center">
+        <InputText
+          id="email"
+          required="true"
+          v-model="product.email"
+          @input="removeWhitespace('email')"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.email }"
+          :maxlength="45"
+          placeholder="user@email.com"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.email"
+        >Email je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="iban">IBAN</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="iban"
+          required="true"
+          v-model="product.iban"
+          mask="SK99999999999999999999"
+          placeholder="SK00001111222233334444"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.iban }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.iban"
+        >IBAN je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="wage">Hodinová mzda</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="wage"
+          required="true"
+          v-model="product.wage"
+          mask="99.9"
+          placeholder="00.0"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.wage }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.wage"
+        >Mzda je povinný údaj.</small
+      >
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
@@ -222,12 +349,39 @@
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <b>Chceš vymazať tento záznam ?</b>
       <div style="text-align: center">
-        <span v-if="product">
-          {{ product.fullName }} <br />
-          {{ product.phoneNumber }}
-        </span>
+        <InputGroup>
+          <InputGroupAddon>
+            <i class="pi pi-user"></i>
+          </InputGroupAddon>
+          <AutoComplete
+            id="name"
+            v-model.trim="product.fullName"
+            disabled
+          /><br />
+        </InputGroup>
+        <InputGroup>
+          <InputGroupAddon>
+            <i class="pi pi-phone"></i>
+          </InputGroupAddon>
+          <AutoComplete
+            id="name"
+            v-model.trim="product.phoneNumber"
+            disabled
+          /><br />
+        </InputGroup>
+        <InputGroup>
+          <InputGroupAddon>
+            <i class="pi pi-id-card"></i>
+          </InputGroupAddon>
+          <AutoComplete
+            id="name"
+            v-model.trim="product.documentNumber"
+            disabled
+          />
+        </InputGroup>
       </div>
     </div>
+
     <template #footer>
       <Button
         label="Nie"
@@ -284,33 +438,16 @@
     </div>
 
     <div class="field col">
-      <label for="healthExam">Zdravotná prehliadka</label>
-      <Calendar
-        showIcon
-        id="healthExam"
-        required="true"
-        v-model="product.healthExam"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.healthExam }"
-      />
-      <small class="p-error" v-if="submitted && !product.healthExam"
-        >Zdravotná prehliadka je povinný údaj.</small
-      >
-    </div>
-
-    <div class="field col">
       <label for="phoneNumber">Telefón</label>
       <div style="display: flex; align-items: center">
-        <span>+421</span>
-        <InputText
+        <InputMask
           id="phoneNumber"
           required="true"
-          v-model="phoneNumberWithoutPrefix"
-          @input="removeWhitespace('phoneNumber')"
+          v-model="product.phoneNumber"
+          mask="+421999999999"
+          placeholder="+421 000 000 000"
           autofocus
           :class="{ 'p-invalid': submitted && !product.phoneNumber }"
-          :maxlength="9"
-          placeholder="000-000-000"
         />
       </div>
       <small class="p-error" v-if="submitted && !product.phoneNumber"
@@ -350,6 +487,94 @@
       >
     </div>
 
+    <div class="field col">
+      <label for="healthExam">Zdravotná prehliadka</label>
+      <Calendar
+        showIcon
+        id="healthExam"
+        required="true"
+        v-model="product.healthExam"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.healthExam }"
+      />
+      <small class="p-error" v-if="submitted && !product.healthExam"
+        >Zdravotná prehliadka je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="documentNumber">Číslo OP</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="documentNumber"
+          required="true"
+          v-model="product.documentNumber"
+          mask="aa999999"
+          placeholder="XX112233"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.documentNumber }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.documentNumber"
+        >Číslo OP je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="email">Email</label>
+      <div style="display: flex; align-items: center">
+        <InputText
+          id="email"
+          required="true"
+          v-model="product.email"
+          @input="removeWhitespace('email')"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.email }"
+          :maxlength="45"
+          placeholder="user@email.com"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.email"
+        >Email je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="iban">IBAN</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="iban"
+          required="true"
+          v-model="product.iban"
+          mask="SK99999999999999999999"
+          placeholder="SK00001111222233334444"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.iban }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.iban"
+        >IBAN je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="wage">Hodinová mzda</label>
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="wage"
+          required="true"
+          v-model="product.wage"
+          mask="99.9"
+          placeholder="00.0"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.wage }"
+        />
+      </div>
+      <small class="p-error" v-if="submitted && !product.wage"
+        >Mzda je povinný údaj.</small
+      >
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
@@ -370,11 +595,13 @@
 <script>
 import Api from "@/services/Api.js";
 import { FilterMatchMode } from "primevue/api";
+
 export default {
   data() {
     return {
       postDetails: null,
       submitted: false,
+      showProductDialog: false,
       productDialog: false,
       productDialogEdit: false,
       product: {},
@@ -391,6 +618,10 @@ export default {
         { contractType: "Zamestnanec" },
         { contractType: "Živnostník" },
       ],
+      documentNumber: "",
+      email: "",
+      iban: "",
+      wage: "",
     };
   },
 
@@ -401,16 +632,7 @@ export default {
   mounted() {
     this.getPostDetails();
   },
-  computed: {
-    phoneNumberWithoutPrefix: {
-      get() {
-        return this.product.phoneNumber.slice(4);
-      },
-      set(newValue) {
-        this.product.phoneNumber = "+421" + newValue;
-      },
-    },
-  },
+
   methods: {
     getPostDetails() {
       Api.get("/employees").then((response) => {
@@ -445,14 +667,19 @@ export default {
 
     handleSubmit() {
       this.submitted = true;
+
       if (this.product.name.trim()) {
         const data = {
           name: this.product.name,
           surname: this.product.surname,
           position: this.product.position.position,
-          phoneNumber: "+421" + this.product.phoneNumber,
+          phoneNumber: this.product.phoneNumber,
           contractType: this.product.contractType.contractType,
           healthExam: this.product.healthExam,
+          documentNumber: this.product.documentNumber,
+          email: this.product.email,
+          iban: this.product.iban,
+          wage: this.product.wage,
         };
 
         Api.post("/employees", data)
@@ -502,6 +729,11 @@ export default {
       }, 1200);
     },
 
+    showProduct(product) {
+      this.product = product;
+      this.showProductDialog = true;
+    },
+
     editProduct(product) {
       this.product = { ...product };
       this.product.position = product.position.position;
@@ -515,7 +747,7 @@ export default {
         ...this.product,
         position: this.product.position.position,
         contractType: this.product.contractType.contractType,
-        phoneNumber: "+421" + this.phoneNumberWithoutPrefix,
+        phoneNumber: this.phoneNumberWithoutPrefix,
       };
 
       Api.put("employees/" + this.product.id, updatedEmployee)

@@ -27,9 +27,11 @@ import AutoComplete from "primevue/autocomplete";
 import Tag from "primevue/tag";
 import Card from "primevue/card";
 
+import "primeicons/primeicons.css";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
+import InputMask from "primevue/inputmask";
 
 const app = createApp(App);
 
@@ -57,6 +59,7 @@ app.component("InputText", InputText);
 app.component("Textarea", Textarea);
 app.component("InputNumber", InputNumber);
 app.component("Toast", Toast);
+app.component("InputMask", InputMask);
 
 //AUTENTICACION PLUGIN
 

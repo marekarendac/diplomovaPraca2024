@@ -9,7 +9,7 @@ const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
 const login = require('./login');
 
-const sequelize = new Sequelize('diplomka', 'root', 'root', {
+const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
   host: 'localhost',
   dialect: 'mysql',
 });
