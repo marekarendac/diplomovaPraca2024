@@ -25,6 +25,13 @@
           </div>
         </div>
       </template>
+      <template #end>
+        <Button
+          label="Export tabuľky"
+          icon="pi pi-external-link"
+          @click="exportEmployees"
+        />
+      </template>
     </Toolbar>
     <DataTable
       :value="postDetails"
@@ -747,7 +754,7 @@ export default {
         ...this.product,
         position: this.product.position.position,
         contractType: this.product.contractType.contractType,
-        phoneNumber: this.phoneNumberWithoutPrefix,
+        phoneNumber: this.product.phoneNumber,
       };
 
       Api.put("employees/" + this.product.id, updatedEmployee)
@@ -788,6 +795,31 @@ export default {
     },
     removeWhitespace(field) {
       this.product[field] = this.product[field].replace(/\s/g, "");
+    },
+    exportEmployees() {
+      if (window.confirm("Do you really want to download the file?")) {
+        console.log("exportEmployees called");
+        Api.get("/exportEmployees", {
+          responseType: "blob", // Important for handling the binary data
+        })
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "employees.xlsx"; // default filename
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+            }
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
   },
 };

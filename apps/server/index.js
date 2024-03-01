@@ -13,6 +13,8 @@ const workplacesRouter = require('./routes/workPlaces');
 const attendancesRouter = require('./routes/attendances');
 const notificationsRouter = require('./routes/notifications');
 const loginRouter = require('./routes/login');
+const exportEmployeesRouter = require('./routes/exportEmployees');
+
 // const { populateDB } = require('./src/helpers');
 
 const app = express();
@@ -38,6 +40,7 @@ app.use('/customers', customersRouter);
 app.use('/attendances', attendancesRouter);
 app.use('/notifications', notificationsRouter);
 app.use('/login', loginRouter);
+app.use('/exportEmployees', exportEmployeesRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}!`);

@@ -25,62 +25,42 @@
           </div>
         </div>
       </template>
+      <template #end>
+        <Button
+          label="Export tabuľky"
+          icon="pi pi-external-link"
+          @click="exportEmployees"
+        />
+      </template>
     </Toolbar>
     <DataTable
       :value="postDetails"
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="83vh"
+      scrollHeight="72vh"
     >
-      <Column
-        field="id"
-        header="ID"
-        style="max-width: 8%"
-        :sortable="true"
-      ></Column>
+      <Column field="brand" header="Značka" :sortable="true"></Column>
 
-      <Column
-        field="brand"
-        header="Značka"
-        style="max-width: 12%"
-        :sortable="true"
-      ></Column>
-
-      <Column
-        field="model"
-        header="Model"
-        style="max-width: 12%"
-        :sortable="true"
-      ></Column
-      ><Column
-        field="year"
-        header="Rok"
-        style="max-width: 10%"
-        :sortable="true"
-      ></Column>
+      <Column field="model" header="Model" :sortable="true"></Column
+      ><Column field="year" header="Rok" :sortable="true"></Column>
       <Column
         field="VIN"
         header="VIN číslo"
-        style="min-width: 19%"
         :sortable="true"
+        style="min-width: 230px"
       ></Column
-      ><Column
-        field="tireSize"
-        header="Pneumatiky"
-        style="min-width: 1vh"
-        :sortable="true"
-        ;
-      ></Column>
-      <Column
-        field="lastService"
-        header="Servis"
-        style="min-width: 1vh"
-        :sortable="true"
-      ></Column>
+      ><Column field="tireSize" header="Pneumatiky" :sortable="true" ;></Column>
+      <Column field="lastService" header="Servis" :sortable="true"></Column>
 
-      <Column header="Operácia" :exportable="false" style="min-width: 1vh">
+      <Column header="Operácia" :exportable="false" style="max-width: 13%">
         <template #body="slotProps">
+          <Button
+            icon="pi pi-eye"
+            class="p-button-rounded mr-1"
+            @click="showProduct(slotProps.data)"
+          />
+
           <Button
             icon="pi pi-pencil"
             class="p-button-rounded p-button-success mr-2"
@@ -96,6 +76,19 @@
       </Column>
     </DataTable>
   </div>
+
+  <Dialog
+    v-model:visible="showProductDialog"
+    :style="{ width: '450px' }"
+    header="Zobraziť záznam"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="brand">Značka</label
+      ><AutoComplete id="brand" v-model.trim="product.brand" disabled />
+    </div>
+  </Dialog>
 
   <Dialog
     @submit.prevent="handleSubmit"

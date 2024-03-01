@@ -6,6 +6,7 @@ const customers = require('./customers');
 const attendances = require('./attendances');
 const notifications = require('./notifications');
 const login = require('./login');
+const exportEmployees = require('./exportEmployees');
 
 module.exports = {
   employees,
@@ -16,4 +17,5 @@ module.exports = {
   attendances,
   notifications,
   login,
+  exportEmployees,
 };
