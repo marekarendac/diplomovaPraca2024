@@ -37,7 +37,7 @@
       :value="postDetails"
       :filters="filters1"
       sortField="healthExam"
-      sortOrder="1"
+      :sortOrder="1"
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="72vh"
