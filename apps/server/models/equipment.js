@@ -24,6 +24,10 @@ const equipment = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      warranty: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
     },
     {
       timestamps: false,

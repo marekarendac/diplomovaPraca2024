@@ -29,7 +29,7 @@
         <Button
           label="Export tabuľky"
           icon="pi pi-external-link"
-          @click="exportEmployees"
+          @click="exportVehicles"
         />
       </template>
     </Toolbar>
@@ -63,7 +63,7 @@
 
           <Button
             icon="pi pi-pencil"
-            class="p-button-rounded p-button-success mr-2"
+            class="p-button-rounded p-button-success mr-1"
             @click="editProduct(slotProps.data)"
           />
 
@@ -88,6 +88,43 @@
       <label for="brand">Značka</label
       ><AutoComplete id="brand" v-model.trim="product.brand" disabled />
     </div>
+
+    <div class="field col">
+      <label for="model">Model</label
+      ><AutoComplete id="model" v-model.trim="product.model" disabled />
+    </div>
+
+    <div class="field col">
+      <label for="year">Rok výroby</label
+      ><AutoComplete id="year" v-model.trim="product.year" disabled />
+    </div>
+
+    <div class="field col">
+      <label for="VIN">VIN číslo</label
+      ><AutoComplete id="VIN" v-model.trim="product.VIN" disabled />
+    </div>
+
+    <div class="field col">
+      <label for="tireSize">Veľkosť pneumatík</label
+      ><AutoComplete id="tireSize" v-model.trim="product.tireSize" disabled />
+    </div>
+
+    <div class="field col">
+      <label for="lastService">Posledný servis</label
+      ><AutoComplete
+        id="lastService"
+        v-model.trim="product.lastService"
+        disabled
+      />
+    </div>
+    <template #footer>
+      <Button
+        label="Ukonči"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="showProductDialog = false"
+      />
+    </template>
   </Dialog>
 
   <Dialog
@@ -106,6 +143,8 @@
         v-model.trim="product.brand"
         autofocus
         :class="{ 'p-invalid': submitted && !product.brand }"
+        maxlength="20"
+        placeholder="Značka vozidla"
       />
       <small class="p-error" v-if="submitted && !product.brand"
         >Značka je povinný údaj.</small
@@ -120,6 +159,8 @@
         v-model.trim="product.model"
         autofocus
         :class="{ 'p-invalid': submitted && !product.model }"
+        maxlength="30"
+        placeholder="Model vozidla"
       />
       <small class="p-error" v-if="submitted && !product.model"
         >Model je povinný údaj.</small
@@ -128,13 +169,17 @@
 
     <div class="field col">
       <label for="year">Rok výroby</label>
-      <InputText
-        id="year"
-        required="true"
-        v-model.trim="product.year"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.year }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="year"
+          required="true"
+          v-model="product.year"
+          mask="9999"
+          placeholder="2024"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.year }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.year"
         >Rok výroby je povinný údaj.</small
       >
@@ -142,31 +187,40 @@
 
     <div class="field col">
       <label for="VIN">VIN číslo</label>
-      <InputText
-        id="VIN"
-        required="true"
-        v-model.trim="product.VIN"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.VIN }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="VIN"
+          required="true"
+          v-model="product.VIN"
+          mask="*****************"
+          placeholder="XXXXXXXXXXXXXXXXX"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.VIN }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.VIN"
-        >VIN je povinný údaj.</small
+        >VIN číslo je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
       <label for="tireSize">Veľkosť pneumatík</label>
-      <InputText
-        id="tireSize"
-        required="true"
-        v-model.trim="product.tireSize"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.tireSize }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="tireSize"
+          required="true"
+          v-model="product.tireSize"
+          mask="999x99xR99"
+          placeholder="999x99xR99"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.tireSize }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.tireSize"
         >Veľkosť pneumatík je povinný údaj.</small
       >
     </div>
+
     <div class="field col">
       <label for="lastService">Posledný servis</label
       ><Calendar
@@ -202,16 +256,38 @@
   <Dialog
     v-model:visible="deleteProductDialog"
     :style="{ width: '450px' }"
-    header="Zmazanie"
+    header="Vymaž vybraný záznam"
     :modal="true"
   >
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-      <span v-if="product"
-        >Chceš vymazať záznam <b>{{ product.brand + " " + product.model }}</b
-        >?</span
-      >
+      <b>Chceš vymazať tento záznam ?</b>
+      <div style="text-align: center">
+        <InputGroup>
+          <InputGroupAddon class="icon-addon">
+            <i class="pi pi-car"></i>
+          </InputGroupAddon>
+          <AutoComplete
+            id="brand"
+            v-model.trim="brandAndModel"
+            disabled
+          /><br />
+        </InputGroup>
+        <InputGroup>
+          <InputGroupAddon class="icon-addon">
+            <i class="pi pi-calendar"></i>
+          </InputGroupAddon>
+          <AutoComplete id="year" v-model.trim="product.year" disabled /><br />
+        </InputGroup>
+        <InputGroup>
+          <InputGroupAddon class="icon-addon">
+            <i class="pi pi-id-card"></i>
+          </InputGroupAddon>
+          <AutoComplete id="VIN" v-model.trim="product.VIN" disabled />
+        </InputGroup>
+      </div>
     </div>
+
     <template #footer>
       <Button
         label="Nie"
@@ -244,6 +320,8 @@
         v-model.trim="product.brand"
         autofocus
         :class="{ 'p-invalid': submitted && !product.brand }"
+        maxlength="20"
+        placeholder="Značka vozidla"
       />
       <small class="p-error" v-if="submitted && !product.brand"
         >Značka je povinný údaj.</small
@@ -258,14 +336,17 @@
         v-model.trim="product.model"
         autofocus
         :class="{ 'p-invalid': submitted && !product.model }"
+        maxlength="30"
+        placeholder="Model vozidla"
       />
       <small class="p-error" v-if="submitted && !product.model"
         >Model je povinný údaj.</small
       >
     </div>
+
     <div class="field col">
-      <label for="lastService">Posledný servis</label>
-      <Calendar
+      <label for="lastService">Posledný servis</label
+      ><Calendar
         showIcon
         id="lastService"
         required="true"
@@ -281,13 +362,17 @@
 
     <div class="field col">
       <label for="year">Rok výroby</label>
-      <InputText
-        id="year"
-        required="true"
-        v-model.trim="product.year"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.year }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="year"
+          required="true"
+          v-model="product.year"
+          mask="9999"
+          placeholder="2024"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.year }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.year"
         >Rok výroby je povinný údaj.</small
       >
@@ -295,27 +380,35 @@
 
     <div class="field col">
       <label for="VIN">VIN číslo</label>
-      <InputText
-        id="VIN"
-        required="true"
-        v-model.trim="product.VIN"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.VIN }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="VIN"
+          required="true"
+          v-model="product.VIN"
+          mask="*****************"
+          placeholder="XXXXXXXXXXXXXXXXX"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.VIN }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.VIN"
-        >VIN je povinný údaj.</small
+        >VIN číslo je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
       <label for="tireSize">Veľkosť pneumatík</label>
-      <InputText
-        id="tireSize"
-        required="true"
-        v-model.trim="product.tireSize"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.tireSize }"
-      />
+      <div style="display: flex; align-items: center">
+        <InputMask
+          id="tireSize"
+          required="true"
+          v-model="product.tireSize"
+          mask="999x99xR99"
+          placeholder="999x99xR99"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.tireSize }"
+        />
+      </div>
       <small class="p-error" v-if="submitted && !product.tireSize"
         >Veľkosť pneumatík je povinný údaj.</small
       >
@@ -341,11 +434,13 @@
 <script>
 import Api from "@/services/Api.js";
 import { FilterMatchMode } from "primevue/api";
+
 export default {
   data() {
     return {
       postDetails: null,
       submitted: false,
+      showProductDialog: false,
       productDialog: false,
       productDialogEdit: false,
       product: {},
@@ -363,6 +458,7 @@ export default {
   mounted() {
     this.getPostDetails();
   },
+
   methods: {
     getPostDetails() {
       Api.get("/vehicles").then((response) => {
@@ -435,6 +531,11 @@ export default {
       }, 1200);
     },
 
+    showProduct(product) {
+      this.product = product;
+      this.showProductDialog = true;
+    },
+
     editProduct(product) {
       this.product = { ...product };
       this.productDialogEdit = true;
@@ -446,6 +547,10 @@ export default {
       if (this.product.brand.trim() && this.product.model.trim());
 
       {
+        this.product.lastService = this.product.lastService
+          .toISOString()
+          .split("T")[0]; // format the date
+
         if (this.product.id) {
           this.postDetails[this.findIndexById(this.product.id)] = this.product;
         }
@@ -456,8 +561,7 @@ export default {
           model: this.product.model,
           year: this.product.year,
           VIN: this.product.VIN,
-          lastService: this.product.lastService,
-          tireSize: this.product.tireSize,
+          lastService: this.product.lastService, // already formatted
         }).catch((error) => console.log(error));
       }
       this.$toast.add({
@@ -489,6 +593,43 @@ export default {
     },
     clearFilter1() {
       this.initFilters1();
+    },
+    exportVehicles() {
+      if (window.confirm("Do you really want to download the file?")) {
+        console.log("exportVehicles called");
+        Api.get("/exportVehicles", {
+          responseType: "blob", // Important for handling the binary data
+        })
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "vehicles.xlsx"; // default filename
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+            }
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+    },
+  },
+  computed: {
+    brandAndModel: {
+      get() {
+        return this.product.brand + " " + this.product.model;
+      },
+      set(value) {
+        const parts = value.split(" ");
+        this.product.brand = parts[0];
+        this.product.model = parts.slice(1).join(" ");
+      },
     },
   },
 };
@@ -533,5 +674,10 @@ export default {
       width: 100%;
     }
   }
+}
+</style>
+<style scoped>
+:deep() .icon-addon {
+  margin-right: 10px; /* adjust as needed */
 }
 </style>

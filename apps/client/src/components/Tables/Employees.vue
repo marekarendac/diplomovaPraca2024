@@ -357,7 +357,7 @@
       <b>Chceš vymazať tento záznam ?</b>
       <div style="text-align: center">
         <InputGroup>
-          <InputGroupAddon>
+          <InputGroupAddon class="icon-addon">
             <i class="pi pi-user"></i>
           </InputGroupAddon>
           <AutoComplete
@@ -367,7 +367,7 @@
           /><br />
         </InputGroup>
         <InputGroup>
-          <InputGroupAddon>
+          <InputGroupAddon class="icon-addon">
             <i class="pi pi-phone"></i>
           </InputGroupAddon>
           <AutoComplete
@@ -377,7 +377,7 @@
           /><br />
         </InputGroup>
         <InputGroup>
-          <InputGroupAddon>
+          <InputGroupAddon class="icon-addon">
             <i class="pi pi-id-card"></i>
           </InputGroupAddon>
           <AutoComplete
@@ -445,6 +445,21 @@
     </div>
 
     <div class="field col">
+      <label for="healthExam">Zdravotná prehliadka</label>
+      <Calendar
+        showIcon
+        id="healthExam"
+        required="true"
+        v-model="product.healthExam"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.healthExam }"
+      />
+      <small class="p-error" v-if="submitted && !product.healthExam"
+        >Zdravotná prehliadka je povinný údaj.</small
+      >
+    </div>
+
+    <div class="field col">
       <label for="phoneNumber">Telefón</label>
       <div style="display: flex; align-items: center">
         <InputMask
@@ -491,21 +506,6 @@
       />
       <small class="p-error" v-if="submitted && !product.contractType"
         >Typ úväzku je povinný údaj.</small
-      >
-    </div>
-
-    <div class="field col">
-      <label for="healthExam">Zdravotná prehliadka</label>
-      <Calendar
-        showIcon
-        id="healthExam"
-        required="true"
-        v-model="product.healthExam"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.healthExam }"
-      />
-      <small class="p-error" v-if="submitted && !product.healthExam"
-        >Zdravotná prehliadka je povinný údaj.</small
       >
     </div>
 
@@ -747,7 +747,6 @@ export default {
       this.product.contractType = product.contractType.contractType;
       this.productDialogEdit = true;
     },
-
     handleEdit() {
       this.submitted = true;
       const updatedEmployee = {
@@ -755,6 +754,7 @@ export default {
         position: this.product.position.position,
         contractType: this.product.contractType.contractType,
         phoneNumber: this.product.phoneNumber,
+        healthExam: this.product.healthExam.toISOString().split("T")[0], // format the date
       };
 
       Api.put("employees/" + this.product.id, updatedEmployee)
@@ -809,8 +809,11 @@ export default {
             const contentDisposition = response.headers["content-disposition"];
             let fileName = "employees.xlsx"; // default filename
             if (contentDisposition) {
-              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+              const fileNameMatch = contentDisposition.match(
+                /filename="?([^"]+)"?\b/
+              );
+              if (fileNameMatch && fileNameMatch[1])
+                fileName = fileNameMatch[1];
             }
             link.setAttribute("download", fileName);
             document.body.appendChild(link);
@@ -864,5 +867,10 @@ export default {
       width: 100%;
     }
   }
+}
+</style>
+<style scoped>
+:deep() .icon-addon {
+  margin-right: 10px; /* adjust as needed */
 }
 </style>

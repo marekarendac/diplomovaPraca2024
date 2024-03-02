@@ -1,19 +1,19 @@
 const xlsx = require('xlsx');
 
-const getExportEmployees = async (req, res) => {
-  const employees = await req.context.models.Employee.findAll();
+const getExportEquipment = async (req, res) => {
+  const equipment = await req.context.models.Equipment.findAll();
 
   // Convert instances to plain objects
-  const plainEmployees = employees.map((employee) => employee.toJSON());
+  const plainEquipment = equipment.map((equipment) => equipment.toJSON());
 
-  const ws = xlsx.utils.json_to_sheet(plainEmployees);
+  const ws = xlsx.utils.json_to_sheet(plainEquipment);
   const wb = xlsx.utils.book_new();
-  xlsx.utils.book_append_sheet(wb, ws, 'Employees');
+  xlsx.utils.book_append_sheet(wb, ws, 'Equipment');
 
   const buf = xlsx.write(wb, { type: 'buffer' });
 
   const timestamp = new Date().toISOString().replace(/[-:]/g, '');
-  const filename = `employees_${timestamp}.xlsx`;
+  const filename = `equipment_${timestamp}.xlsx`;
 
   res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
   res.setHeader('X-Filename', filename); // Send filename as separate header
@@ -22,5 +22,5 @@ const getExportEmployees = async (req, res) => {
 };
 
 module.exports = {
-  getExportEmployees,
+  getExportEquipment,
 };

@@ -26,12 +26,12 @@ import Dropdown from "primevue/dropdown";
 import AutoComplete from "primevue/autocomplete";
 import Tag from "primevue/tag";
 import Card from "primevue/card";
+import InputMask from "primevue/inputmask";
 
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/saga-blue/theme.css";
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
-import InputMask from "primevue/inputmask";
 
 const app = createApp(App);
 

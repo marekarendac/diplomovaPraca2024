@@ -7,6 +7,8 @@ const attendances = require('./attendances');
 const notifications = require('./notifications');
 const login = require('./login');
 const exportEmployees = require('./exportEmployees');
+const exportVehicles = require('./exportVehicles');
+const exportEquipment = require('./exportEquipment');
 
 module.exports = {
   employees,
@@ -18,4 +20,6 @@ module.exports = {
   notifications,
   login,
   exportEmployees,
+  exportVehicles,
+  exportEquipment,
 };
