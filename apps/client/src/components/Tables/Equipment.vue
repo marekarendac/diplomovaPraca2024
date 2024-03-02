@@ -36,6 +36,8 @@
     <DataTable
       :value="postDetails"
       :filters="filters1"
+      sortField="warranty"
+      sortOrder="1"
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="72vh"
@@ -397,6 +399,22 @@
     </div>
 
     <div class="field col">
+      <label for="status">Stav nástroja</label>
+      <Dropdown
+        id="status"
+        :options="statuses"
+        optionLabel="status"
+        required="true"
+        v-model="product.status"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.status }"
+      />
+      <small class="p-error" v-if="submitted && !product.status"
+        >Stav je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
       <label for="description">Popis nástroja</label>
       <Textarea
         id="description"
@@ -410,22 +428,6 @@
       />
       <small class="p-error" v-if="submitted && !product.description"
         >Popis je povinné pole.</small
-      >
-    </div>
-
-    <div class="field col">
-      <label for="status">Stav nástroja</label>
-      <Dropdown
-        id="status"
-        :options="statuses"
-        optionLabel="status"
-        required="true"
-        v-model="product.status"
-        autofocus
-        :class="{ 'p-invalid': submitted && !product.status }"
-      />
-      <small class="p-error" v-if="submitted && !product.status"
-        >Stav je povinné pole.</small
       >
     </div>
 
@@ -540,11 +542,11 @@ export default {
               severity: "success",
               summary: "Úspech",
               detail: "Záznam bol vytvorený!",
-              life: 1200,
+              life: 800,
             });
             setTimeout(() => {
               this.productDialog = false;
-            }, 1200);
+            }, 800);
           })
           .catch((error) => console.log(error));
       }
@@ -566,11 +568,11 @@ export default {
         severity: "warn",
         summary: "Vymazané",
         detail: "Záznam bol vymazaný.",
-        life: 1200,
+        life: 800,
       });
       setTimeout(() => {
         this.deleteProductDialog = false;
-      }, 1200);
+      }, 800);
     },
 
     editProduct(product) {
@@ -585,41 +587,31 @@ export default {
 
     handleEdit() {
       this.submitted = true;
+      const updatedEquipment = {
+        ...this.product,
+        equipmentType: this.product.equipmentType.type, // assuming equipmentType is a Proxy object with a type property
+        status: this.product.status.status, // assuming status is a Proxy object with a status property
+        warranty: this.product.warranty.toISOString().split("T")[0], // format the date
+      };
 
-      if (
-        typeof this.product.brand === "string" &&
-        this.product.brand.trim() &&
-        typeof this.product.equipmentType === "string" &&
-        this.product.equipmentType.trim()
-      ) {
-        // format the warranty date
-        this.product.warranty = this.product.warranty
-          .toISOString()
-          .split("T")[0];
+      Api.put("equipment/" + this.product.id, updatedEquipment)
+        .then(() => {
+          if (this.product.id) {
+            this.postDetails[this.findIndexById(this.product.id)] =
+              updatedEquipment;
+          }
+          this.$toast.add({
+            severity: "success",
+            summary: "Úspech",
+            detail: "Záznam bol editovaný!",
+            life: 800,
+          });
+        })
+        .catch((error) => console.log(error));
 
-        if (this.product.id) {
-          this.postDetails[this.findIndexById(this.product.id)] = this.product;
-        }
-
-        Api.put("equipment/" + this.product.id, {
-          id: this.product.id,
-          idNumber: this.product.idNumber,
-          brand: this.product.brand,
-          equipmentType: this.product.equipmentType,
-          description: this.product.description,
-          status: this.product.status,
-          warranty: this.product.warranty, // already formatted
-        }).catch((error) => console.log(error));
-      }
-      this.$toast.add({
-        severity: "success",
-        summary: "Úspech",
-        detail: "Záznam bol editovaný!",
-        life: 1200,
-      });
       setTimeout(() => {
         this.productDialogEdit = false;
-      }, 1200);
+      }, 800);
     },
 
     findIndexById(id) {

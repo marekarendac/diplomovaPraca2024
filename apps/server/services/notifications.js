@@ -27,9 +27,24 @@ const findAll = async (req, res) => {
     },
   });
 
-  res
-    .status(200)
-    .send({ vehiclesErrors: !!vehicles, employeesErrors: !!employees });
+  const lastAllowedEquipmentWarrantyDate = new Date();
+  lastAllowedEquipmentWarrantyDate.setMonth(
+    lastAllowedEquipmentWarrantyDate.getMonth() - 22,
+  );
+
+  const equipment = await req.context.models.Equipment.count({
+    where: {
+      warranty: {
+        [Op.lt]: lastAllowedEquipmentWarrantyDate,
+      },
+    },
+  });
+
+  res.status(200).send({
+    vehiclesErrors: !!vehicles,
+    employeesErrors: !!employees,
+    equipmentErrors: !!equipment,
+  });
 };
 module.exports = {
   findAll,

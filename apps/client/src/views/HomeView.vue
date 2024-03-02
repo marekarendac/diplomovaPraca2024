@@ -29,6 +29,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
       ></Tag>
       <router-link to="/vehicles"><CardVe /></router-link
     ></a-col>
+
     <a-col>
       <Tag
         v-if="this.employeesErrors"
@@ -46,14 +47,23 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
       ></Tag>
       <router-link to="/employees"><CardEm /></router-link
     ></a-col>
-    <a-col style="padding-left: 5%"
-      ><Tag
+
+    <a-col style="padding-left: 5%">
+      <Tag
+        v-if="this.equipmentErrors"
+        style="width: 100%"
+        severity="warning"
+        value="POZOR"
+        icon="pi pi-exclamation-triangle"
+      ></Tag>
+      <Tag
+        v-else
         style="width: 100%"
         severity="success"
         value="OK"
         icon="pi pi-check-square"
-      ></Tag
-      ><router-link to="/equipment"><CardEq /></router-link
+      ></Tag>
+      <router-link to="/equipment"><CardEq /></router-link
     ></a-col>
   </a-row>
 </template>
@@ -66,6 +76,7 @@ export default {
       postDetails: null,
       vehiclesErrors: false,
       employeesErrors: false,
+      equipmentErrors: false,
     };
   },
 
@@ -77,6 +88,7 @@ export default {
       Api.get("/notifications").then((response) => {
         this.vehiclesErrors = response.data.vehiclesErrors;
         this.employeesErrors = response.data.employeesErrors;
+        this.equipmentErrors = response.data.equipmentErrors;
       });
     },
   },

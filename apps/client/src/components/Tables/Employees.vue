@@ -36,6 +36,8 @@
     <DataTable
       :value="postDetails"
       :filters="filters1"
+      sortField="healthExam"
+      sortOrder="1"
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="72vh"
@@ -702,14 +704,14 @@ export default {
               severity: "success",
               summary: "Úspech",
               detail: "Záznam bol vytvorený!",
-              life: 1200,
+              life: 800,
             });
           })
           .catch((error) => console.log(error));
 
         setTimeout(() => {
           this.productDialog = false;
-        }, 1200);
+        }, 800);
       }
     },
 
@@ -729,11 +731,11 @@ export default {
         severity: "warn",
         summary: "Vymazané",
         detail: "Záznam bol vymazaný.",
-        life: 1200,
+        life: 800,
       });
       setTimeout(() => {
         this.deleteProductDialog = false;
-      }, 1200);
+      }, 800);
     },
 
     showProduct(product) {
@@ -767,14 +769,14 @@ export default {
             severity: "success",
             summary: "Úspech",
             detail: "Záznam bol editovaný!",
-            life: 1200,
+            life: 800,
           });
         })
         .catch((error) => console.log(error));
 
       setTimeout(() => {
         this.productDialogEdit = false;
-      }, 1200);
+      }, 800);
     },
 
     findIndexById(id) {
