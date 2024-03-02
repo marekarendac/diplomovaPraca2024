@@ -44,6 +44,15 @@
     </a-menu-item>
 
     <a-menu-item key="8">
+      <template #icon> <UserSwitchOutlined /> </template>
+      <span
+        ><router-link to="/customers"
+          ><p class="navText">Zákazníci</p></router-link
+        ></span
+      >
+    </a-menu-item>
+
+    <a-menu-item key="8">
       <template #icon> <CodepenOutlined /> </template>
       <span
         ><router-link to="/projects"
@@ -58,7 +67,7 @@
       </template>
       <span
         ><router-link to="/attendance"
-          ><p class="navText">Dochádzka</p></router-link
+          ><p class="navText">Montážny denník</p></router-link
         ></span
       >
     </a-menu-item>
@@ -92,6 +101,7 @@ import {
   AuditOutlined,
   FieldTimeOutlined,
   CodepenOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -106,6 +116,7 @@ export default defineComponent({
     AuditOutlined,
     FieldTimeOutlined,
     CodepenOutlined,
+    UserSwitchOutlined,
   },
 
   setup() {

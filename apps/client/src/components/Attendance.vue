@@ -1,10 +1,5 @@
 <template>
   <div class="card">
-    <div
-      class="block bg-white font-bold text-left p-2 border-round mb-2 uppercase"
-    >
-      MONTÁŽNY DENNÍK
-    </div>
     <div class="card-container yellow-container">
       <div class="block bg-white font-bold text-center p-1 border-round mb-2">
         <div class="card"></div>
@@ -19,7 +14,7 @@
                   <Dropdown
                     v-model="selectedResEmployee"
                     :options="responsibleEmployees"
-                    optionLabel="name"
+                    optionLabel="fullNameMajster"
                     placeholder="Zadaj zodpovedného"
                     style="width: 100%"
                   />
@@ -85,7 +80,7 @@
             <Dropdown
               v-model="selectedEmployee1"
               :options="employees"
-              optionLabel="name"
+              optionLabel="fullName"
               placeholder="Meno zamestnanca"
               style="width: 100%"
             />
@@ -115,7 +110,7 @@
               <Dropdown
                 v-model="selectedEmployee2"
                 :options="employees"
-                optionLabel="name"
+                optionLabel="fullName"
                 placeholder="Meno zamestnanca"
                 style="width: 100%"
               />
@@ -144,7 +139,7 @@
                 <Dropdown
                   v-model="selectedEmployee3"
                   :options="employees"
-                  optionLabel="name"
+                  optionLabel="fullName"
                   placeholder="Meno zamestnanca"
                   style="width: 100%"
                 />
@@ -173,7 +168,7 @@
                   <Dropdown
                     v-model="selectedEmployee4"
                     :options="employees"
-                    optionLabel="name"
+                    optionLabel="fullName"
                     placeholder="Meno zamestnanca"
                     style="width: 100%"
                   />
@@ -203,7 +198,7 @@
                   <Dropdown
                     v-model="selectedEmployee5"
                     :options="employees"
-                    optionLabel="name"
+                    optionLabel="fullName"
                     placeholder="Meno zamestnanca"
                     style="width: 100%"
                   />
@@ -269,21 +264,30 @@ export default {
   methods: {
     async getAllEmployees() {
       await Api.get("/employees").then((response) => {
-        this.employees = response.data;
+        this.employees = response.data.map((employee) => ({
+          ...employee,
+          fullName: `${employee.name} ${employee.surname}`,
+        }));
       });
     },
+
     async getPlacesDetails() {
       await Api.get("/workPlaces").then((response) => {
         this.places = response.data;
       });
     },
+
     async getResponsiblesDetails() {
       await Api.get("/employees", { params: { position: "Majster" } }).then(
         (response) => {
-          this.responsibleEmployees = response.data;
+          this.responsibleEmployees = response.data.map((employee) => ({
+            ...employee,
+            fullNameMajster: `${employee.name} ${employee.surname}`,
+          }));
         }
       );
     },
+
     async getCustomerDetails() {
       await Api.get("/customers").then((response) => {
         this.customers = response.data;
