@@ -357,37 +357,52 @@
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <b>Chceš vymazať tento záznam ?</b>
-      <div style="text-align: center">
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+      <div class="text-align-center">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-user"></i>
-          </InputGroupAddon>
-          <AutoComplete
-            id="name"
-            v-model.trim="product.fullName"
-            disabled
+          </span>
+          <InputText id="name" v-model.trim="product.fullName" readonly /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-caret-right"></i>
+          </span>
+          <InputText
+            id="position"
+            v-model.trim="product.position"
+            readonly
           /><br />
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-briefcase"></i>
+          </span>
+          <InputText
+            id="contractType"
+            v-model.trim="product.contractType"
+            readonly
+          /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-phone"></i>
-          </InputGroupAddon>
-          <AutoComplete
+          </span>
+          <InputText
             id="name"
             v-model.trim="product.phoneNumber"
-            disabled
+            readonly
           /><br />
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-id-card"></i>
-          </InputGroupAddon>
-          <AutoComplete
-            id="name"
-            v-model.trim="product.documentNumber"
-            disabled
-          />
-        </InputGroup>
+          </span>
+          <InputText id="name" v-model.trim="product.documentNumber" readonly />
+        </div>
       </div>
     </div>
 
@@ -874,5 +889,15 @@ export default {
 <style scoped>
 :deep() .icon-addon {
   margin-right: 10px; /* adjust as needed */
+}
+.p-inputgroup .p-inputtext[readonly] {
+  pointer-events: none;
+  background-color: #f5f5f5; /* adjust as needed */
+}
+.p-inputgroup {
+  margin-bottom: 5px; /* adjust as needed */
+}
+.text-align-center {
+  margin-top: 7px; /* adjust as needed */
 }
 </style>

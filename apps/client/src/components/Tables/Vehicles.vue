@@ -36,7 +36,7 @@
     <DataTable
       :value="postDetails"
       sortField="lastService"
-      sortOrder="1"
+      :sortOrder="1"
       :filters="filters1"
       filterMode="lenient"
       :scrollable="true"
@@ -264,29 +264,25 @@
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <b>Chceš vymazať tento záznam ?</b>
-      <div style="text-align: center">
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+      <div class="text-align-center">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-car"></i>
-          </InputGroupAddon>
-          <AutoComplete
-            id="brand"
-            v-model.trim="brandAndModel"
-            disabled
-          /><br />
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+          </span>
+          <InputText id="brand" v-model.trim="brandAndModel" readonly /><br />
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-calendar"></i>
-          </InputGroupAddon>
-          <AutoComplete id="year" v-model.trim="product.year" disabled /><br />
-        </InputGroup>
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+          </span>
+          <InputText id="year" v-model.trim="product.year" readonly /><br />
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-id-card"></i>
-          </InputGroupAddon>
-          <AutoComplete id="VIN" v-model.trim="product.VIN" disabled />
-        </InputGroup>
+          </span>
+          <InputText id="VIN" v-model.trim="product.VIN" readonly />
+        </div>
       </div>
     </div>
 
@@ -681,5 +677,15 @@ export default {
 <style scoped>
 :deep() .icon-addon {
   margin-right: 10px; /* adjust as needed */
+}
+.p-inputgroup .p-inputtext[readonly] {
+  pointer-events: none;
+  background-color: #f5f5f5; /* adjust as needed */
+}
+.p-inputgroup {
+  margin-bottom: 5px; /* adjust as needed */
+}
+.text-align-center {
+  margin-top: 7px; /* adjust as needed */
 }
 </style>

@@ -37,7 +37,7 @@
       :value="postDetails"
       :filters="filters1"
       sortField="warranty"
-      sortOrder="1"
+      :sortOrder="1"
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="72vh"
@@ -273,57 +273,58 @@
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
       <b>Chceš vymazať tento záznam ?</b>
-      <div style="text-align: center">
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+      <div class="text-align-center">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-info-circle"></i>
-          </InputGroupAddon>
-          <AutoComplete
+          </span>
+          <InputText
             id="idNumber"
             v-model.trim="product.idNumber"
-            disabled
+            readonly
           /><br />
-        </InputGroup>
-
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-tag"></i>
-          </InputGroupAddon>
-          <AutoComplete
-            id="brand"
-            v-model.trim="product.brand"
-            disabled
-          /><br />
-        </InputGroup>
-
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+          </span>
+          <InputText id="brand" v-model.trim="product.brand" readonly /><br />
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-info"></i>
-          </InputGroupAddon>
-          <AutoComplete
+          </span>
+          <InputText
             id="equipmentType"
             v-model.trim="product.equipmentType"
-            disabled
+            readonly
           /><br />
-        </InputGroup>
+        </div>
 
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-cog"></i>
-          </InputGroupAddon>
-          <AutoComplete id="status" v-model.trim="product.status" disabled />
-        </InputGroup>
-        <br />
-        <InputGroup>
-          <InputGroupAddon class="icon-addon">
+          </span>
+          <InputText id="status" v-model.trim="product.status" readonly /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
             <i class="pi pi-calendar-times"></i>
-          </InputGroupAddon>
-          <AutoComplete
-            id="warranty"
-            v-model.trim="product.warranty"
-            disabled
+          </span>
+          <InputText id="warranty" v-model.trim="product.warranty" readonly />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-calendar-times"></i>
+          </span>
+          <InputText
+            id="description"
+            v-model.trim="product.description"
+            readonly
           />
-        </InputGroup>
+        </div>
       </div>
     </div>
 
@@ -707,5 +708,15 @@ export default {
 <style scoped>
 :deep() .icon-addon {
   margin-right: 10px; /* adjust as needed */
+}
+.p-inputgroup .p-inputtext[readonly] {
+  pointer-events: none;
+  background-color: #f5f5f5; /* adjust as needed */
+}
+.p-inputgroup {
+  margin-bottom: 5px; /* adjust as needed */
+}
+.text-align-center {
+  margin-top: 7px; /* adjust as needed */
 }
 </style>
