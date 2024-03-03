@@ -35,12 +35,16 @@
     </Toolbar>
     <DataTable
       :value="postDetails"
-      sortField="lastService"
-      :sortOrder="1"
       :filters="filters1"
+      sortField="healthExam"
+      :sortOrder="1"
+      removableSort
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="72vh"
+      style="min-height: 100vh"
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column field="brand" header="Značka" :sortable="true"></Column>
 

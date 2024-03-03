@@ -36,11 +36,13 @@
     <DataTable
       :value="postDetails"
       :filters="filters1"
-      sortField="warranty"
-      :sortOrder="1"
+      removableSort
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="72vh"
+      style="min-height: 100vh"
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column
         field="idNumber"
@@ -674,6 +676,7 @@ export default {
     align-items: start;
   }
 }
+
 @media screen and (max-width: 960px) {
   ::v-deep(.p-toolbar) {
     flex-wrap: wrap;
@@ -682,20 +685,13 @@ export default {
       margin-bottom: 0.25rem;
     }
   }
+
   .confirmation-content {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  @media screen and (max-width: 960px) {
-    ::v-deep(.p-toolbar) {
-      flex-wrap: wrap;
 
-      .p-button {
-        margin-bottom: 0.25rem;
-      }
-    }
-  }
   .p-filter-column {
     .p-multiselect,
     .p-dropdown,
@@ -704,19 +700,25 @@ export default {
     }
   }
 }
-</style>
-<style scoped>
+
 :deep() .icon-addon {
   margin-right: 10px; /* adjust as needed */
 }
+
 .p-inputgroup .p-inputtext[readonly] {
   pointer-events: none;
   background-color: #f5f5f5; /* adjust as needed */
 }
+
 .p-inputgroup {
   margin-bottom: 5px; /* adjust as needed */
 }
+
 .text-align-center {
   margin-top: 7px; /* adjust as needed */
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  z-index: 0;
 }
 </style>

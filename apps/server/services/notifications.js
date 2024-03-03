@@ -27,16 +27,9 @@ const findAll = async (req, res) => {
     },
   });
 
-  const lastAllowedEquipmentWarrantyDate = new Date();
-  lastAllowedEquipmentWarrantyDate.setMonth(
-    lastAllowedEquipmentWarrantyDate.getMonth() - 22,
-  );
-
   const equipment = await req.context.models.Equipment.count({
     where: {
-      warranty: {
-        [Op.lt]: lastAllowedEquipmentWarrantyDate,
-      },
+      status: 'Pokazené',
     },
   });
 
@@ -46,6 +39,7 @@ const findAll = async (req, res) => {
     equipmentErrors: !!equipment,
   });
 };
+
 module.exports = {
   findAll,
 };

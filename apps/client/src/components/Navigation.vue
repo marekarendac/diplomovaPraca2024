@@ -43,7 +43,7 @@
       >
     </a-menu-item>
 
-    <a-menu-item key="8">
+    <a-menu-item key="5">
       <template #icon> <UserSwitchOutlined /> </template>
       <span
         ><router-link to="/customers"
@@ -52,7 +52,7 @@
       >
     </a-menu-item>
 
-    <a-menu-item key="8">
+    <a-menu-item key="6">
       <template #icon> <CodepenOutlined /> </template>
       <span
         ><router-link to="/projects"
@@ -61,7 +61,7 @@
       >
     </a-menu-item>
 
-    <a-menu-item key="5">
+    <a-menu-item key="7">
       <template #icon>
         <ContactsOutlined />
       </template>
@@ -71,7 +71,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="6">
+    <a-menu-item key="8">
       <template #icon>
         <AuditOutlined />
       </template>
@@ -81,7 +81,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="7">
+    <a-menu-item key="9">
       <template #icon> <FieldTimeOutlined /> </template>
       <span
         ><router-link to="/TotalHours"
@@ -127,9 +127,11 @@ export default defineComponent({
       "/employees": "2",
       "/vehicles": "3",
       "/equipment": "4",
-      "/attendance": "5",
-      "/report": "6",
-      "/TotalHours": "7",
+      "/customers": "5",
+      "/projects": "6",
+      "/attendance": "7",
+      "/report": "8",
+      "/TotalHours": "9",
     };
 
     const state = reactive({
