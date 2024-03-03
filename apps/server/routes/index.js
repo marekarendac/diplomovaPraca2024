@@ -9,6 +9,7 @@ const login = require('./login');
 const exportEmployees = require('./exportEmployees');
 const exportVehicles = require('./exportVehicles');
 const exportEquipment = require('./exportEquipment');
+const exportCustomers = require('./exportCustomers');
 
 module.exports = {
   employees,
@@ -22,4 +23,5 @@ module.exports = {
   exportEmployees,
   exportVehicles,
   exportEquipment,
+  exportCustomers,
 };
