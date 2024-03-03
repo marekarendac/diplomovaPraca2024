@@ -7,6 +7,8 @@ const workPlace = require('./workPlace');
 const customer = require('./customer');
 const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
+const workGroup = require('./workGroup');
+const employeeWorkGroup = require('./employeeWorkGroup'); // new model
 
 const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
   host: 'localhost',
@@ -14,8 +16,15 @@ const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
 });
 
 const applyRelations = () => {
-  const { Attendance, Employee, WorkPlace, EmployeeAttendance, Customer } =
-    sequelize.models;
+  const {
+    Attendance,
+    Employee,
+    WorkPlace,
+    EmployeeAttendance,
+    Customer,
+    WorkGroup,
+    EmployeeWorkGroup,
+  } = sequelize.models;
 
   Employee.hasMany(Attendance, {
     as: 'responsibleAttendances',
@@ -40,6 +49,10 @@ const applyRelations = () => {
 
   EmployeeAttendance.belongsTo(Attendance);
   EmployeeAttendance.belongsTo(Employee);
+
+  // Many-to-many relation between Employee and WorkGroup
+  Employee.belongsToMany(WorkGroup, { through: EmployeeWorkGroup });
+  WorkGroup.belongsToMany(Employee, { through: EmployeeWorkGroup });
 };
 
 const models = [
@@ -50,6 +63,8 @@ const models = [
   customer,
   employeeAttendance,
   attendance,
+  workGroup,
+  employeeWorkGroup, // new model
 ];
 
 models.forEach((model) => model(sequelize));
@@ -57,9 +72,3 @@ models.forEach((model) => model(sequelize));
 applyRelations();
 
 module.exports = sequelize;
-
-/* sequelize
-  .sync()
-  .then(() => console.log('Tables have been created'))
-  .catch((error) => console.log(error));
-  */

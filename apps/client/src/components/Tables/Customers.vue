@@ -45,14 +45,19 @@
       :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column field="name" header="Zákazník" :sortable="true"></Column>
-      <Column field="pointOfContact" header="Kontakt" :sortable="true"></Column>
-      <Column field="phoneNumber" header="Telefón" :sortable="true"></Column>
-      <Column field="email" header="Email" :sortable="true"></Column>
       <Column
         field="address"
         header="Adresa"
         :sortable="true"
         style="min-width: 260px"
+      ></Column>
+      <Column field="pointOfContact" header="Kontakt" :sortable="true"></Column>
+      <Column field="phoneNumber" header="Telefón" :sortable="true"></Column>
+      <Column
+        field="email"
+        header="Email"
+        :sortable="true"
+        style="min-width: 230px"
       ></Column>
 
       <Column header="Operácie" :exportable="false" style="max-width: 13%">
@@ -663,6 +668,7 @@ export default {
       productDialog: false,
       productDialogEdit: false,
       product: {},
+      filters1: {},
       deleteProductDialog: false,
       name: "",
       phoneNumber: "",

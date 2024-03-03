@@ -17,6 +17,7 @@ const exportEmployeesRouter = require('./routes/exportEmployees');
 const exportVehiclesRouter = require('./routes/exportVehicles');
 const exportEquipmentRouter = require('./routes/exportEquipment');
 const exportCustomersRouter = require('./routes/exportCustomers');
+const workGroupsRouter = require('./routes/workGroups');
 
 // const { populateDB } = require('./src/helpers');
 
@@ -47,6 +48,7 @@ app.use('/exportEmployees', exportEmployeesRouter);
 app.use('/exportVehicles', exportVehiclesRouter);
 app.use('/exportEquipment', exportEquipmentRouter);
 app.use('/exportCustomers', exportCustomersRouter);
+app.use('/workGroups', workGroupsRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}!`);
