@@ -11,6 +11,7 @@ import AttendanceReport from "../views/Tables/AttendanceReport.vue";
 import LoginPage from "../views/LoginPage.vue";
 import Projects from "../views/Projects.vue";
 import Customers from "../views/Tables/Customers.vue";
+import WorkGroups from "../views/Tables/WorkGroups.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
           path: "customers",
           name: "Customers",
           component: Customers,
+        },
+        {
+          path: "workGroups",
+          name: "WorkGroups",
+          component: WorkGroups,
         },
       ],
     },

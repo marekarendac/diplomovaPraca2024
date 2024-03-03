@@ -62,6 +62,15 @@
     </a-menu-item>
 
     <a-menu-item key="7">
+      <template #icon> <GoldOutlined /> </template>
+      <span
+        ><router-link to="/workgroups"
+          ><p class="navText">Pracovné skupiny</p></router-link
+        ></span
+      >
+    </a-menu-item>
+
+    <a-menu-item key="8">
       <template #icon>
         <ContactsOutlined />
       </template>
@@ -71,7 +80,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="8">
+    <a-menu-item key="9">
       <template #icon>
         <AuditOutlined />
       </template>
@@ -81,7 +90,7 @@
         ></span
       >
     </a-menu-item>
-    <a-menu-item key="9">
+    <a-menu-item key="10">
       <template #icon> <FieldTimeOutlined /> </template>
       <span
         ><router-link to="/TotalHours"
@@ -102,6 +111,7 @@ import {
   FieldTimeOutlined,
   CodepenOutlined,
   UserSwitchOutlined,
+  GoldOutlined,
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -117,6 +127,7 @@ export default defineComponent({
     FieldTimeOutlined,
     CodepenOutlined,
     UserSwitchOutlined,
+    GoldOutlined,
   },
 
   setup() {
@@ -129,9 +140,10 @@ export default defineComponent({
       "/equipment": "4",
       "/customers": "5",
       "/projects": "6",
-      "/attendance": "7",
-      "/report": "8",
-      "/TotalHours": "9",
+      "/workgroups": "7",
+      "/attendance": "8",
+      "/report": "9",
+      "/TotalHours": "10",
     };
 
     const state = reactive({

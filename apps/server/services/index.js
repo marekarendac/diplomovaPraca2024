@@ -11,6 +11,7 @@ const exportVehicles = require('./exportVehicles');
 const exportEquipment = require('./exportEquipment');
 const exportCustomers = require('./exportCustomers');
 const workGroups = require('./workGroups');
+const employeeWorkGroups = require('./employeeWorkGroups');
 
 module.exports = {
   employees,
@@ -26,4 +27,5 @@ module.exports = {
   exportEquipment,
   exportCustomers,
   workGroups,
+  employeeWorkGroups,
 };

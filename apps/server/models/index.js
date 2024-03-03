@@ -51,8 +51,18 @@ const applyRelations = () => {
   EmployeeAttendance.belongsTo(Employee);
 
   // Many-to-many relation between Employee and WorkGroup
-  Employee.belongsToMany(WorkGroup, { through: EmployeeWorkGroup });
-  WorkGroup.belongsToMany(Employee, { through: EmployeeWorkGroup });
+  Employee.belongsToMany(WorkGroup, {
+    through: EmployeeWorkGroup,
+    as: 'workGroups',
+  });
+  WorkGroup.belongsToMany(Employee, {
+    through: EmployeeWorkGroup,
+    as: 'employees',
+  });
+
+  // Associations from EmployeeWorkGroup to Employee and WorkGroup
+  EmployeeWorkGroup.belongsTo(Employee, { as: 'employee' });
+  EmployeeWorkGroup.belongsTo(WorkGroup, { as: 'workGroup' });
 };
 
 const models = [
