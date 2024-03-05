@@ -27,9 +27,17 @@
       </template>
       <template #end>
         <Button
-          label="Export tabuľky"
-          icon="pi pi-external-link"
-          @click="exportEquipment"
+          label="Uprav skupinu"
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button mr-1"
+          @click="editProduct"
+        />
+
+        <Button
+          label="Vymaž skupinu"
+          icon="pi pi-trash"
+          class="p-button-rounded p-button-warning mr-1"
+          @click="confirmDeleteProduct"
         />
       </template>
     </Toolbar>
@@ -57,6 +65,187 @@
       <Column field="employeeHealthExam" header="ZP"></Column>
     </DataTable>
   </div>
+
+  <Dialog
+    @submit.prevent="handleSubmit"
+    v-model:visible="productDialog"
+    :style="{ width: '550px' }"
+    header="Pridaj novú pracovnú skupinu"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="workGroup">Pracovná skupina</label>
+      <div style="display: flex; align-items: center">
+        <InputText
+          id="workGroup"
+          required="true"
+          v-model.trim="product.workGroup"
+          placeholder="Názov skupiny"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.workGroup }"
+        />
+        <small class="p-error" v-if="submitted && !product.workGroup"
+          >Názov pracovnej skupiny je povinné pole.</small
+        >
+      </div>
+    </div>
+
+    <template #footer>
+      <Button
+        label="Ukonči"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="hideDialog"
+      />
+      <Button
+        label="Pridaj"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="handleSubmit"
+      /><Toast />
+    </template>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="productDialogEdit"
+    :style="{ width: '450px' }"
+    header="Edituj vybraný záznam"
+    :modal="true"
+    class="p-fluid"
+  >
+    <div class="field col">
+      <label for="name">Pracovná skupina</label>
+      <div style="display: flex; align-items: center">
+        <Dropdown
+          v-model="name"
+          :options="workGroups"
+          optionLabel="name"
+          placeholder="Zadaj meno zamestnanca"
+          style="width: 100%"
+        >
+        </Dropdown>
+      </div>
+    </div>
+
+    <div class="field col">
+      <label for="phoneNumber">Zamestnanec</label>
+      <div style="display: flex; align-items: center">
+        <Dropdown
+          v-model="employeeFullName"
+          :options="groupedEmployees"
+          optionLabel="label"
+          filter
+          optionGroupLabel="label"
+          optionGroupChildren="items"
+          placeholder="Zadaj meno zamestnanca"
+          style="width: 100%"
+        >
+          <template #optiongroup="slotProps">
+            <div class="flex align-items-center">
+              <div>{{ slotProps.option.label }}</div>
+            </div>
+          </template>
+        </Dropdown>
+      </div>
+    </div>
+
+    <template #footer>
+      <Button
+        label="Ukonči"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="hideDialogEdit"
+      />
+      <Button
+        label="Edituj"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="handleEdit"
+      /><Toast />
+    </template>
+  </Dialog>
+
+  <Dialog
+    v-model:visible="deleteProductDialog"
+    :style="{ width: '450px' }"
+    header="Vymaž vybraný záznam"
+    :modal="true"
+  >
+    <div class="confirmation-content">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <b>Chceš vymazať tento záznam ?</b>
+      <div class="text-align-center">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-info-circle"></i>
+          </span>
+          <InputText
+            id="idNumber"
+            v-model.trim="product.idNumber"
+            readonly
+          /><br />
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-tag"></i>
+          </span>
+          <InputText id="brand" v-model.trim="product.brand" readonly /><br />
+        </div>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-info"></i>
+          </span>
+          <InputText
+            id="equipmentType"
+            v-model.trim="product.equipmentType"
+            readonly
+          /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-cog"></i>
+          </span>
+          <InputText id="status" v-model.trim="product.status" readonly /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-calendar-times"></i>
+          </span>
+          <InputText id="warranty" v-model.trim="product.warranty" readonly />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-calendar-times"></i>
+          </span>
+          <InputText
+            id="description"
+            v-model.trim="product.description"
+            readonly
+          />
+        </div>
+      </div>
+    </div>
+
+    <template #footer>
+      <Button
+        label="Nie"
+        icon="pi pi-times"
+        class="p-button-text"
+        @click="deleteProductDialog = false"
+      />
+      <Button
+        label="Áno"
+        icon="pi pi-check"
+        class="p-button-text"
+        @click="deleteProduct"
+      />
+      <Toast />
+    </template>
+  </Dialog>
 </template>
 
 <script>
@@ -85,17 +274,33 @@ export default {
   },
 
   methods: {
-    getPostDetails() {
-      Api.get("/employeeWorkGroups").then((response) => {
-        this.postDetails = response.data;
-        console.log("employeeWorkGroups:", response.data);
-      });
+    async getPostDetails() {
+      const [
+        employeeWorkGroupsResponse,
+        employeesResponse,
+        workGroupsResponse,
+      ] = await Promise.all([
+        Api.get("/employeeWorkGroups"),
+        Api.get("/employees"),
+        Api.get("/workGroups"),
+      ]);
+
+      this.postDetails = employeeWorkGroupsResponse.data;
+      console.log("First element of postDetails:", this.postDetails[0]);
+
+      this.employees = employeesResponse.data;
+      this.workGroups = workGroupsResponse.data;
+    },
+
+    clearFilter1() {
+      this.initFilters1();
     },
 
     openNew() {
       this.product = {};
       this.submitted = false;
       this.productDialog = true;
+      this.productDialogEdit = false; // Ensure productDialogEdit is false when opening a new product dialog
     },
 
     hideDialog() {
@@ -107,31 +312,44 @@ export default {
       this.productDialogEdit = false;
       this.submitted = false;
     },
-
     handleSubmit() {
       this.submitted = true;
-      if (this.product.brand.trim()) {
-        Api.post("/equipment", {
-          idNumber: this.product.idNumber,
-          brand: this.product.brand,
-          equipmentType: this.product.equipmentType.type,
-          description: this.product.description,
-          status: this.product.status.status,
-          warranty: this.product.warranty,
-        })
+
+      if (this.product.name.trim()) {
+        const data = {
+          name: this.product.name,
+          surname: this.product.surname,
+          position: this.product.position.position,
+          phoneNumber: this.product.phoneNumber,
+          contractType: this.product.contractType.contractType,
+          healthExam: this.product.healthExam,
+          documentNumber: this.product.documentNumber,
+          email: this.product.email,
+          iban: this.product.iban,
+          wage: this.product.wage,
+        };
+
+        Api.post("/employees", data)
           .then((response) => {
-            this.postDetails.push(response.data);
+            const newEmployee = {
+              ...response.data,
+              fullName: `${response.data.name} ${response.data.surname}`,
+            };
+
+            this.postDetails.push(newEmployee);
+
             this.$toast.add({
               severity: "success",
               summary: "Úspech",
               detail: "Záznam bol vytvorený!",
               life: 800,
             });
-            setTimeout(() => {
-              this.productDialog = false;
-            }, 800);
           })
           .catch((error) => console.log(error));
+
+        setTimeout(() => {
+          this.productDialog = false;
+        }, 800);
       }
     },
 
@@ -161,11 +379,6 @@ export default {
     editProduct(product) {
       this.product = { ...product };
       this.productDialogEdit = true;
-    },
-
-    showProduct(product) {
-      this.product = product;
-      this.showProductDialog = true;
     },
 
     handleEdit() {
@@ -213,31 +426,8 @@ export default {
     clearFilter1() {
       this.initFilters1();
     },
-
-    exportEquipment() {
-      if (window.confirm("Do you really want to download the file?")) {
-        console.log("exportVehicles called");
-        Api.get("/exportEquipment", {
-          responseType: "blob", // Important for handling the binary data
-        })
-          .then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            const contentDisposition = response.headers["content-disposition"];
-            let fileName = "vehicles.xlsx"; // default filename
-            if (contentDisposition) {
-              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-              if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
-            }
-            link.setAttribute("download", fileName);
-            document.body.appendChild(link);
-            link.click();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+    removeWhitespace(field) {
+      this.product[field] = this.product[field].replace(/\s/g, "");
     },
   },
   computed: {
@@ -254,6 +444,23 @@ export default {
       } else {
         return [];
       }
+    },
+    groupedEmployees() {
+      // First, group the employees by position
+      const groups = this.employees.reduce((groups, employee) => {
+        const key = employee.position;
+        if (!groups[key]) {
+          groups[key] = [];
+        }
+        groups[key].push({
+          label: `${employee.name} ${employee.surname}`,
+          id: employee.id,
+        });
+        return groups;
+      }, {});
+
+      // Then, transform the groups into an array of objects
+      return Object.entries(groups).map(([label, items]) => ({ label, items }));
     },
   },
 };
