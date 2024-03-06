@@ -18,8 +18,15 @@ const destroy = async (req, res) => {
 };
 
 const post = async (req, res) => {
-  const workGroup = await req.context.models.WorkGroup.create(req.body);
-  res.status(200).send(workGroup);
+  try {
+    const workGroup = await req.context.models.WorkGroup.create(req.body);
+    res.status(200).send(workGroup);
+  } catch (error) {
+    res.status(500).send({
+      message: 'Error occurred while creating the workGroup',
+      error: error.message,
+    });
+  }
 };
 
 const update = async (req, res) => {

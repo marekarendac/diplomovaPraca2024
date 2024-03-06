@@ -81,7 +81,7 @@
           id="workGroup"
           required="true"
           v-model.trim="product.workGroup"
-          placeholder="Názov skupiny"
+          placeholder="Názov novej pracovnej skupiny"
           autofocus
           :class="{ 'p-invalid': submitted && !product.workGroup }"
         />
@@ -110,7 +110,7 @@
   <Dialog
     v-model:visible="productDialogEdit"
     :style="{ width: '450px' }"
-    header="Edituj vybraný záznam"
+    header="Edituj skupinu"
     :modal="true"
     class="p-fluid"
   >
@@ -312,31 +312,20 @@ export default {
       this.productDialogEdit = false;
       this.submitted = false;
     },
+
     handleSubmit() {
       this.submitted = true;
 
-      if (this.product.name.trim()) {
+      if (this.product.workGroup.trim()) {
         const data = {
-          name: this.product.name,
-          surname: this.product.surname,
-          position: this.product.position.position,
-          phoneNumber: this.product.phoneNumber,
-          contractType: this.product.contractType.contractType,
-          healthExam: this.product.healthExam,
-          documentNumber: this.product.documentNumber,
-          email: this.product.email,
-          iban: this.product.iban,
-          wage: this.product.wage,
+          name: this.product.workGroup,
         };
 
-        Api.post("/employees", data)
+        Api.post("/workGroups", data)
           .then((response) => {
-            const newEmployee = {
-              ...response.data,
-              fullName: `${response.data.name} ${response.data.surname}`,
-            };
+            const newWorkGroup = response.data;
 
-            this.postDetails.push(newEmployee);
+            this.workGroups.push(newWorkGroup);
 
             this.$toast.add({
               severity: "success",
