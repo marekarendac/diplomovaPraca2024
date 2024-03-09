@@ -166,7 +166,7 @@
           icon="pi pi-times"
           class="p-button-warning"
           style="margin-left: 10px"
-          @click="removeEmployeeFromGroup(index)"
+          @click="removeEmployeeFromWorkGroup(index)"
         />
       </div>
     </div>
@@ -252,6 +252,7 @@ export default {
       filters1: {},
       selectedEmployees: [],
       selectedWorkGroupEmployees: [],
+      employeesToRemove: [],
     };
   },
 
@@ -327,7 +328,7 @@ export default {
           };
 
           await Api.post("/employeeWorkGroups", employeeWorkGroupData);
-          location.reload();
+
           // Fetch the updated workGroup with the associated employees
           const updatedWorkGroup = await Api.get(
             `/workGroups/${newWorkGroup.id}`
@@ -361,7 +362,7 @@ export default {
           (val) => val.id !== this.product.id
         );
         Api.delete("workGroups/" + this.product);
-        location.reload();
+
         // ...
       } else {
         console.error("No product selected for deletion");
@@ -381,14 +382,9 @@ export default {
     editProduct(product) {
       this.product = { ...product };
       this.productDialogEdit = true;
-      console.log("Selected work group:", this.product);
-      console.log(
-        "Selected work group employees:",
-        this.selectedWorkGroupEmployees
-      );
     },
 
-    handleEdit() {
+    async handleEdit() {
       this.submitted = true;
 
       // Update the work group
@@ -396,50 +392,45 @@ export default {
         ...this.product,
       };
 
-      Api.put("workGroups/" + this.product, updatedWorkGroup)
-        .then(async () => {
-          if (this.product.id) {
-            this.workGroups[this.findIndexById(this.product.id)] =
-              updatedWorkGroup;
-          }
-          console.log(
-            "Before removing employees:",
-            this.selectedWorkGroupEmployees
-          );
+      try {
+        await Api.put("workGroups/" + this.product.id, updatedWorkGroup);
 
-          // Remove each employee from the work group
-          for (const employee of this.selectedWorkGroupEmployees) {
-            const deleteParams = {
-              workGroupId: this.product,
-              employeeId: employee.id,
-            };
+        if (this.product.id) {
+          this.workGroups[this.findIndexById(this.product.id)] =
+            updatedWorkGroup;
+        }
 
-            console.log("deleteParams:", deleteParams);
+        // Remove the employees that were removed from the group
+        for (const employeeId of this.employeesToRemove) {
+          const deleteParams = {
+            workGroupId: this.product,
+            employeeId: employeeId,
+          };
 
-            await Api.delete(`employeeWorkGroups/removeEmployee`, {
-              data: deleteParams,
-            });
-          }
+          console.log("deleteParams:", deleteParams);
 
-          this.selectedWorkGroupEmployees = [];
-
-          console.log(
-            "After removing employees:",
-            this.selectedWorkGroupEmployees
-          );
-
-          this.$toast.add({
-            severity: "success",
-            summary: "Úspech",
-            detail: "Záznam bol editovaný!",
-            life: 800,
+          await Api.delete(`employeeWorkGroups/removeEmployee`, {
+            data: deleteParams,
           });
-        })
-        .catch((error) => console.log(error));
+        }
+
+        // Clear the list of employees to remove
+        this.employeesToRemove = [];
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Úspech",
+          detail: "Záznam bol editovaný!",
+          life: 800,
+        });
+      } catch (error) {
+        console.log(error);
+      }
 
       setTimeout(() => {
         this.productDialogEdit = false;
       }, 800);
+      // location.reload();
     },
 
     findIndexById(id) {
@@ -478,12 +469,10 @@ export default {
         }
       );
     },
-    removeEmployeeFromGroup(index) {
-      console.log("Before removing employee:", this.selectedWorkGroupEmployees);
-
+    removeEmployeeFromWorkGroup(index) {
+      const employee = this.selectedWorkGroupEmployees[index];
+      this.employeesToRemove.push(employee.id);
       this.selectedWorkGroupEmployees.splice(index, 1);
-
-      console.log("After removing employee:", this.selectedWorkGroupEmployees);
     },
   },
 
