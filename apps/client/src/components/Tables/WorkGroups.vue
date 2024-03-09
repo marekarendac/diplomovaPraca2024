@@ -92,7 +92,7 @@
     </div>
 
     <div class="field col">
-      <label for="employees">Zamestnanci</label>
+      <label for="employees">Členovia pracovnej skupiny</label>
       <div style="display: flex; align-items: center">
         <MultiSelect
           id="employees"
@@ -102,7 +102,7 @@
           filter
           optionGroupLabel="label"
           optionGroupChildren="items"
-          placeholder="Zadaj meno zamestnanca"
+          placeholder="Vyber jedného alebo viacerých členov"
           style="width: 100%"
           :class="{ 'p-invalid': submitted && selectedEmployees.length === 0 }"
         />
@@ -132,7 +132,7 @@
 
   <Dialog
     v-model:visible="productDialogEdit"
-    :style="{ width: '450px' }"
+    :style="{ width: '550px' }"
     header="Edituj skupinu"
     :modal="true"
     class="p-fluid"
@@ -146,10 +146,35 @@
           :options="workGroupsFullName"
           optionLabel="workGroup"
           optionValue="id"
-          placeholder="Vyber pracovnej skupiny"
+          placeholder="Vyber pracovnú skupinu na editovanie"
           style="width: 100%"
           autofocus
           @change="handleWorkGroupChange"
+        />
+      </div>
+    </div>
+    <div
+      class="field col"
+      v-if="selectedWorkGroupEmployees && selectedWorkGroupEmployees.length"
+    >
+      <label for="employees">Pridaj členov pracovnej skupiny</label>
+      <div style="display: flex; align-items: center">
+        <MultiSelect
+          id="employees"
+          v-model="selectedEmployees"
+          :options="groupedEmployees"
+          optionLabel="label"
+          filter
+          optionGroupLabel="label"
+          optionGroupChildren="items"
+          placeholder="Pridaj jedného alebo viacerých členov do skupiny"
+          style="flex-grow: 1; width: auto; max-width: calc(550px - 140px)"
+        />
+        <Button
+          icon="pi pi-check"
+          class="p-button-success"
+          style="margin-left: 20px; flex-shrink: 0"
+          disabled
         />
       </div>
     </div>
@@ -159,14 +184,14 @@
       v-for="(employee, index) in selectedWorkGroupEmployees"
       :key="index"
     >
-      <label for="employee">Zamestnanec</label>
+      <label for="employee">Člen pracovnej skupiny {{ index + 1 }}</label>
       <div style="display: flex; align-items: center">
         <InputText id="employee" v-model="employee.fullName" disabled />
         <Button
           icon="pi pi-times"
           class="p-button-warning"
           style="margin-left: 10px"
-          @click="removeEmployeeFromWorkGroup(index)"
+          @click="editEmployeeWorkGroup(index)"
         />
       </div>
     </div>
@@ -392,6 +417,8 @@ export default {
         ...this.product,
       };
 
+      console.log("updatedWorkGroup:", updatedWorkGroup);
+
       try {
         await Api.put("workGroups/" + this.product.id, updatedWorkGroup);
 
@@ -399,6 +426,8 @@ export default {
           this.workGroups[this.findIndexById(this.product.id)] =
             updatedWorkGroup;
         }
+
+        console.log("workGroups after update:", this.workGroups);
 
         // Remove the employees that were removed from the group
         for (const employeeId of this.employeesToRemove) {
@@ -414,8 +443,22 @@ export default {
           });
         }
 
-        // Clear the list of employees to remove
+        // Add the new employees to the group
+        const addParams = {
+          workGroupId: this.product,
+          employees: this.selectedEmployees.map((employee) => employee.id),
+        };
+
+        console.log("addParams:", addParams);
+
+        await Api.post(`/employeeWorkGroups`, addParams);
+
+        // Clear the list of employees to remove and to add
         this.employeesToRemove = [];
+        this.selectedEmployees = [];
+
+        console.log("employeesToRemove after clear:", this.employeesToRemove);
+        console.log("selectedEmployees after clear:", this.selectedEmployees);
 
         this.$toast.add({
           severity: "success",
@@ -424,13 +467,12 @@ export default {
           life: 800,
         });
       } catch (error) {
-        console.log(error);
+        console.log("Error in handleEdit:", error);
       }
 
       setTimeout(() => {
         this.productDialogEdit = false;
       }, 800);
-      // location.reload();
     },
 
     findIndexById(id) {
@@ -468,8 +510,22 @@ export default {
           );
         }
       );
+
+      // Get the IDs of the selected employees
+      const selectedEmployeeIds = this.selectedWorkGroupEmployees.map(
+        (employee) => employee.id
+      );
+
+      // Filter the groupedEmployees array to remove the selected employees
+      this.groupedEmployees = this.groupedEmployees.map((group) => {
+        group.items = group.items.filter(
+          (employee) => !selectedEmployeeIds.includes(employee.id)
+        );
+        return group;
+      });
     },
-    removeEmployeeFromWorkGroup(index) {
+
+    editEmployeeWorkGroup(index) {
       const employee = this.selectedWorkGroupEmployees[index];
       this.employeesToRemove.push(employee.id);
       this.selectedWorkGroupEmployees.splice(index, 1);
