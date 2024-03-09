@@ -8,7 +8,8 @@ const customer = require('./customer');
 const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
 const workGroup = require('./workGroup');
-const employeeWorkGroup = require('./employeeWorkGroup'); // new model
+const employeeWorkGroup = require('./employeeWorkGroup');
+const project = require('./project');
 
 const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
   host: 'localhost',
@@ -24,6 +25,7 @@ const applyRelations = () => {
     Customer,
     WorkGroup,
     EmployeeWorkGroup,
+    Project,
   } = sequelize.models;
 
   Employee.hasMany(Attendance, {
@@ -63,6 +65,15 @@ const applyRelations = () => {
   // Associations from EmployeeWorkGroup to Employee and WorkGroup
   EmployeeWorkGroup.belongsTo(Employee, { as: 'employee' });
   EmployeeWorkGroup.belongsTo(WorkGroup, { as: 'workGroup' });
+
+  // One-to-many relation between Customer and Project
+  Customer.hasMany(Project, {
+    foreignKey: 'customerId',
+  });
+  Project.belongsTo(Customer, {
+    foreignKey: 'customerId',
+    as: 'projectCustomer',
+  });
 };
 
 const models = [
@@ -74,7 +85,8 @@ const models = [
   employeeAttendance,
   attendance,
   workGroup,
-  employeeWorkGroup, // new model
+  employeeWorkGroup,
+  project,
 ];
 
 models.forEach((model) => model(sequelize));

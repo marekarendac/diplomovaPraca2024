@@ -1,5 +1,5 @@
 <script setup>
-import Projects from "@/components/Projects.vue";
+import Projects from "@/components/Tables/Projects.vue";
 </script>
 
 <template>
