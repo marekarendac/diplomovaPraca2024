@@ -9,12 +9,20 @@ const destroy = async (req, res) => {
 
   if (!workGroup) {
     res.status(404).send(`workGroup with ${req.params.id} not found`);
-
     return;
   }
 
+  // Delete all employeeWorkGroups with the same workGroupId
+  await req.context.models.EmployeeWorkGroup.destroy({
+    where: { workGroupId: req.params.id },
+  });
+
   await workGroup.destroy();
-  res.status(200).send(`workGroup with ${req.params.id} was destroyed`);
+  res
+    .status(200)
+    .send(
+      `workGroup with id ${req.params.id} was destroyed, also all employeeWorkGroups with the same workGroupId were destroyed.`,
+    );
 };
 
 const post = async (req, res) => {

@@ -91,6 +91,29 @@
       </div>
     </div>
 
+    <div class="field col">
+      <label for="employees">Zamestnanci</label>
+      <div style="display: flex; align-items: center">
+        <MultiSelect
+          id="employees"
+          v-model="selectedEmployees"
+          :options="groupedEmployees"
+          optionLabel="label"
+          filter
+          optionGroupLabel="label"
+          optionGroupChildren="items"
+          placeholder="Zadaj meno zamestnanca"
+          style="width: 100%"
+          :class="{ 'p-invalid': submitted && selectedEmployees.length === 0 }"
+        />
+        <small
+          class="p-error"
+          v-if="submitted && selectedEmployees.length === 0"
+          >Vyber aspoň jedného zamestnanca.</small
+        >
+      </div>
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
@@ -118,35 +141,33 @@
       <label for="name">Pracovná skupina</label>
       <div style="display: flex; align-items: center">
         <Dropdown
-          v-model="name"
-          :options="workGroups"
-          optionLabel="name"
-          placeholder="Zadaj meno zamestnanca"
+          id="workGroup"
+          v-model="product"
+          :options="workGroupsFullName"
+          optionLabel="workGroup"
+          optionValue="id"
+          placeholder="Vyber pracovnej skupiny"
           style="width: 100%"
-        >
-        </Dropdown>
+          autofocus
+          @change="handleWorkGroupChange"
+        />
       </div>
     </div>
 
-    <div class="field col">
-      <label for="phoneNumber">Zamestnanec</label>
+    <div
+      class="field col"
+      v-for="(employee, index) in selectedWorkGroupEmployees"
+      :key="index"
+    >
+      <label for="employee">Zamestnanec</label>
       <div style="display: flex; align-items: center">
-        <Dropdown
-          v-model="employeeFullName"
-          :options="groupedEmployees"
-          optionLabel="label"
-          filter
-          optionGroupLabel="label"
-          optionGroupChildren="items"
-          placeholder="Zadaj meno zamestnanca"
-          style="width: 100%"
-        >
-          <template #optiongroup="slotProps">
-            <div class="flex align-items-center">
-              <div>{{ slotProps.option.label }}</div>
-            </div>
-          </template>
-        </Dropdown>
+        <InputText id="employee" v-model="employee.fullName" disabled />
+        <Button
+          icon="pi pi-times"
+          class="p-button-warning"
+          style="margin-left: 10px"
+          @click="removeEmployeeFromGroup(index)"
+        />
       </div>
     </div>
 
@@ -169,63 +190,29 @@
   <Dialog
     v-model:visible="deleteProductDialog"
     :style="{ width: '450px' }"
-    header="Vymaž vybraný záznam"
+    header="Vymaž vybranú pracovnú skupinu"
     :modal="true"
   >
     <div class="confirmation-content">
       <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
-      <b>Chceš vymazať tento záznam ?</b>
+      <b>Chceš vymazať túto skupinu ?</b>
       <div class="text-align-center">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
-            <i class="pi pi-info-circle"></i>
+            <i class="pi pi-trash"></i>
           </span>
-          <InputText
-            id="idNumber"
-            v-model.trim="product.idNumber"
-            readonly
+
+          <Dropdown
+            id="workGroup"
+            v-model="product"
+            :options="workGroupsFullName"
+            optionLabel="workGroup"
+            optionValue="id"
+            placeholder="Názov novej pracovnej skupiny"
+            autofocus
+            :class="{ 'p-invalid': submitted && !product.workGroup }"
+            @change="product = $event.value"
           /><br />
-        </div>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-tag"></i>
-          </span>
-          <InputText id="brand" v-model.trim="product.brand" readonly /><br />
-        </div>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-info"></i>
-          </span>
-          <InputText
-            id="equipmentType"
-            v-model.trim="product.equipmentType"
-            readonly
-          /><br />
-        </div>
-
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-cog"></i>
-          </span>
-          <InputText id="status" v-model.trim="product.status" readonly /><br />
-        </div>
-
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-calendar-times"></i>
-          </span>
-          <InputText id="warranty" v-model.trim="product.warranty" readonly />
-        </div>
-
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-calendar-times"></i>
-          </span>
-          <InputText
-            id="description"
-            v-model.trim="product.description"
-            readonly
-          />
         </div>
       </div>
     </div>
@@ -251,6 +238,7 @@
 <script>
 import Api from "@/services/Api.js";
 import { FilterMatchMode } from "primevue/api";
+
 export default {
   data() {
     return {
@@ -262,6 +250,8 @@ export default {
       product: {},
       deleteProductDialog: false,
       filters1: {},
+      selectedEmployees: [],
+      selectedWorkGroupEmployees: [],
     };
   },
 
@@ -286,10 +276,16 @@ export default {
       ]);
 
       this.postDetails = employeeWorkGroupsResponse.data;
-      console.log("First element of postDetails:", this.postDetails[0]);
 
-      this.employees = employeesResponse.data;
+      this.employees = employeesResponse.data.map((employee) => ({
+        ...employee,
+        fullName: `${employee.name} ${employee.surname}`,
+      }));
+
       this.workGroups = workGroupsResponse.data;
+      console.log("First element of postDetails:", this.postDetails[0]);
+      console.log("First element of employees:", this.employees[0]);
+      console.log("First element of worgroups:", this.workGroups[0]);
     },
 
     clearFilter1() {
@@ -313,28 +309,41 @@ export default {
       this.submitted = false;
     },
 
-    handleSubmit() {
+    async handleSubmit() {
       this.submitted = true;
 
-      if (this.product.workGroup.trim()) {
-        const data = {
+      if (this.product.workGroup.trim() && this.selectedEmployees.length > 0) {
+        const workGroupData = {
           name: this.product.workGroup,
         };
 
-        Api.post("/workGroups", data)
-          .then((response) => {
-            const newWorkGroup = response.data;
+        try {
+          const response = await Api.post("/workGroups", workGroupData);
+          const newWorkGroup = response.data;
 
-            this.workGroups.push(newWorkGroup);
+          const employeeWorkGroupData = {
+            workGroupId: newWorkGroup.id,
+            employees: this.selectedEmployees.map((employee) => employee.id),
+          };
 
-            this.$toast.add({
-              severity: "success",
-              summary: "Úspech",
-              detail: "Záznam bol vytvorený!",
-              life: 800,
-            });
-          })
-          .catch((error) => console.log(error));
+          await Api.post("/employeeWorkGroups", employeeWorkGroupData);
+          location.reload();
+          // Fetch the updated workGroup with the associated employees
+          const updatedWorkGroup = await Api.get(
+            `/workGroups/${newWorkGroup.id}`
+          );
+
+          this.workGroups.push(updatedWorkGroup.data);
+
+          this.$toast.add({
+            severity: "success",
+            summary: "Úspech",
+            detail: "Záznam bol vytvorený!",
+            life: 800,
+          });
+        } catch (error) {
+          console.log(error);
+        }
 
         setTimeout(() => {
           this.productDialog = false;
@@ -342,17 +351,21 @@ export default {
       }
     },
 
-    confirmDeleteProduct(product) {
-      this.product = product;
+    confirmDeleteProduct() {
       this.deleteProductDialog = true;
     },
 
     deleteProduct() {
-      this.postDetails = this.postDetails.filter(
-        (val) => val.id !== this.product.id
-      );
-
-      Api.delete("equipment/" + this.product.id);
+      if (this.product) {
+        this.workGroups = this.workGroups.filter(
+          (val) => val.id !== this.product.id
+        );
+        Api.delete("workGroups/" + this.product);
+        location.reload();
+        // ...
+      } else {
+        console.error("No product selected for deletion");
+      }
 
       this.$toast.add({
         severity: "warn",
@@ -368,20 +381,53 @@ export default {
     editProduct(product) {
       this.product = { ...product };
       this.productDialogEdit = true;
+      console.log("Selected work group:", this.product);
+      console.log(
+        "Selected work group employees:",
+        this.selectedWorkGroupEmployees
+      );
     },
 
     handleEdit() {
       this.submitted = true;
-      const updatedEquipment = {
+
+      // Update the work group
+      const updatedWorkGroup = {
         ...this.product,
       };
 
-      Api.put("equipment/" + this.product.id, updatedEquipment)
-        .then(() => {
+      Api.put("workGroups/" + this.product, updatedWorkGroup)
+        .then(async () => {
           if (this.product.id) {
-            this.postDetails[this.findIndexById(this.product.id)] =
-              updatedEquipment;
+            this.workGroups[this.findIndexById(this.product.id)] =
+              updatedWorkGroup;
           }
+          console.log(
+            "Before removing employees:",
+            this.selectedWorkGroupEmployees
+          );
+
+          // Remove each employee from the work group
+          for (const employee of this.selectedWorkGroupEmployees) {
+            const deleteParams = {
+              workGroupId: this.product,
+              employeeId: employee.id,
+            };
+
+            console.log("deleteParams:", deleteParams);
+
+            await Api.delete(`employeeWorkGroups/removeEmployee`, {
+              data: deleteParams,
+            });
+          }
+
+          this.selectedWorkGroupEmployees = [];
+
+          console.log(
+            "After removing employees:",
+            this.selectedWorkGroupEmployees
+          );
+
           this.$toast.add({
             severity: "success",
             summary: "Úspech",
@@ -418,7 +464,29 @@ export default {
     removeWhitespace(field) {
       this.product[field] = this.product[field].replace(/\s/g, "");
     },
+
+    handleWorkGroupChange() {
+      const selectedWorkGroupRelations = this.postDetails.filter(
+        (relation) => relation.workGroupId === this.product
+      );
+
+      this.selectedWorkGroupEmployees = selectedWorkGroupRelations.map(
+        (relation) => {
+          return this.employees.find(
+            (employee) => employee.id === relation.employeeId
+          );
+        }
+      );
+    },
+    removeEmployeeFromGroup(index) {
+      console.log("Before removing employee:", this.selectedWorkGroupEmployees);
+
+      this.selectedWorkGroupEmployees.splice(index, 1);
+
+      console.log("After removing employee:", this.selectedWorkGroupEmployees);
+    },
   },
+
   computed: {
     mappedPostDetails() {
       if (this.postDetails) {
@@ -433,6 +501,12 @@ export default {
       } else {
         return [];
       }
+    },
+    workGroupsFullName() {
+      return this.workGroups.map((workGroup) => ({
+        ...workGroup,
+        workGroup: `${workGroup.id} - ${workGroup.name}`,
+      }));
     },
     groupedEmployees() {
       // First, group the employees by position

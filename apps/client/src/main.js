@@ -15,7 +15,7 @@ import Row from "primevue/row";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import FileUpload from "primevue/fileupload";
-import PrimeFlex from "/node_modules/primeflex/primeflex.css";
+import PrimeFlex from "primeflex/primeflex.css";
 import InputText from "primevue/inputtext";
 import Textarea from "primevue/textarea";
 import InputNumber from "primevue/inputnumber";
@@ -27,6 +27,7 @@ import AutoComplete from "primevue/autocomplete";
 import Tag from "primevue/tag";
 import Card from "primevue/card";
 import InputMask from "primevue/inputmask";
+import MultiSelect from "primevue/multiselect";
 
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/saga-blue/theme.css";
@@ -60,6 +61,7 @@ app.component("Textarea", Textarea);
 app.component("InputNumber", InputNumber);
 app.component("Toast", Toast);
 app.component("InputMask", InputMask);
+app.component("MultiSelect", MultiSelect);
 
 //AUTENTICACION PLUGIN
 

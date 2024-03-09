@@ -33,33 +33,63 @@ const destroy = async (req, res) => {
 };
 
 const post = async (req, res) => {
-  const employeeWorkGroup = await req.context.models.EmployeeWorkGroup.create(
-    req.body,
+  const { workGroupId, employees } = req.body;
+
+  const employeeWorkGroups = await Promise.all(
+    employees.map((employeeId) =>
+      req.context.models.EmployeeWorkGroup.create({
+        WorkGroupId: workGroupId,
+        EmployeeId: employeeId,
+      }),
+    ),
   );
-  res.status(200).send(employeeWorkGroup);
+
+  res.status(200).send(employeeWorkGroups);
 };
 
 const update = async (req, res) => {
-  const { id } = req.params;
-  await req.context.models.EmployeeWorkGroup.update(req.body, {
-    where: { id: req.body.id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: 'EmployeeWorkGroup was updated successfully.',
-        });
-      } else {
-        res.send({
-          message: `Cannot update EmployeeWorkGroup with id=${id}. Maybe EmployeeWorkGroup was not found or req.body is empty!`,
-        });
-      }
-    })
-    .catch((error) => {
-      res.status(500).send({
-        message: `Error updating EmployeeWorkGroup with id=${id}`,
-      });
-    });
+  const employeeWorkGroup = await req.context.models.EmployeeWorkGroup.findByPk(
+    req.params.id,
+  );
+
+  if (!employeeWorkGroup) {
+    res
+      .status(404)
+      .send(`EmployeeWorkGroup with id ${req.params.id} not found`);
+    return;
+  }
+
+  const updatedEmployeeWorkGroup = await employeeWorkGroup.update(req.body);
+  res.status(200).send(updatedEmployeeWorkGroup);
+};
+
+const removeEmployee = async (req, res) => {
+  const { workGroupId, employeeId } = req.body;
+
+  const employeeWorkGroup = await req.context.models.EmployeeWorkGroup.findOne({
+    where: {
+      WorkGroupId: workGroupId,
+      EmployeeId: employeeId,
+    },
+  });
+
+  console.log('employeeWorkGroup:', employeeWorkGroup); // Log the result of the findOne operation
+
+  if (!employeeWorkGroup) {
+    res
+      .status(404)
+      .send(
+        `EmployeeWorkGroup with workGroupId ${workGroupId} and employeeId ${employeeId} not found`,
+      );
+    return;
+  }
+
+  await employeeWorkGroup.destroy();
+  res
+    .status(200)
+    .send(
+      `Employee from EmployeeWorkGroup with workGroupId ${workGroupId} and employeeId ${employeeId} was removed`,
+    );
 };
 
 module.exports = {
@@ -67,4 +97,5 @@ module.exports = {
   destroy,
   post,
   update,
+  removeEmployee,
 };
