@@ -20,6 +20,7 @@ const exportCustomersRouter = require('./routes/exportCustomers');
 const workGroupsRouter = require('./routes/workGroups');
 const employeeWorkGroupsRouter = require('./routes/employeeWorkGroups');
 const projectsRouter = require('./routes/projects');
+const exportProjectsRouter = require('./routes/exportProjects');
 
 // const { populateDB } = require('./src/helpers');
 
@@ -53,6 +54,7 @@ app.use('/exportCustomers', exportCustomersRouter);
 app.use('/workGroups', workGroupsRouter);
 app.use('/employeeWorkGroups', employeeWorkGroupsRouter);
 app.use('/projects', projectsRouter);
+app.use('/exportProjects', exportProjectsRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}!`);

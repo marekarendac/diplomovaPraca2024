@@ -5,6 +5,10 @@ const findAll = async (req, res) => {
         model: req.context.models.Customer,
         as: 'projectCustomer',
       },
+      {
+        model: req.context.models.WorkGroup,
+        as: 'defaultWorkGroup',
+      },
     ],
   });
 

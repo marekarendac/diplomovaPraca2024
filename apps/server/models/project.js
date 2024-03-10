@@ -37,6 +37,14 @@ const project = (sequelize) => {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: true,
       },
+      defaultWorkGroupId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'workGroup',
+          key: 'id',
+        },
+      },
     },
     {
       timestamps: false,

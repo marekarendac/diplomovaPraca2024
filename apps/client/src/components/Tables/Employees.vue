@@ -94,6 +94,11 @@
     class="p-fluid"
   >
     <div class="field col">
+      <label for="id"># Interné číslo</label
+      ><AutoComplete id="name" v-model.trim="product.id" disabled />
+    </div>
+
+    <div class="field col">
       <label for="name">Meno</label
       ><AutoComplete id="name" v-model.trim="product.name" disabled />
     </div>

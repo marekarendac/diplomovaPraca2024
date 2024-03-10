@@ -354,13 +354,6 @@ export default {
 
           await Api.post("/employeeWorkGroups", employeeWorkGroupData);
 
-          // Fetch the updated workGroup with the associated employees
-          const updatedWorkGroup = await Api.get(
-            `/workGroups/${newWorkGroup.id}`
-          );
-
-          this.workGroups.push(updatedWorkGroup.data);
-
           this.$toast.add({
             severity: "success",
             summary: "Úspech",

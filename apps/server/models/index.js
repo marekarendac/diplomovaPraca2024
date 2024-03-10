@@ -74,6 +74,15 @@ const applyRelations = () => {
     foreignKey: 'customerId',
     as: 'projectCustomer',
   });
+
+  // One-to-many relation between WorkGroup and Project
+  WorkGroup.hasMany(Project, {
+    foreignKey: 'defaultWorkGroupId',
+  });
+  Project.belongsTo(WorkGroup, {
+    foreignKey: 'defaultWorkGroupId',
+    as: 'defaultWorkGroup',
+  });
 };
 
 const models = [

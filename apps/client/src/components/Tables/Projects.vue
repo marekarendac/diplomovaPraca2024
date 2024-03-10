@@ -29,7 +29,7 @@
         <Button
           label="Export tabuľky"
           icon="pi pi-external-link"
-          @click="exportVehicles"
+          @click="exportProjects"
         />
       </template>
     </Toolbar>
@@ -54,26 +54,44 @@
         style="max-width: 70px"
       ></Column>
 
-      <Column field="name" header="Názov projektu" :sortable="true"></Column
+      <Column
+        field="name"
+        header="Názov projektu"
+        :sortable="true"
+        style="min-width: 270px"
+      ></Column
       ><Column
         field="workPlace"
         header="Miesto práce"
         :sortable="true"
+        style="min-width: 270px"
       ></Column>
 
       <Column
         field="projectCustomer.name"
         header="Zákazník"
         :sortable="true"
-        style="min-width: 230px"
+        style="max-width: 150px"
       ></Column>
 
       <Column
-        field="workedHours"
-        header="TOTAL odpracované hodiny"
+        field="status"
+        header="Status projektu"
         :sortable="true"
-        ;
-      ></Column>
+        style="min-width: 150px"
+      >
+      </Column>
+
+      <Column field="workedHours" header="TOTAL [h]" :sortable="true">
+        <template #body="slotProps">
+          {{
+            slotProps.data.workedHours !== null &&
+            slotProps.data.workedHours !== undefined
+              ? slotProps.data.workedHours
+              : "0.0"
+          }}
+        </template>
+      </Column>
 
       <Column header="Operácia" :exportable="false" style="max-width: 13%">
         <template #body="slotProps">
@@ -107,8 +125,8 @@
     class="p-fluid"
   >
     <div class="field col">
-      <label for="id">Interné číslo projektu</label
-      ><AutoComplete id="id" v-model.trim="product.id" disabled />
+      <label for="id"># Interné číslo</label
+      ><AutoComplete id="name" v-model.trim="product.id" disabled />
     </div>
 
     <div class="field col">
@@ -153,6 +171,11 @@
       />
     </div>
 
+    <div class="field col">
+      <label for="workGroup">Pridelená pracovná skupina</label>
+      <AutoComplete id="workGroup" v-model.trim="workGroupName" disabled />
+    </div>
+
     <template #footer>
       <Button
         label="Ukonči"
@@ -179,7 +202,7 @@
         v-model.trim="product.name"
         autofocus
         :class="{ 'p-invalid': submitted && !product.name }"
-        maxlength="20"
+        maxlength="244"
         placeholder="Zadaj názov projektu"
       />
       <small class="p-error" v-if="submitted && !product.name"
@@ -230,7 +253,7 @@
         autofocus
         :class="{ 'p-invalid': submitted && !product.workPlace }"
         maxlength="50"
-        placeholder="Miesto práce"
+        placeholder="Zadaj miesto práce"
       />
       <small class="p-error" v-if="submitted && !product.workPlace"
         >Miesto práce je povinný údaj.</small
@@ -248,11 +271,25 @@
         :options="customers"
         optionLabel="name"
         optionValue="id"
-        placeholder="Zákazník"
+        placeholder="Prideľ zákazníka"
       />
       <small class="p-error" v-if="submitted && !product.customerId"
         >Zákazník je povinný údaj.</small
       >
+    </div>
+
+    <div class="field col">
+      <label for="defaultWorkGroup.name">Pridelená pracovná skupina</label>
+      <Dropdown
+        id="defaultWorkGroup.id"
+        required="true"
+        v-model="product.defaultWorkGroupId"
+        autofocus
+        :options="workGroups"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Prideľ pracovnú skupinu"
+      />
     </div>
 
     <template #footer>
@@ -283,21 +320,37 @@
       <div class="text-align-center">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
-            <i class="pi pi-car"></i>
+            <i class="pi pi-box"></i>
           </span>
-          <InputText id="brand" v-model.trim="brandAndModel" readonly /><br />
+          <InputText id="name" v-model.trim="product.name" readonly /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-building"></i>
+          </span>
+          <InputText
+            id="workPlace"
+            v-model.trim="product.workPlace"
+            readonly
+          /><br />
+        </div>
+
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-user"></i>
+          </span>
+          <InputText id="customerName" :value="customerName" readonly /><br />
         </div>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
-            <i class="pi pi-calendar"></i>
+            <i class="pi pi-chart-bar"></i>
           </span>
-          <InputText id="year" v-model.trim="product.year" readonly /><br />
-        </div>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-id-card"></i>
-          </span>
-          <InputText id="VIN" v-model.trim="product.VIN" readonly />
+          <InputText
+            id="workedHours"
+            v-model.trim="product.workedHours"
+            readonly
+          />
         </div>
       </div>
     </div>
@@ -327,105 +380,102 @@
     class="p-fluid"
   >
     <div class="field col">
-      <label for="brand">Značka</label>
+      <label for="name">Názov projektu</label>
       <InputText
-        id="brand"
+        id="name"
         required="true"
-        v-model.trim="product.brand"
+        v-model.trim="product.name"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.brand }"
-        maxlength="20"
-        placeholder="Značka vozidla"
+        :class="{ 'p-invalid': submitted && !product.name }"
+        maxlength="244"
+        placeholder="Zadaj názov projektu"
       />
-      <small class="p-error" v-if="submitted && !product.brand"
+      <small class="p-error" v-if="submitted && !product.name"
         >Značka je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
-      <label for="model">Model</label>
+      <label for="status">Status projektu</label>
+      <Dropdown
+        id="status"
+        v-model="product.status"
+        :options="statuses"
+        optionLabel="status"
+        optionValue="status"
+        required="true"
+        autofocus
+        :class="{ 'p-invalid': submitted && !product.status }"
+        placeholder="Vyber status projektu"
+      />
+      <small class="p-error" v-if="submitted && !product.status"
+        >Stav je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="description">Popis projektu</label>
+      <Textarea
+        id="description"
+        required="true"
+        v-model.trim="product.description"
+        autofocus
+        autoResize
+        maxlength="245"
+        placeholder="Popis projektu..."
+        :class="{ 'p-invalid': submitted && !product.description }"
+      />
+      <small class="p-error" v-if="submitted && !product.description"
+        >Popis je povinné pole.</small
+      >
+    </div>
+
+    <div class="field col">
+      <label for="workPlace">Miesto práce</label>
       <InputText
-        id="model"
+        id="workPlace"
         required="true"
-        v-model.trim="product.model"
+        v-model.trim="product.workPlace"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.model }"
-        maxlength="30"
-        placeholder="Model vozidla"
+        :class="{ 'p-invalid': submitted && !product.workPlace }"
+        maxlength="50"
+        placeholder="Miesto práce"
       />
-      <small class="p-error" v-if="submitted && !product.model"
-        >Model je povinný údaj.</small
+      <small class="p-error" v-if="submitted && !product.workPlace"
+        >Miesto práce je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
-      <label for="lastService">Posledný servis</label
-      ><Calendar
-        showIcon
-        id="lastService"
+      <label for="projectCustomer.name">Zákazník</label>
+      <Dropdown
+        id="projectCustomerid"
         required="true"
-        v-model="product.lastService"
-        dateFormat="yy-mm-dd"
+        v-model="product.customerId"
         autofocus
-        :class="{ 'p-invalid': submitted && !product.lastService }"
+        :class="{ 'p-invalid': submitted && !product.customerId }"
+        :options="customers"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Zákazník"
       />
-      <small class="p-error" v-if="submitted && !product.lastService"
-        >Posledný servis je povinný údaj.</small
+      <small class="p-error" v-if="submitted && !product.customerId"
+        >Zákazník je povinný údaj.</small
       >
     </div>
 
     <div class="field col">
-      <label for="year">Rok výroby</label>
-      <div style="display: flex; align-items: center">
-        <InputMask
-          id="year"
-          required="true"
-          v-model="product.year"
-          mask="9999"
-          placeholder="2024"
-          autofocus
-          :class="{ 'p-invalid': submitted && !product.year }"
-        />
-      </div>
-      <small class="p-error" v-if="submitted && !product.year"
-        >Rok výroby je povinný údaj.</small
-      >
-    </div>
-
-    <div class="field col">
-      <label for="VIN">VIN číslo</label>
-      <div style="display: flex; align-items: center">
-        <InputMask
-          id="VIN"
-          required="true"
-          v-model="product.VIN"
-          mask="*****************"
-          placeholder="XXXXXXXXXXXXXXXXX"
-          autofocus
-          :class="{ 'p-invalid': submitted && !product.VIN }"
-        />
-      </div>
-      <small class="p-error" v-if="submitted && !product.VIN"
-        >VIN číslo je povinný údaj.</small
-      >
-    </div>
-
-    <div class="field col">
-      <label for="tireSize">Veľkosť pneumatík</label>
-      <div style="display: flex; align-items: center">
-        <InputMask
-          id="tireSize"
-          required="true"
-          v-model="product.tireSize"
-          mask="999x99xR99"
-          placeholder="999x99xR99"
-          autofocus
-          :class="{ 'p-invalid': submitted && !product.tireSize }"
-        />
-      </div>
-      <small class="p-error" v-if="submitted && !product.tireSize"
-        >Veľkosť pneumatík je povinný údaj.</small
-      >
+      <label for="defaultWorkGroup.name">Pridelená pracovná skupina</label>
+      <Dropdown
+        id="defaultWorkGroup.id"
+        required="true"
+        v-model="product.defaultWorkGroupId"
+        autofocus
+        :options="workGroups"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Prideľ pracovnú skupinu"
+      />
     </div>
 
     <template #footer>
@@ -470,6 +520,7 @@ export default {
         { status: "Uzavretý" },
       ],
       customers: [],
+      workGroups: [],
     };
   },
   created() {
@@ -481,17 +532,25 @@ export default {
   },
 
   methods: {
-    async getPostDetails() {
-      const [projectsResponse, customersResponse] = await Promise.all([
+    getPostDetails() {
+      Promise.all([
         Api.get("/projects"),
         Api.get("/customers"),
-      ]);
+        Api.get("/workGroups"),
+      ])
+        .then(([projectsResponse, customersResponse, workGroupsResponse]) => {
+          this.postDetails = projectsResponse.data;
+          this.customers = customersResponse.data;
+          this.workGroups = workGroupsResponse.data;
 
-      this.postDetails = projectsResponse.data;
-      this.customers = customersResponse.data;
-
-      console.log("First element of postDetails:", this.postDetails[0]);
-      console.log("First element of customers:", this.customers[0]);
+          console.log("First element of postDetails:", this.postDetails[0]);
+          console.log("First element of customers:", this.customers[0]);
+          console.log("First element of workGroups:", this.workGroups[0]);
+          console.log("workgroup:", this.postDetails[0].defaultWorkGroup.name);
+        })
+        .catch((error) => {
+          console.log("Error while getting post details:", error);
+        });
     },
 
     openNew() {
@@ -510,54 +569,58 @@ export default {
       this.submitted = false;
     },
 
-    async handleSubmit() {
+    handleSubmit() {
       this.submitted = true;
 
       if (
         this.product.name.trim() &&
-        typeof this.product.status === "string" &&
-        this.product.status.trim() &&
+        this.product.status &&
         this.product.description.trim() &&
         this.product.workPlace.trim() &&
-        this.product.projectCustomer.name.trim() &&
-        this.product.customerId.trim()
+        this.product.customerId
       ) {
         const projectData = {
           name: this.product.name,
-          status: this.product.status,
+          status: this.product.status.status,
           description: this.product.description,
           workPlace: this.product.workPlace,
-          projectCustomer: {
-            name: this.product.projectCustomer.name,
-          },
           customerId: this.product.customerId,
+          defaultWorkGroupId: this.product.defaultWorkGroupId,
         };
 
-        // Log the projectData object to the console
-        console.log(projectData);
+        Api.post("/projects", projectData)
+          .then((response) => {
+            const newProject = response.data;
 
-        try {
-          const response = await Api.post("/projects", projectData);
-          const newProject = response.data;
+            // Find the customer object from the customers array
+            const customer = this.customers.find(
+              (customer) => customer.id === this.product.customerId
+            );
+            const workGroup = this.workGroups.find(
+              (workGroup) => workGroup.id === this.product.defaultWorkGroupId
+            );
 
-          // Fetch the updated project with the associated data
-          const updatedProject = await Api.get(`/projects/${newProject.id}`);
+            // Add the customer object to the newProject object
+            newProject.projectCustomer = customer;
 
-          this.postDetails.push(updatedProject.data);
+            this.postDetails.push(newProject);
 
-          this.$toast.add({
-            severity: "success",
-            summary: "Úspech",
-            detail: "Záznam bol vytvorený!",
-            life: 800,
+            this.$toast.add({
+              severity: "success",
+              summary: "Úspech",
+              detail: "Záznam bol vytvorený!",
+              life: 800,
+            });
+
+            setTimeout(() => {
+              this.productDialog = false;
+            }, 800);
+          })
+          .catch((error) => {
+            console.log("Error while creating project:", error);
           });
-        } catch (error) {
-          console.log(error);
-        }
-
-        setTimeout(() => {
-          this.productDialog = false;
-        }, 800);
+      } else {
+        console.log("Form validation failed"); // Log a message if form validation fails
       }
     },
 
@@ -571,7 +634,7 @@ export default {
         (val) => val.id !== this.product.id
       );
 
-      Api.delete("vehicles/" + this.product.id);
+      Api.delete("projects/" + this.product.id);
 
       this.$toast.add({
         severity: "warn",
@@ -597,35 +660,38 @@ export default {
     handleEdit() {
       this.submitted = true;
 
-      if (this.product.brand.trim() && this.product.model.trim());
-
-      {
-        this.product.lastService = this.product.lastService
-          .toISOString()
-          .split("T")[0]; // format the date
-
+      if (
+        this.product.name.trim() &&
+        this.product.status &&
+        this.product.description.trim() &&
+        this.product.workPlace.trim() &&
+        this.product.customerId
+      ) {
         if (this.product.id) {
           this.postDetails[this.findIndexById(this.product.id)] = this.product;
         }
 
-        Api.put("vehicles/" + this.product.id, {
+        Api.put("projects/" + this.product.id, {
           id: this.product.id,
-          brand: this.product.brand,
-          model: this.product.model,
-          year: this.product.year,
-          VIN: this.product.VIN,
-          lastService: this.product.lastService, // already formatted
+          name: this.product.name,
+          status: this.product.status,
+          description: this.product.description,
+          workPlace: this.product.workPlace,
+          customerId: this.product.customerId,
+          defaultWorkGroupId: this.product.defaultWorkGroupId,
         }).catch((error) => console.log(error));
+
+        this.$toast.add({
+          severity: "success",
+          summary: "Úspech",
+          detail: "Záznam bol editovaný!",
+          life: 800,
+        });
+
+        setTimeout(() => {
+          this.productDialogEdit = false;
+        }, 800);
       }
-      this.$toast.add({
-        severity: "success",
-        summary: "Úspech",
-        detail: "Záznam bol editovaný!",
-        life: 800,
-      });
-      setTimeout(() => {
-        this.productDialogEdit = false;
-      }, 800);
     },
 
     findIndexById(id) {
@@ -647,10 +713,10 @@ export default {
     clearFilter1() {
       this.initFilters1();
     },
-    exportVehicles() {
+    exportProjects() {
       if (window.confirm("Do you really want to download the file?")) {
-        console.log("exportVehicles called");
-        Api.get("/exportVehicles", {
+        console.log("exportProjects called");
+        Api.get("/exportProjects", {
           responseType: "blob", // Important for handling the binary data
         })
           .then((response) => {
@@ -658,7 +724,7 @@ export default {
             const link = document.createElement("a");
             link.href = url;
             const contentDisposition = response.headers["content-disposition"];
-            let fileName = "vehicles.xlsx"; // default filename
+            let fileName = "projects.xlsx"; // default filename
             if (contentDisposition) {
               const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
               if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
@@ -671,6 +737,20 @@ export default {
             console.error(error);
           });
       }
+    },
+  },
+  computed: {
+    customerName() {
+      // Assuming `customers` is an array of customer objects
+      const customer = this.customers.find(
+        (c) => c.id === this.product.customerId
+      );
+      return customer ? customer.name : "";
+    },
+    workGroupName() {
+      return this.product.defaultWorkGroup
+        ? this.product.defaultWorkGroup.name
+        : "Zatiaľ nebola pridelená skupina";
     },
   },
 };
