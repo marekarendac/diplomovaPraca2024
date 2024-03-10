@@ -225,15 +225,17 @@
       <label for="position">Pozícia</label>
       <Dropdown
         id="position"
-        required="true"
+        v-model="product.position"
         :options="positions"
         optionLabel="position"
-        v-model="product.position"
+        optionValue="position"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.position }"
+        placeholder="Vyber pozíciu projektu"
       />
       <small class="p-error" v-if="submitted && !product.position"
-        >Pozícia je povinný údaj.</small
+        >Stav je povinné pole.</small
       >
     </div>
 
@@ -646,6 +648,7 @@ export default {
       contractType: "",
       phoneNumber: "",
       filters1: {},
+      position: null,
       positions: [{ position: "Majster" }, { position: "Pracovník" }],
       contracts: [
         { contractType: "Zamestnanec" },
