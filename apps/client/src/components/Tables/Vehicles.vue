@@ -551,32 +551,38 @@ export default {
     handleEdit() {
       this.submitted = true;
 
-      if (this.product.brand.trim() && this.product.model.trim());
-
-      {
-        this.product.lastService = this.product.lastService
-          .toISOString()
-          .split("T")[0]; // format the date
-
-        if (this.product.id) {
-          this.postDetails[this.findIndexById(this.product.id)] = this.product;
-        }
-
-        Api.put("vehicles/" + this.product.id, {
-          id: this.product.id,
-          brand: this.product.brand,
-          model: this.product.model,
-          year: this.product.year,
-          VIN: this.product.VIN,
-          lastService: this.product.lastService, // already formatted
-        }).catch((error) => console.log(error));
+      let lastServiceDate = this.product.lastService;
+      if (typeof this.product.lastService === "string") {
+        lastServiceDate = new Date(this.product.lastService);
       }
-      this.$toast.add({
-        severity: "success",
-        summary: "Úspech",
-        detail: "Záznam bol editovaný!",
-        life: 800,
-      });
+
+      const updatedVehicle = {
+        ...this.product,
+        brand: this.product.brand,
+        model: this.product.model,
+        year: this.product.year,
+        VIN: this.product.VIN,
+        lastService: lastServiceDate
+          ? lastServiceDate.toISOString().split("T")[0]
+          : null, // format the date
+      };
+
+      Api.put("vehicles/" + this.product.id, updatedVehicle)
+        .then(() => {
+          if (this.product.id) {
+            this.postDetails[this.findIndexById(this.product.id)] =
+              updatedVehicle;
+          }
+
+          this.$toast.add({
+            severity: "success",
+            summary: "Úspech",
+            detail: "Záznam bol editovaný!",
+            life: 800,
+          });
+        })
+        .catch((error) => console.log(error));
+
       setTimeout(() => {
         this.productDialogEdit = false;
       }, 800);

@@ -155,6 +155,23 @@
     </div>
 
     <div class="field col" v-if="selectedWorkGroup">
+      <label for="employees">Zmeň názov pracovnej skupiny</label>
+      <div style="display: flex; align-items: center">
+        <InputText
+          id="workGroup"
+          required="true"
+          v-model.trim="product.workGroup"
+          placeholder="Názov novej pracovnej skupiny"
+          autofocus
+          :class="{ 'p-invalid': submitted && !product.workGroup }"
+        />
+        <small class="p-error" v-if="submitted && !product.workGroup"
+          >Názov pracovnej skupiny je povinné pole.</small
+        >
+      </div>
+    </div>
+
+    <div class="field col" v-if="selectedWorkGroup">
       <label for="employees">Pridaj členov pracovnej skupiny</label>
       <div style="display: flex; align-items: center">
         <MultiSelect

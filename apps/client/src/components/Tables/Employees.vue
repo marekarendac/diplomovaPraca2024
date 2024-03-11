@@ -322,9 +322,6 @@
           :class="{ 'p-invalid': submitted && !product.iban }"
         />
       </div>
-      <small class="p-error" v-if="submitted && !product.iban"
-        >IBAN je povinný údaj.</small
-      >
     </div>
 
     <div class="field col">
@@ -522,7 +519,7 @@
         placeholder="Vyber typ pozície"
       />
       <small class="p-error" v-if="submitted && !product.position"
-        >Stav je povinné pole.</small
+        >Pozícia je povinné pole.</small
       >
     </div>
 

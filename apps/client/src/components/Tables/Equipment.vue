@@ -194,12 +194,14 @@
       <label for="equipmentType">Typ nástroja</label>
       <Dropdown
         id="equipmentType"
-        required="true"
-        :options="types"
-        optionLabel="type"
         v-model="product.equipmentType"
+        :options="equipmentTypes"
+        optionLabel="equipmentType"
+        optionValue="equipmentType"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.equipmentType }"
+        placeholder="Vyber typ nástroja"
       />
       <small class="p-error" v-if="submitted && !product.equipmentType"
         >Typ nástroja je povinné pole.</small
@@ -224,18 +226,20 @@
     </div>
 
     <div class="field col">
-      <label for="status">Stav nástroja</label>
+      <label for="status">Typ nástroja</label>
       <Dropdown
         id="status"
+        v-model="product.status"
         :options="statuses"
         optionLabel="status"
+        optionValue="status"
         required="true"
-        v-model="product.status"
         autofocus
         :class="{ 'p-invalid': submitted && !product.status }"
+        placeholder="Vyber typ nástroja"
       />
       <small class="p-error" v-if="submitted && !product.status"
-        >Stav je povinné pole.</small
+        >Stav nástroja je povinné pole.</small
       >
     </div>
 
@@ -394,12 +398,14 @@
       <label for="equipmentType">Typ nástroja</label>
       <Dropdown
         id="equipmentType"
-        required="true"
-        :options="types"
-        optionLabel="type"
         v-model="product.equipmentType"
+        :options="equipmentTypes"
+        optionLabel="equipmentType"
+        optionValue="equipmentType"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.equipmentType }"
+        placeholder="Vyber typ nástroja"
       />
       <small class="p-error" v-if="submitted && !product.equipmentType"
         >Typ nástroja je povinné pole.</small
@@ -412,6 +418,7 @@
         id="status"
         :options="statuses"
         optionLabel="status"
+        optionValue="status"
         required="true"
         v-model="product.status"
         autofocus
@@ -487,7 +494,7 @@ export default {
       deleteProductDialog: false,
       idNumber: "",
       brand: "",
-      equipmentType: "",
+      equipmentType: null,
       description: "",
       statuses: [
         { status: "Záruka" },
@@ -495,11 +502,11 @@ export default {
         { status: "Pokazené" },
       ],
       filters1: {},
-      types: [
-        { type: "Vŕtačka" },
-        { type: "AKU vŕtačka" },
-        { type: "Zváračka" },
-        { type: "Karbobrúska" },
+      equipmentTypes: [
+        { equipmentType: "Vŕtačka" },
+        { equipmentType: "AKU vŕtačka" },
+        { equipmentType: "Zváračka" },
+        { equipmentType: "Karbobrúska" },
       ],
       warranty: "",
     };
@@ -539,9 +546,9 @@ export default {
         Api.post("/equipment", {
           idNumber: this.product.idNumber,
           brand: this.product.brand,
-          equipmentType: this.product.equipmentType.type,
+          equipmentType: this.product.equipmentType,
           description: this.product.description,
-          status: this.product.status.status,
+          status: this.product.status,
           warranty: this.product.warranty,
         })
           .then((response) => {
@@ -595,11 +602,19 @@ export default {
 
     handleEdit() {
       this.submitted = true;
+
+      let warrantyDate = this.product.warranty;
+      if (typeof this.product.warranty === "string") {
+        warrantyDate = new Date(this.product.warranty);
+      }
+
       const updatedEquipment = {
         ...this.product,
-        equipmentType: this.product.equipmentType.type, // assuming equipmentType is a Proxy object with a type property
-        status: this.product.status.status, // assuming status is a Proxy object with a status property
-        warranty: this.product.warranty.toISOString().split("T")[0], // format the date
+        equipmentType: this.product.equipmentType, // assuming equipmentType is a Proxy object with a type property
+        status: this.product.status, // assuming status is a Proxy object with a status property
+        warranty: warrantyDate
+          ? warrantyDate.toISOString().split("T")[0]
+          : null, // format the date
       };
 
       Api.put("equipment/" + this.product.id, updatedEquipment)
