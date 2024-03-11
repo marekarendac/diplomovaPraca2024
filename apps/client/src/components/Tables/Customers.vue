@@ -763,22 +763,42 @@ export default {
       this.deleteProductDialog = true;
     },
 
-    deleteProduct() {
-      this.postDetails = this.postDetails.filter(
-        (val) => val.id !== this.product.id
-      );
+    async deleteProduct() {
+      try {
+        await Api.delete("customers/" + this.product.id);
 
-      Api.delete("customers/" + this.product.id);
+        this.postDetails = this.postDetails.filter(
+          (val) => val.id !== this.product.id
+        );
 
-      this.$toast.add({
-        severity: "warn",
-        summary: "Vymazané",
-        detail: "Záznam bol vymazaný.",
-        life: 800,
-      });
-      setTimeout(() => {
-        this.deleteProductDialog = false;
-      }, 800);
+        this.$toast.add({
+          severity: "warn",
+          summary: "Vymazané",
+          detail: "Záznam bol vymazaný.",
+          life: 800,
+        });
+
+        setTimeout(() => {
+          this.deleteProductDialog = false;
+        }, 800);
+      } catch (error) {
+        if (error.response && error.response.status === 409) {
+          this.$toast.add({
+            severity: "info",
+            summary: "Chyba",
+            detail:
+              "Záznam nemôže byť vymazaný, pretože je referencovaný inými entitami.",
+            life: 2000,
+          });
+
+          setTimeout(() => {
+            this.deleteProductDialog = false;
+          }, 2000);
+        } else {
+          // handle other types of errors or rethrow if you don't want to handle them here
+          throw error;
+        }
+      }
     },
 
     showProduct(product) {

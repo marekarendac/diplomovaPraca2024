@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 const findAll = async (req, res) => {
   const customers = await req.context.models.Customer.findAll();
 
@@ -9,12 +11,24 @@ const destroy = async (req, res) => {
 
   if (!customer) {
     res.status(404).send(`customer with ${req.params.id} not found`);
-
     return;
   }
 
-  await customer.destroy();
-  res.status(200).send(`customer with ${req.params.id} was destroyed`);
+  try {
+    await customer.destroy();
+    res.status(200).send(`customer with ${req.params.id} was destroyed`);
+  } catch (error) {
+    if (error instanceof Sequelize.ForeignKeyConstraintError) {
+      res
+        .status(409)
+        .send(
+          `Cannot delete customer with id ${req.params.id} as it is being referenced by other entities.`,
+        );
+    } else {
+      // handle other types of errors or rethrow if you don't want to handle them here
+      throw error;
+    }
+  }
 };
 
 const post = async (req, res) => {

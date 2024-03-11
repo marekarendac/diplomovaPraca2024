@@ -24,11 +24,25 @@ const destroy = async (req, res) => {
 
   if (!employeeWorkGroup) {
     res.status(404).send(`EmployeeWorkGroup with ${req.params.id} not found`);
+    return;
+  }
 
+  // Check if the WorkGroup is referenced in the Project table
+  const project = await req.context.models.Project.findOne({
+    where: { defaultWorkGroupId: employeeWorkGroup.workGroupId },
+  });
+
+  if (project) {
+    res
+      .status(409)
+      .send(
+        `Cannot delete EmployeeWorkGroup with id ${req.params.id} as its workGroup is being referenced by other entities.`,
+      );
     return;
   }
 
   await employeeWorkGroup.destroy();
+
   res.status(200).send(`EmployeeWorkGroup with ${req.params.id} was destroyed`);
 };
 

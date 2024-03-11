@@ -153,10 +153,8 @@
         />
       </div>
     </div>
-    <div
-      class="field col"
-      v-if="selectedWorkGroupEmployees && selectedWorkGroupEmployees.length"
-    >
+
+    <div class="field col" v-if="selectedWorkGroup">
       <label for="employees">Pridaj členov pracovnej skupiny</label>
       <div style="display: flex; align-items: center">
         <MultiSelect
@@ -278,6 +276,7 @@ export default {
       selectedEmployees: [],
       selectedWorkGroupEmployees: [],
       employeesToRemove: [],
+      selectedWorkGroup: null,
     };
   },
 
@@ -374,27 +373,46 @@ export default {
       this.deleteProductDialog = true;
     },
 
-    deleteProduct() {
+    async deleteProduct() {
       if (this.product) {
         this.workGroups = this.workGroups.filter(
           (val) => val.id !== this.product.id
         );
-        Api.delete("workGroups/" + this.product);
 
-        // ...
+        try {
+          await Api.delete("workGroups/" + this.product);
+
+          this.$toast.add({
+            severity: "warn",
+            summary: "Vymazané",
+            detail: "Záznam bol vymazaný.",
+            life: 800,
+          });
+
+          setTimeout(() => {
+            this.deleteProductDialog = false;
+          }, 800);
+        } catch (error) {
+          if (error.response && error.response.status === 409) {
+            this.$toast.add({
+              severity: "info",
+              summary: "Chyba",
+              detail:
+                "Záznam nemôže byť vymazaný, pretože je referencovaný inými entitami.",
+              life: 2000,
+            });
+
+            setTimeout(() => {
+              this.deleteProductDialog = false;
+            }, 2000);
+          } else {
+            // handle other types of errors or rethrow if you don't want to handle them here
+            throw error;
+          }
+        }
       } else {
         console.error("No product selected for deletion");
       }
-
-      this.$toast.add({
-        severity: "warn",
-        summary: "Vymazané",
-        detail: "Záznam bol vymazaný.",
-        life: 800,
-      });
-      setTimeout(() => {
-        this.deleteProductDialog = false;
-      }, 800);
     },
 
     editProduct(product) {
@@ -491,31 +509,36 @@ export default {
       this.product[field] = this.product[field].replace(/\s/g, "");
     },
 
-    handleWorkGroupChange() {
-      const selectedWorkGroupRelations = this.postDetails.filter(
-        (relation) => relation.workGroupId === this.product
-      );
-
-      this.selectedWorkGroupEmployees = selectedWorkGroupRelations.map(
-        (relation) => {
-          return this.employees.find(
-            (employee) => employee.id === relation.employeeId
-          );
-        }
-      );
-
-      // Get the IDs of the selected employees
-      const selectedEmployeeIds = this.selectedWorkGroupEmployees.map(
-        (employee) => employee.id
-      );
-
-      // Filter the groupedEmployees array to remove the selected employees
-      this.groupedEmployees = this.groupedEmployees.map((group) => {
-        group.items = group.items.filter(
-          (employee) => !selectedEmployeeIds.includes(employee.id)
+    handleWorkGroupChange(selectedWorkGroup) {
+      if (selectedWorkGroup) {
+        this.selectedWorkGroup = selectedWorkGroup;
+        const selectedWorkGroupRelations = this.postDetails.filter(
+          (relation) => relation.workGroupId === this.product
         );
-        return group;
-      });
+
+        this.selectedWorkGroupEmployees = selectedWorkGroupRelations.map(
+          (relation) => {
+            return this.employees.find(
+              (employee) => employee.id === relation.employeeId
+            );
+          }
+        );
+
+        // Get the IDs of the selected employees
+        const selectedEmployeeIds = this.selectedWorkGroupEmployees.map(
+          (employee) => employee.id
+        );
+
+        // Filter the groupedEmployees array to remove the selected employees
+        this.groupedEmployees = this.groupedEmployees.map((group) => {
+          group.items = group.items.filter(
+            (employee) => !selectedEmployeeIds.includes(employee.id)
+          );
+          return group;
+        });
+      } else {
+        this.selectedWorkGroup = null;
+      }
     },
 
     editEmployeeWorkGroup(index) {

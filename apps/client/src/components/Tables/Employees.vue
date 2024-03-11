@@ -232,7 +232,7 @@
         required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.position }"
-        placeholder="Vyber pozíciu projektu"
+        placeholder="Vyber typ pozície"
       />
       <small class="p-error" v-if="submitted && !product.position"
         >Stav je povinné pole.</small
@@ -243,15 +243,17 @@
       <label for="contractType">Typ úväzku</label>
       <Dropdown
         id="contractType"
-        required="true"
+        v-model="product.contractType"
         :options="contracts"
         optionLabel="contractType"
-        v-model="product.contractType"
+        optionValue="contractType"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.contractType }"
+        placeholder="Vyber typ úväzku"
       />
       <small class="p-error" v-if="submitted && !product.contractType"
-        >Typ úväzku je povinný údaj.</small
+        >Stav je povinné pole.</small
       >
     </div>
 
@@ -456,6 +458,7 @@
         >Meno je povinný údaj.</small
       >
     </div>
+
     <div class="field col">
       <label for="surname">Priezvisko</label>
       <InputText
@@ -509,15 +512,17 @@
       <label for="position">Pozícia</label>
       <Dropdown
         id="position"
-        required="true"
+        v-model="product.position"
         :options="positions"
         optionLabel="position"
-        v-model="product.position"
+        optionValue="position"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.position }"
+        placeholder="Vyber typ pozície"
       />
       <small class="p-error" v-if="submitted && !product.position"
-        >Pozícia je povinný údaj.</small
+        >Stav je povinné pole.</small
       >
     </div>
 
@@ -525,15 +530,17 @@
       <label for="contractType">Typ úväzku</label>
       <Dropdown
         id="contractType"
-        required="true"
+        v-model="product.contractType"
         :options="contracts"
         optionLabel="contractType"
-        v-model="product.contractType"
+        optionValue="contractType"
+        required="true"
         autofocus
         :class="{ 'p-invalid': submitted && !product.contractType }"
+        placeholder="Vyber typ úväzku"
       />
       <small class="p-error" v-if="submitted && !product.contractType"
-        >Typ úväzku je povinný údaj.</small
+        >Stav je povinné pole.</small
       >
     </div>
 
@@ -708,15 +715,16 @@ export default {
         const data = {
           name: this.product.name,
           surname: this.product.surname,
-          position: this.product.position.position,
+          position: this.product.position,
           phoneNumber: this.product.phoneNumber,
-          contractType: this.product.contractType.contractType,
+          contractType: this.product.contractType,
           healthExam: this.product.healthExam,
           documentNumber: this.product.documentNumber,
           email: this.product.email,
           iban: this.product.iban,
           wage: this.product.wage,
         };
+        console.log("data: ", data);
 
         Api.post("/employees", data)
           .then((response) => {
@@ -747,22 +755,42 @@ export default {
       this.deleteProductDialog = true;
     },
 
-    deleteProduct() {
-      this.postDetails = this.postDetails.filter(
-        (val) => val.id !== this.product.id
-      );
+    async deleteProduct() {
+      try {
+        await Api.delete("employees/" + this.product.id);
 
-      Api.delete("employees/" + this.product.id);
+        this.postDetails = this.postDetails.filter(
+          (val) => val.id !== this.product.id
+        );
 
-      this.$toast.add({
-        severity: "warn",
-        summary: "Vymazané",
-        detail: "Záznam bol vymazaný.",
-        life: 800,
-      });
-      setTimeout(() => {
-        this.deleteProductDialog = false;
-      }, 800);
+        this.$toast.add({
+          severity: "warn",
+          summary: "Vymazané",
+          detail: "Záznam bol vymazaný.",
+          life: 800,
+        });
+
+        setTimeout(() => {
+          this.deleteProductDialog = false;
+        }, 800);
+      } catch (error) {
+        if (error.response && error.response.status === 409) {
+          this.$toast.add({
+            severity: "info",
+            summary: "Chyba",
+            detail:
+              "Záznam nemôže byť vymazaný, pretože je referencovaný inými entitami.",
+            life: 2000,
+          });
+
+          setTimeout(() => {
+            this.deleteProductDialog = false;
+          }, 2000);
+        } else {
+          // handle other types of errors or rethrow if you don't want to handle them here
+          throw error;
+        }
+      }
     },
 
     showProduct(product) {
@@ -772,18 +800,27 @@ export default {
 
     editProduct(product) {
       this.product = { ...product };
-      this.product.position = product.position.position;
-      this.product.contractType = product.contractType.contractType;
+      this.product.position = product.position;
+      this.product.contractType = product.contractType;
       this.productDialogEdit = true;
     },
+
     handleEdit() {
       this.submitted = true;
+
+      let healthExamDate = this.product.healthExam;
+      if (typeof this.product.healthExam === "string") {
+        healthExamDate = new Date(this.product.healthExam);
+      }
+
       const updatedEmployee = {
         ...this.product,
-        position: this.product.position.position,
-        contractType: this.product.contractType.contractType,
+        position: this.product.position,
+        contractType: this.product.contractType,
         phoneNumber: this.product.phoneNumber,
-        healthExam: this.product.healthExam.toISOString().split("T")[0], // format the date
+        healthExam: healthExamDate
+          ? healthExamDate.toISOString().split("T")[0]
+          : null, // format the date
       };
 
       Api.put("employees/" + this.product.id, updatedEmployee)
@@ -792,6 +829,7 @@ export default {
             this.postDetails[this.findIndexById(this.product.id)] =
               updatedEmployee;
           }
+
           this.$toast.add({
             severity: "success",
             summary: "Úspech",

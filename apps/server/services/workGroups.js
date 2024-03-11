@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 const findAll = async (req, res) => {
   const workGroups = await req.context.models.WorkGroup.findAll();
 
@@ -12,12 +14,28 @@ const destroy = async (req, res) => {
     return;
   }
 
+  // Check if the WorkGroup is referenced in the Project table
+  const project = await req.context.models.Project.findOne({
+    where: { defaultWorkGroupId: req.params.id },
+  });
+
+  if (project) {
+    res
+      .status(409)
+      .send(
+        `Cannot delete workGroup with id ${req.params.id} as it is being referenced by other entities.`,
+      );
+    return;
+  }
+
   // Delete all employeeWorkGroups with the same workGroupId
   await req.context.models.EmployeeWorkGroup.destroy({
     where: { workGroupId: req.params.id },
   });
 
+  // Now delete the workGroup
   await workGroup.destroy();
+
   res
     .status(200)
     .send(
