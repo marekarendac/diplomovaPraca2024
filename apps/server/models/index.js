@@ -3,9 +3,7 @@ const Sequelize = require('sequelize');
 const employee = require('./employee');
 const vehicle = require('./vehicle');
 const equipment = require('./equipment');
-const workPlace = require('./workPlace');
 const customer = require('./customer');
-const employeeAttendance = require('./employeeAttendance');
 const attendance = require('./attendance');
 const workGroup = require('./workGroup');
 const employeeWorkGroup = require('./employeeWorkGroup');
@@ -18,39 +16,13 @@ const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
 
 const applyRelations = () => {
   const {
-    Attendance,
     Employee,
-    WorkPlace,
-    EmployeeAttendance,
     Customer,
     WorkGroup,
     EmployeeWorkGroup,
     Project,
+    Attendance,
   } = sequelize.models;
-
-  Employee.hasMany(Attendance, {
-    as: 'responsibleAttendances',
-    foreignKey: 'responsibleId',
-  });
-  Attendance.belongsTo(Employee, {
-    as: 'responsibleEmployee',
-    foreignKey: 'responsibleId',
-  });
-
-  WorkPlace.hasMany(Attendance);
-  Attendance.belongsTo(WorkPlace);
-
-  Customer.hasMany(Attendance);
-  Attendance.belongsTo(Customer);
-
-  Employee.belongsToMany(Attendance, { through: EmployeeAttendance });
-  Attendance.belongsToMany(Employee, {
-    through: EmployeeAttendance,
-    as: 'employees',
-  });
-
-  EmployeeAttendance.belongsTo(Attendance);
-  EmployeeAttendance.belongsTo(Employee);
 
   // Many-to-many relation between Employee and WorkGroup
   Employee.belongsToMany(WorkGroup, {
@@ -83,15 +55,31 @@ const applyRelations = () => {
     foreignKey: 'defaultWorkGroupId',
     as: 'defaultWorkGroup',
   });
+
+  // One-to-many relation between Project and Attendance
+  Project.hasMany(Attendance, {
+    foreignKey: 'projectId',
+  });
+  Attendance.belongsTo(Project, {
+    foreignKey: 'projectId',
+    as: 'attendanceProject',
+  });
+
+  // One-to-many relation between Employee and Attendance
+  Employee.hasMany(Attendance, {
+    foreignKey: 'employeeId',
+  });
+  Attendance.belongsTo(Employee, {
+    foreignKey: 'employeeId',
+    as: 'attendanceEmployee',
+  });
 };
 
 const models = [
   employee,
   vehicle,
   equipment,
-  workPlace,
   customer,
-  employeeAttendance,
   attendance,
   workGroup,
   employeeWorkGroup,

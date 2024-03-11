@@ -7,7 +7,17 @@
     >
       <div class="flex-1 bg-white font-bold text-left p-2 border-round">
         <div>
-          Dátum:
+          <Dropdown
+            id="project"
+            required="true"
+            v-model="projectId"
+            :options="projects"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Select a project"
+          />
+        </div>
+        <div>
           <Calendar
             showIcon
             v-model="date"
@@ -37,30 +47,17 @@ export default {
     return {
       date: null,
       workDescription: null,
-      workHours1: 8,
-      workHours2: 8,
-      workHours3: 8,
-      workHours4: 8,
-      workHours5: 8,
-      responsibleEmployees: {},
-      places: {},
-      selectedResEmployee: null,
-      selectedPlace: null,
       customers: null,
       selectedCustomer: null,
       employees: null,
-      selectedEmployee1: null,
-      selectedEmployee2: null,
-      selectedEmployee3: null,
-      selectedEmployee4: null,
-      selectedEmployee5: null,
+      projectId: null,
+      projects: [],
     };
   },
   mounted() {
-    this.getPlacesDetails();
-    this.getResponsiblesDetails();
     this.getCustomerDetails();
     this.getAllEmployees();
+    this.getAttendances();
   },
   methods: {
     async getAllEmployees() {
@@ -72,84 +69,41 @@ export default {
       });
     },
 
-    async getPlacesDetails() {
-      await Api.get("/workPlaces").then((response) => {
-        this.places = response.data;
-      });
-    },
-
-    async getResponsiblesDetails() {
-      await Api.get("/employees", { params: { position: "Majster" } }).then(
-        (response) => {
-          this.responsibleEmployees = response.data.map((employee) => ({
-            ...employee,
-            fullNameMajster: `${employee.name} ${employee.surname}`,
-          }));
-        }
-      );
-    },
-
     async getCustomerDetails() {
       await Api.get("/customers").then((response) => {
         this.customers = response.data;
       });
     },
 
-    formatSingleEmployee(employee, hours) {
-      if (employee && hours) {
-        return {
-          id: employee.id,
-          hours,
-        };
+    async getAttendances() {
+      try {
+        const response = await Api.get("/attendances");
+        this.attendances = response.data;
+
+        // Log the first row of the attendances table
+        if (this.attendances.length > 0) {
+          console.log(this.attendances[44]);
+        }
+      } catch (error) {
+        console.log(error);
       }
-
-      return null;
-    },
-
-    formatEmployeeData() {
-      const formattedEmployee1 = this.formatSingleEmployee(
-        this.selectedEmployee1,
-        this.workHours1
-      );
-      const formattedEmployee2 = this.formatSingleEmployee(
-        this.selectedEmployee2,
-        this.workHours2
-      );
-      const formattedEmployee3 = this.formatSingleEmployee(
-        this.selectedEmployee3,
-        this.workHours3
-      );
-      const formattedEmployee4 = this.formatSingleEmployee(
-        this.selectedEmployee4,
-        this.workHours4
-      );
-      const formattedEmployee5 = this.formatSingleEmployee(
-        this.selectedEmployee5,
-        this.workHours5
-      );
-
-      return [
-        formattedEmployee1,
-        formattedEmployee2,
-        formattedEmployee3,
-        formattedEmployee4,
-        formattedEmployee5,
-      ].filter((employee) => employee);
     },
 
     async handleSubmit() {
       const payload = {
         date: this.date,
-        workPlaceId: this.selectedPlace.id,
-        responsibleId: this.selectedResEmployee.id,
-        customerId: this.selectedCustomer.id,
-        employees: this.formatEmployeeData(),
-        description: this.workDescription,
+        projectId: this.projectId,
+        workedHours: this.workedHours,
+        employeeId: this.employeeId,
+        workDescription: this.workDescription,
       };
-      await Api.post("/attendances", payload)
-        .then((response) => console.log(response.data))
-        .catch((error) => console.log(error));
-      location.reload();
+
+      try {
+        const response = await Api.post("/attendances", payload);
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

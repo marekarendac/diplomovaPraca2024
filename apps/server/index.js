@@ -9,7 +9,6 @@ const employeesRouter = require('./routes/employees');
 const vehiclesRouter = require('./routes/vehicles');
 const equipmentRouter = require('./routes/equipment');
 const customersRouter = require('./routes/customers');
-const workplacesRouter = require('./routes/workPlaces');
 const attendancesRouter = require('./routes/attendances');
 const notificationsRouter = require('./routes/notifications');
 const loginRouter = require('./routes/login');
@@ -42,7 +41,6 @@ app.use((req, _, next) => {
 app.use('/employees', employeesRouter);
 app.use('/vehicles', vehiclesRouter);
 app.use('/equipment', equipmentRouter);
-app.use('/workPlaces', workplacesRouter);
 app.use('/customers', customersRouter);
 app.use('/attendances', attendancesRouter);
 app.use('/notifications', notificationsRouter);
