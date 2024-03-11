@@ -5,7 +5,7 @@
         <Button
           label="Nový"
           icon="pi pi-plus"
-          class="p-button-success mr-2"
+          class="p-button-rounded p-button-success mr-2 p-button-raised"
           @click="openNew"
         />
         <div class="text-left">
@@ -30,6 +30,7 @@
           label="Export tabuľky"
           icon="pi pi-external-link"
           @click="exportEquipment"
+          class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
         />
       </template>
     </Toolbar>

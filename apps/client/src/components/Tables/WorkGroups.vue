@@ -5,7 +5,7 @@
         <Button
           label="Nový"
           icon="pi pi-plus"
-          class="p-button-success mr-2"
+          class="p-button-rounded p-button-success mr-2 p-button-raised"
           @click="openNew"
         />
         <div class="text-left">
@@ -29,14 +29,14 @@
         <Button
           label="Uprav skupinu"
           icon="pi pi-pencil"
-          class="p-button-rounded p-button mr-1"
+          class="p-button-rounded p-button mr-1 p-button-raised"
           @click="editProduct"
         />
 
         <Button
           label="Vymaž skupinu"
           icon="pi pi-trash"
-          class="p-button-rounded p-button-warning mr-1"
+          class="p-button-rounded p-button-warning mr-1 p-button-raised"
           @click="confirmDeleteProduct"
         />
       </template>
@@ -44,9 +44,9 @@
     <DataTable
       :value="mappedPostDetails"
       rowGroupMode="rowspan"
-      groupRowsBy="workGroup"
+      groupRowsBy="workGroupFullName"
       sortMode="single"
-      sortField="workGroup"
+      sortField="workGroupFullName"
       :sortOrder="1"
       style="min-height: 100vh"
       paginator
@@ -54,7 +54,7 @@
       :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column
-        field="workGroup"
+        field="workGroupFullName"
         header="Pracovná skupina"
         style="max-width: 100px"
       ></Column>
@@ -143,8 +143,8 @@
         <Dropdown
           id="workGroup"
           v-model="product"
-          :options="workGroupsFullName"
-          optionLabel="workGroup"
+          :options="workGroups"
+          optionLabel="name"
           optionValue="id"
           placeholder="Vyber pracovnú skupinu na editovanie"
           style="width: 100%"
@@ -155,17 +155,17 @@
     </div>
 
     <div class="field col" v-if="selectedWorkGroup">
-      <label for="employees">Zmeň názov pracovnej skupiny</label>
+      <label for="name">Zmeň názov pracovnej skupiny</label>
       <div style="display: flex; align-items: center">
         <InputText
-          id="workGroup"
+          id="name"
           required="true"
-          v-model.trim="product.workGroup"
-          placeholder="Názov novej pracovnej skupiny"
+          v-model="selectedWorkGroup.name"
           autofocus
-          :class="{ 'p-invalid': submitted && !product.workGroup }"
+          :class="{ 'p-invalid': submitted && !selectedWorkGroup.name }"
+          placeholder="Pracovná skupina"
         />
-        <small class="p-error" v-if="submitted && !product.workGroup"
+        <small class="p-error" v-if="submitted && !selectedWorkGroup.name"
           >Názov pracovnej skupiny je povinné pole.</small
         >
       </div>
@@ -245,11 +245,10 @@
           <Dropdown
             id="workGroup"
             v-model="product"
-            :options="workGroupsFullName"
-            optionLabel="workGroup"
+            :options="workGroups"
+            optionLabel="name"
             optionValue="id"
             placeholder="Názov novej pracovnej skupiny"
-            autofocus
             :class="{ 'p-invalid': submitted && !product.workGroup }"
             @change="product = $event.value"
           /><br />
@@ -325,6 +324,7 @@ export default {
       }));
 
       this.workGroups = workGroupsResponse.data;
+
       console.log("First element of postDetails:", this.postDetails[0]);
       console.log("First element of employees:", this.employees[0]);
       console.log("First element of worgroups:", this.workGroups[0]);
@@ -440,19 +440,21 @@ export default {
     async handleEdit() {
       this.submitted = true;
 
-      // Update the work group
-      const updatedWorkGroup = {
-        ...this.product,
-      };
+      // Find the selected work group in the workGroups array
+      const selectedWorkGroup = this.workGroups.find(
+        (workGroup) => workGroup.id === this.product
+      );
 
-      console.log("updatedWorkGroup:", updatedWorkGroup);
+      // Update the selected work group's name
+      selectedWorkGroup.name = this.selectedWorkGroup.name;
+
+      console.log("updatedWorkGroup:", selectedWorkGroup);
 
       try {
-        await Api.put("workGroups/" + this.product.id, updatedWorkGroup);
+        await Api.put("workGroups/" + this.product, selectedWorkGroup);
 
-        if (this.product.id) {
-          this.workGroups[this.findIndexById(this.product.id)] =
-            updatedWorkGroup;
+        if (this.product) {
+          this.workGroups[this.findIndexById(this.product)] = selectedWorkGroup;
         }
 
         console.log("workGroups after update:", this.workGroups);
@@ -569,7 +571,7 @@ export default {
     mappedPostDetails() {
       if (this.postDetails) {
         return this.postDetails.map((postDetail) => ({
-          workGroup: `${postDetail.workGroup.id} - ${postDetail.workGroup.name}`,
+          workGroupFullName: `${postDetail.workGroup.id} - ${postDetail.workGroup.name}`,
           employeeFullName: `${postDetail.employee.name} ${postDetail.employee.surname}`,
           employeePosition: postDetail.employee.position,
           employeePhoneNumber: postDetail.employee.phoneNumber,
@@ -580,12 +582,7 @@ export default {
         return [];
       }
     },
-    workGroupsFullName() {
-      return this.workGroups.map((workGroup) => ({
-        ...workGroup,
-        workGroup: `${workGroup.id} - ${workGroup.name}`,
-      }));
-    },
+
     groupedEmployees() {
       // First, group the employees by position
       const groups = this.employees.reduce((groups, employee) => {

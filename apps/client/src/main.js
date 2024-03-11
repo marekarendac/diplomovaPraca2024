@@ -28,6 +28,8 @@ import Tag from "primevue/tag";
 import Card from "primevue/card";
 import InputMask from "primevue/inputmask";
 import MultiSelect from "primevue/multiselect";
+import Splitter from "primevue/splitter";
+import SplitterPanel from "primevue/splitterpanel";
 
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/saga-blue/theme.css";
@@ -62,6 +64,8 @@ app.component("InputNumber", InputNumber);
 app.component("Toast", Toast);
 app.component("InputMask", InputMask);
 app.component("MultiSelect", MultiSelect);
+app.component("Splitter", Splitter);
+app.component("SplitterPanel", SplitterPanel);
 
 //AUTENTICACION PLUGIN
 
