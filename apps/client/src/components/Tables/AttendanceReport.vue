@@ -35,17 +35,9 @@
         :sortable="true"
         ;
       >
-        <!-- <template> </template>
-        <template #filter="{ filterModel }">
-          <Calendar
-            v-model="filterModel.value"
-            dateFormat="mm/dd/yy"
-            placeholder="mm/dd/yyyy"
-          />
-        </template> -->
       </Column>
       <Column
-        field="employeeName"
+        field="fullName"
         header="Meno"
         style="min-width: 20%"
         :sortable="true"
@@ -53,13 +45,13 @@
       ></Column>
 
       <Column
-        field="description"
+        field="workDescription"
         header="Popis práce"
         style="min-width: 35%"
         :sortable="true"
       ></Column>
       <Column
-        field="employeeHours"
+        field="workedHours"
         header="Hodiny"
         style="min-width: 5%"
         :sortable="true"
@@ -89,11 +81,10 @@ export default {
   methods: {
     getPostDetails() {
       Api.get("/attendances").then((response) => {
-        this.postDetails = response.data;
-        console.log(response.data);
-        // this.postDetails.forEach(
-        //   (attendance) => (attendance.date = new Date(attendance.date))
-        // );
+        this.postDetails = response.data.map((attendanceEmployee) => ({
+          ...attendanceEmployee,
+          fullName: `${attendanceEmployee.attendanceEmployee.name} ${attendanceEmployee.attendanceEmployee.surname}`,
+        }));
       });
     },
 

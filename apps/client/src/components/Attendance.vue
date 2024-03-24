@@ -1,7 +1,7 @@
 <template>
   <Splitter class="full-height">
     <SplitterPanel
-      class="flex align-items-center justify-content-center"
+      class="flex align-items-start justify-content-center"
       :size="25"
     >
       <div>
@@ -116,30 +116,58 @@
             </div>
           </div>
         </SplitterPanel>
+
         <SplitterPanel class="flex align-items-center justify-content-center">
-          <div
-            class="field col"
-            v-for="(employeeWorkGroup, index) in selectedProject &&
-            selectedProject.defaultWorkGroup
-              ? selectedProject.defaultWorkGroup.employeeWorkGroups
-              : []"
-            :key="index"
-          >
-            <label for="employee">Člen pracovnej skupiny {{ index + 1 }}</label>
-            <div style="display: flex; align-items: center">
-              <InputText
-                id="employee"
-                v-model="employeeWorkGroup.employee.name"
-                disabled
-              />
+          <div v-if="selectedProjectId">
+            <div v-if="selectedProject.defaultWorkGroupId">
+              <div
+                class="field col"
+                v-for="(employeeWorkGroup, index) in employeeWorkGroups"
+                :key="index"
+              >
+                <label for="employee"
+                  >Člen pracovnej skupiny {{ index + 1 }}</label
+                >
+                <div style="display: flex; align-items: center">
+                  <Button
+                    icon="pi pi-times"
+                    class="p-button-warning"
+                    style="margin-right: 10px"
+                    @click="editEmployeeWorkGroup(index)"
+                  />
+                  <InputText
+                    id="employee"
+                    v-model="employeeWorkGroup.employee.fullName"
+                    disabled
+                  />
+
+                  <InputNumber
+                    v-model="inputNumberValues[index]"
+                    inputId="horizontal-buttons"
+                    showButtons
+                    buttonLayout="horizontal"
+                    :step="0.5"
+                    style="margin-left: 10px"
+                  >
+                    <template #incrementbuttonicon>
+                      <span class="pi pi-plus" />
+                    </template>
+                    <template #decrementbuttonicon>
+                      <span class="pi pi-minus" />
+                    </template>
+                  </InputNumber>
+                </div>
+              </div>
               <Button
-                icon="pi pi-times"
-                class="p-button-warning"
-                style="margin-left: 10px"
-                @click="editEmployeeWorkGroup(index)"
+                label="Pridaj"
+                icon="pi pi-check"
+                class="p-button-text"
+                @click="handleSubmit"
               />
             </div>
+            <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
           </div>
+          <div v-else>Nebol zvolený projekt</div>
         </SplitterPanel>
       </Splitter>
     </SplitterPanel>
@@ -166,14 +194,23 @@ export default {
         { status: "Aktívny" },
         { status: "Uzavretý" },
       ],
+      employeeWorkGroups: [],
+      inputNumberValues: [],
+      employeesToRemove: [],
     };
   },
+
   mounted() {
     this.getProjectDetails();
     this.getEmployeesDetails();
     this.getAttendancesDetails();
     this.employeeWorkGroupsDetails();
   },
+
+  created() {
+    this.inputNumberValues = this.employeeWorkGroups.map(() => 8);
+  },
+
   methods: {
     async getEmployeesDetails() {
       await Api.get("/employees").then((response) => {
@@ -197,30 +234,82 @@ export default {
 
     async employeeWorkGroupsDetails() {
       const response = await Api.get("/employeeWorkGroups");
-      this.employeeWorkGroups = response.data;
+      this.employeeWorkGroups = response.data.map((employeeWorkGroup) => ({
+        ...employeeWorkGroup,
+        employee: {
+          ...employeeWorkGroup.employee,
+          fullName: `${employeeWorkGroup.employee.name} ${employeeWorkGroup.employee.surname}`,
+        },
+      }));
     },
 
     async handleSubmit() {
-      const payload = {
-        date: this.date,
-        projectId: this.projectId,
-        workedHours: this.workedHours,
-        employeeId: this.employeeId,
-        workDescription: this.workDescription,
-      };
+      for (const [
+        index,
+        employeeWorkGroup,
+      ] of this.employeeWorkGroups.entries()) {
+        const payload = {
+          date: this.date,
+          projectId: this.selectedProjectId,
+          employeeId: employeeWorkGroup.employee.id,
+          workedHours: this.inputNumberValues[index],
+          workDescription: this.workDescription,
+        };
 
-      try {
-        const response = await Api.post("/attendances", payload);
-        console.log(response.data);
-      } catch (error) {
-        console.log(error);
+        console.log("Sending payload:", payload); // log the payload
+
+        try {
+          const response = await Api.post("/attendances", payload);
+          console.log(response.data);
+        } catch (error) {
+          console.error("API call failed:", error);
+        }
       }
     },
+
+    editEmployeeWorkGroup(index) {
+      const employee = this.employeeWorkGroups[index].employee;
+      this.employeesToRemove.push(employee.id);
+      this.employeeWorkGroups.splice(index, 1);
+      this.inputNumberValues.splice(index, 1);
+    },
   },
+
   watch: {
-    selectedProjectId(newVal) {
-      this.selectedProject =
-        this.projects.find((project) => project.id === newVal) || {};
+    employeeWorkGroups: {
+      immediate: true,
+      handler(newVal) {
+        this.inputNumberValues = newVal.map(() => 8);
+      },
+    },
+    selectedProjectId: {
+      immediate: true,
+      async handler(newVal) {
+        console.log("selectedProjectId changed:", newVal);
+
+        this.selectedProject =
+          this.projects.find((project) => project.id === newVal) || {};
+        console.log(
+          "selectedProject:",
+          this.selectedProject.defaultWorkGroupId
+        );
+
+        if (this.selectedProject.defaultWorkGroupId) {
+          const response = await Api.get(
+            `/employeeWorkGroups?workGroupId=${this.selectedProject.defaultWorkGroupId}`
+          );
+          console.log("vystup po selektovani projektu:", response);
+          this.employeeWorkGroups = response.data.map((employeeWorkGroup) => ({
+            ...employeeWorkGroup,
+            employee: {
+              ...employeeWorkGroup.employee,
+              fullName: `${employeeWorkGroup.employee.name} ${employeeWorkGroup.employee.surname}`,
+            },
+          }));
+        } else {
+          this.employeeWorkGroups = [];
+        }
+      },
     },
   },
 };

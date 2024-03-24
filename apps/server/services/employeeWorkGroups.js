@@ -1,6 +1,10 @@
 const findAll = async (req, res) => {
-  const employeeWorkGroups = await req.context.models.EmployeeWorkGroup.findAll(
-    {
+  const { workGroupId } = req.query;
+  let employeeWorkGroups;
+
+  if (workGroupId) {
+    employeeWorkGroups = await req.context.models.EmployeeWorkGroup.findAll({
+      where: { workGroupId: Number(workGroupId) },
       include: [
         {
           model: req.context.models.Employee,
@@ -11,8 +15,21 @@ const findAll = async (req, res) => {
           as: 'workGroup',
         },
       ],
-    },
-  );
+    });
+  } else {
+    employeeWorkGroups = await req.context.models.EmployeeWorkGroup.findAll({
+      include: [
+        {
+          model: req.context.models.Employee,
+          as: 'employee',
+        },
+        {
+          model: req.context.models.WorkGroup,
+          as: 'workGroup',
+        },
+      ],
+    });
+  }
 
   res.status(200).send(employeeWorkGroups);
 };
