@@ -28,14 +28,7 @@
       filterMode="lenient"
       :scrollable="true"
       scrollHeight="70vh"
-      ><Column
-        field="date"
-        header="Dátum"
-        style="min-width: 15%"
-        :sortable="true"
-        ;
-      >
-      </Column>
+      ><Column field="date" header="Dátum" :sortable="true" ;> </Column>
       <Column
         field="fullName"
         header="Meno"
@@ -45,18 +38,18 @@
       ></Column>
 
       <Column
+        field="attendanceProject.name"
+        header="Projekt"
+        :sortable="true"
+      ></Column>
+
+      <Column
         field="workDescription"
         header="Popis práce"
         style="min-width: 35%"
         :sortable="true"
       ></Column>
-      <Column
-        field="workedHours"
-        header="Hodiny"
-        style="min-width: 5%"
-        :sortable="true"
-        ;
-      ></Column>
+      <Column field="workedHours" header="Hodiny" :sortable="true" ;></Column>
     </DataTable>
   </div>
 </template>
