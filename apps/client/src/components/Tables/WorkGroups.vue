@@ -369,6 +369,7 @@ export default {
           };
 
           await Api.post("/employeeWorkGroups", employeeWorkGroupData);
+          this.getPostDetails();
 
           this.$toast.add({
             severity: "success",
