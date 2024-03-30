@@ -71,8 +71,8 @@ app.component("SplitterPanel", SplitterPanel);
 
 app.use(
   createAuth0({
-    domain: "dev-fd07so3o34m67ppo.us.auth0.com",
-    clientId: "E3yvYAehXBpdjXIV8KSpBPkMk4YlwyKJ",
+    domain: import.meta.env.VITE_AUTH0_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
     authorizationParams: {
       redirect_uri: window.location.origin,
     },
