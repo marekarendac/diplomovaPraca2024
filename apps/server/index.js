@@ -24,7 +24,7 @@ const exportProjectsRouter = require('./routes/exportProjects');
 // const { populateDB } = require('./src/helpers');
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.SERVICE_PORT;
 const logger = pino(pinoPretty());
 
 app.use(cors());
@@ -55,5 +55,6 @@ app.use('/projects', projectsRouter);
 app.use('/exportProjects', exportProjectsRouter);
 
 app.listen(port, () => {
+  console.log(process.env);
   console.log(`App listening on port ${port}!`);
 });
