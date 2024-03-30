@@ -55,6 +55,5 @@ app.use('/projects', projectsRouter);
 app.use('/exportProjects', exportProjectsRouter);
 
 app.listen(port, () => {
-  console.log(process.env);
   console.log(`App listening on port ${port}!`);
 });
