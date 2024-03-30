@@ -9,10 +9,18 @@ const workGroup = require('./workGroup');
 const employeeWorkGroup = require('./employeeWorkGroup');
 const project = require('./project');
 
-const sequelize = new Sequelize('diplomka_TEST', 'root', 'root', {
-  host: 'localhost',
-  dialect: 'mysql',
-});
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE,
+  process.env.DB_USERNAME,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOSTNAME,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: true,
+    },
+  },
+);
 
 const applyRelations = () => {
   const {

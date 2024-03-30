@@ -1,0 +1,397 @@
+{
+    "tables": {
+        "Employees": {
+            "tableName": "Employees",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "surname": {
+                    "allowNull": false,
+                    "field": "surname",
+                    "seqType": "Sequelize.STRING"
+                },
+                "position": {
+                    "allowNull": false,
+                    "field": "position",
+                    "seqType": "Sequelize.STRING"
+                },
+                "phoneNumber": {
+                    "allowNull": false,
+                    "field": "phoneNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "contractType": {
+                    "allowNull": false,
+                    "field": "contractType",
+                    "seqType": "Sequelize.STRING"
+                },
+                "healthExam": {
+                    "allowNull": false,
+                    "field": "healthExam",
+                    "seqType": "Sequelize.DATEONLY"
+                },
+                "documentNumber": {
+                    "allowNull": false,
+                    "field": "documentNumber",
+                    "seqType": "Sequelize.STRING(20)"
+                },
+                "email": {
+                    "allowNull": false,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING(45)"
+                },
+                "iban": {
+                    "allowNull": false,
+                    "field": "iban",
+                    "seqType": "Sequelize.STRING(24)"
+                },
+                "wage": {
+                    "allowNull": false,
+                    "field": "wage",
+                    "seqType": "Sequelize.DECIMAL(4, 2)"
+                }
+            },
+            "indexes": []
+        },
+        "Vehicles": {
+            "tableName": "Vehicles",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "brand": {
+                    "allowNull": false,
+                    "field": "brand",
+                    "seqType": "Sequelize.STRING"
+                },
+                "model": {
+                    "allowNull": false,
+                    "field": "model",
+                    "seqType": "Sequelize.STRING"
+                },
+                "year": {
+                    "allowNull": false,
+                    "field": "year",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "VIN": {
+                    "allowNull": false,
+                    "field": "VIN",
+                    "seqType": "Sequelize.STRING"
+                },
+                "lastService": {
+                    "allowNull": false,
+                    "field": "lastService",
+                    "seqType": "Sequelize.DATEONLY"
+                },
+                "tireSize": {
+                    "allowNull": false,
+                    "field": "tireSize",
+                    "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        },
+        "Equipment": {
+            "tableName": "Equipment",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "idNumber": {
+                    "allowNull": false,
+                    "field": "idNumber",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "brand": {
+                    "allowNull": false,
+                    "field": "brand",
+                    "seqType": "Sequelize.STRING"
+                },
+                "equipmentType": {
+                    "allowNull": false,
+                    "field": "equipmentType",
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "allowNull": false,
+                    "field": "description",
+                    "seqType": "Sequelize.STRING"
+                },
+                "status": {
+                    "allowNull": false,
+                    "field": "status",
+                    "seqType": "Sequelize.STRING"
+                },
+                "warranty": {
+                    "allowNull": false,
+                    "field": "warranty",
+                    "seqType": "Sequelize.DATEONLY"
+                }
+            },
+            "indexes": []
+        },
+        "Customers": {
+            "tableName": "Customers",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "phoneNumber": {
+                    "allowNull": false,
+                    "field": "phoneNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "city": {
+                    "allowNull": false,
+                    "field": "city",
+                    "seqType": "Sequelize.STRING"
+                },
+                "street": {
+                    "allowNull": false,
+                    "field": "street",
+                    "seqType": "Sequelize.STRING"
+                },
+                "ICO": {
+                    "allowNull": false,
+                    "field": "ICO",
+                    "seqType": "Sequelize.STRING"
+                },
+                "DIC": {
+                    "allowNull": false,
+                    "field": "DIC",
+                    "seqType": "Sequelize.STRING"
+                },
+                "ICDPH": {
+                    "allowNull": false,
+                    "field": "ICDPH",
+                    "seqType": "Sequelize.STRING"
+                },
+                "IBAN": {
+                    "allowNull": false,
+                    "field": "IBAN",
+                    "seqType": "Sequelize.STRING"
+                },
+                "pointOfContact": {
+                    "allowNull": false,
+                    "field": "pointOfContact",
+                    "seqType": "Sequelize.STRING"
+                },
+                "email": {
+                    "allowNull": false,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "PSC": {
+                    "allowNull": false,
+                    "field": "PSC",
+                    "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        },
+        "Attendances": {
+            "tableName": "Attendances",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "date": {
+                    "allowNull": false,
+                    "field": "date",
+                    "seqType": "Sequelize.DATEONLY"
+                },
+                "projectId": {
+                    "allowNull": false,
+                    "field": "projectId",
+                    "references": {
+                        "model": "Projects",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "employeeId": {
+                    "allowNull": false,
+                    "field": "employeeId",
+                    "references": {
+                        "model": "Employees",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "workedHours": {
+                    "allowNull": true,
+                    "field": "workedHours",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "workDescription": {
+                    "allowNull": true,
+                    "field": "workDescription",
+                    "seqType": "Sequelize.TEXT"
+                }
+            },
+            "indexes": []
+        },
+        "WorkGroups": {
+            "tableName": "WorkGroups",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        },
+        "EmployeeWorkGroups": {
+            "tableName": "EmployeeWorkGroups",
+            "schema": {
+                "employeeId": {
+                    "references": {
+                        "model": "Employee",
+                        "key": "id"
+                    },
+                    "field": "employeeId",
+                    "allowNull": true,
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "workGroupId": {
+                    "references": {
+                        "model": "WorkGroup",
+                        "key": "id"
+                    },
+                    "field": "workGroupId",
+                    "allowNull": true,
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "EmployeeId": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Employees",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "EmployeeId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "WorkGroupId": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "WorkGroups",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "WorkGroupId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "Projects": {
+            "tableName": "Projects",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "status": {
+                    "allowNull": false,
+                    "field": "status",
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "allowNull": true,
+                    "field": "description",
+                    "seqType": "Sequelize.STRING"
+                },
+                "workPlace": {
+                    "allowNull": true,
+                    "field": "workPlace",
+                    "seqType": "Sequelize.STRING"
+                },
+                "customerId": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "customer",
+                        "key": "id"
+                    },
+                    "field": "customerId",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "workedHours": {
+                    "allowNull": true,
+                    "field": "workedHours",
+                    "seqType": "Sequelize.DECIMAL(5, 2)"
+                },
+                "defaultWorkGroupId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "workGroup",
+                        "key": "id"
+                    },
+                    "field": "defaultWorkGroupId",
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
