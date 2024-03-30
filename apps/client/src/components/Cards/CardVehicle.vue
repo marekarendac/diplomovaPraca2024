@@ -1,7 +1,7 @@
 <template>
   <a-card hoverable style="width: 40vh">
     <template #cover>
-      <img style="padding: 20%" alt="example" src="truck.svg" />
+      <img style="padding: 20%" alt="example" src="./truck.svg" />
     </template>
 
     <p class="cardTitle">Vozidlá</p>

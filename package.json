@@ -20,17 +20,5 @@
   "devDependencies": {
     "lerna": "^8.1.2",
     "vue-cli-plugin-vuestic-ui": "~1.0.5"
-  },
-  "dependencies": {
-    "@ant-design/icons": "^5.3.0",
-    "@auth0/auth0-vue": "^2.3.3",
-    "bootstrap-vue": "^2.23.1",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.8.0",
-    "primeflex": "^3.3.1",
-    "primeicons": "^6.0.1",
-    "primevue": "^3.49.1",
-    "sqlite3": "^5.1.7",
-    "vue": "^3.2.31"
   }
 }
