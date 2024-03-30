@@ -24,7 +24,7 @@ const exportProjectsRouter = require('./routes/exportProjects');
 // const { populateDB } = require('./src/helpers');
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT;
 const logger = pino(pinoPretty());
 
 app.use(cors());
