@@ -828,6 +828,13 @@ export default {
               updatedEmployee;
           }
 
+          Api.get("/employees").then((response) => {
+            this.postDetails = response.data.map((employee) => ({
+              ...employee,
+              fullName: `${employee.name} ${employee.surname}`,
+            }));
+          });
+
           this.$toast.add({
             severity: "success",
             summary: "Úspech",

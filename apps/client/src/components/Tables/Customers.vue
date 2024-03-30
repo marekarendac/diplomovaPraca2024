@@ -745,7 +745,12 @@ export default {
       })
 
         .then((response) => {
-          this.postDetails.push(response.data);
+          const customer = response.data;
+          this.postDetails.push({
+            ...customer,
+            address: `${customer.city} ${customer.street} ${customer.PSC}`,
+          });
+
           this.$toast.add({
             severity: "success",
             summary: "Úspech",
@@ -821,9 +826,13 @@ export default {
       Api.put("customers/" + this.product.id, updatedCustomer)
         .then(() => {
           if (this.product.id) {
-            this.postDetails[this.findIndexById(this.product.id)] =
-              updatedCustomer;
+            const customerIndex = this.findIndexById(this.product.id);
+            this.postDetails[customerIndex] = {
+              ...updatedCustomer,
+              address: `${updatedCustomer.city} ${updatedCustomer.street} ${updatedCustomer.PSC}`,
+            };
           }
+
           this.$toast.add({
             severity: "success",
             summary: "Úspech",

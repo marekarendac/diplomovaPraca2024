@@ -543,11 +543,6 @@ export default {
           this.postDetails = projectsResponse.data;
           this.customers = customersResponse.data;
           this.workGroups = workGroupsResponse.data;
-
-          console.log("First element of postDetails:", this.postDetails[0]);
-          console.log("First element of customers:", this.customers[0]);
-          console.log("First element of workGroups:", this.workGroups[0]);
-          console.log("workgroup:", this.postDetails[0].defaultWorkGroup.name);
         })
         .catch((error) => {
           console.log("Error while getting post details:", error);
