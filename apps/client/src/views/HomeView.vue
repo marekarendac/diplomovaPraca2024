@@ -13,7 +13,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
       display: flex;
     "
     ><a-col style="padding-right: 5%">
-      <!-- <Tag
+      <Tag
         v-if="this.vehiclesErrors"
         style="width: 100%"
         severity="warning"
@@ -26,12 +26,12 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
         severity="success"
         value="OK"
         icon="pi pi-check-square"
-      ></Tag> -->
+      ></Tag>
       <router-link to="/vehicles"><CardVe /></router-link
     ></a-col>
 
     <a-col>
-      <!-- <Tag
+      <Tag
         v-if="this.employeesErrors"
         style="width: 100%"
         severity="warning"
@@ -44,12 +44,12 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
         severity="success"
         value="OK"
         icon="pi pi-check-square"
-      ></Tag> -->
+      ></Tag>
       <router-link to="/employees"><CardEm /></router-link
     ></a-col>
 
     <a-col style="padding-left: 5%">
-      <!-- <Tag
+      <Tag
         v-if="this.equipmentErrors"
         style="width: 100%"
         severity="warning"
@@ -62,7 +62,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
         severity="success"
         value="OK"
         icon="pi pi-check-square"
-      ></Tag> -->
+      ></Tag>
       <router-link to="/equipment"><CardEq /></router-link
     ></a-col>
   </a-row>
@@ -73,24 +73,23 @@ import Api from "@/services/Api.js";
 export default {
   data() {
     return {
-      postDetails: null,
-      // vehiclesErrors: false,
-      // employeesErrors: false,
-      // equipmentErrors: false,
+      vehiclesErrors: false,
+      employeesErrors: false,
+      equipmentErrors: false,
     };
   },
 
   mounted() {
-    // this.getPostDetails();
+    this.getDataNotifications();
   },
   methods: {
-    // getPostDetails() {
-    //   Api.get("/notifications").then((response) => {
-    //     this.vehiclesErrors = response.data.vehiclesErrors;
-    //     this.employeesErrors = response.data.employeesErrors;
-    //     this.equipmentErrors = response.data.equipmentErrors;
-    //   });
-    // },
+    getDataNotifications() {
+      Api.get("/notifications").then((response) => {
+        this.vehiclesErrors = response.data.vehiclesErrors;
+        this.employeesErrors = response.data.employeesErrors;
+        this.equipmentErrors = response.data.equipmentErrors;
+      });
+    },
   },
 };
 </script>
