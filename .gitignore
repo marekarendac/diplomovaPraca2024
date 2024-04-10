@@ -107,3 +107,5 @@ dist
 
 # DB
 apps/server/db.sqlite
+
+.DS_Store
