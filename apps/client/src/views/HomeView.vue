@@ -69,6 +69,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
 </template>
 <script>
 import Api from "@/services/Api.js";
+import { useAuth0 } from "@auth0/auth0-vue";
 
 export default {
   data() {
@@ -80,6 +81,8 @@ export default {
   },
 
   mounted() {
+    const auth = useAuth0();
+    console.log("auth =>", auth);
     this.getDataNotifications();
   },
   methods: {
