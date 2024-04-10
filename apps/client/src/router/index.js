@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: "/",
       component: Layout,
-      // beforeEnter: authGuard,
+      beforeEnter: authGuard,
       children: [
         {
           path: "",
