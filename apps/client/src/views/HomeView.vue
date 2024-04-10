@@ -14,7 +14,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
     "
     ><a-col style="padding-right: 5%">
       <Tag
-        v-if="this.vehiclesErrors"
+        v-if="vehiclesErrors"
         style="width: 100%"
         severity="warning"
         value="POZOR"
@@ -32,7 +32,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
 
     <a-col>
       <Tag
-        v-if="this.employeesErrors"
+        v-if="employeesErrors"
         style="width: 100%"
         severity="warning"
         value="POZOR"
@@ -50,7 +50,7 @@ import CardVe from "@/components/Cards/CardVehicle.vue";
 
     <a-col style="padding-left: 5%">
       <Tag
-        v-if="this.equipmentErrors"
+        v-if="equipmentErrors"
         style="width: 100%"
         severity="warning"
         value="POZOR"
