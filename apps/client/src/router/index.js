@@ -25,7 +25,10 @@ const router = createRouter({
     {
       path: "/",
       component: Layout,
-      beforeEnter: authGuard,
+      // beforeEnter: () => {
+      //   const auth = useAuth0();
+      //   console.log("SKAP auth =>", auth);
+      // },
       children: [
         {
           path: "",
