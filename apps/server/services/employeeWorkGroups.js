@@ -4,7 +4,7 @@ const findAll = async (req, res) => {
 
   if (workGroupId) {
     employeeWorkGroups = await req.context.models.EmployeeWorkGroup.findAll({
-      where: { workGroupId: Number(workGroupId) },
+      where: { WorkGroupId: Number(workGroupId) },
       include: [
         {
           model: req.context.models.Employee,
