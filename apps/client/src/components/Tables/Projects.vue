@@ -580,7 +580,7 @@ export default {
           status: this.product.status.status,
           description: this.product.description,
           workPlace: this.product.workPlace,
-          customerId: this.product.customerId,
+          CustomerId: this.product.customerId,
           defaultWorkGroupId: this.product.defaultWorkGroupId,
         };
 
@@ -673,7 +673,7 @@ export default {
           status: this.product.status,
           description: this.product.description,
           workPlace: this.product.workPlace,
-          customerId: this.product.customerId,
+          CustomerId: this.product.customerId,
           defaultWorkGroupId: this.product.defaultWorkGroupId,
         }).catch((error) => console.log(error));
 
