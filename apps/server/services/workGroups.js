@@ -30,7 +30,7 @@ const destroy = async (req, res) => {
 
   // Delete all employeeWorkGroups with the same workGroupId
   await req.context.models.EmployeeWorkGroup.destroy({
-    where: { workGroupId: req.params.id },
+    where: { WorkGroupId: req.params.id },
   });
 
   // Now delete the workGroup
