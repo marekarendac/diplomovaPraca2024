@@ -533,13 +533,12 @@ export default {
       if (selectedWorkGroup) {
         this.selectedWorkGroup = selectedWorkGroup;
         const selectedWorkGroupRelations = this.postDetails.filter(
-          (relation) => relation.workGroupId === this.product
+          (relation) => relation.WorkGroupId === this.product
         );
-
         this.selectedWorkGroupEmployees = selectedWorkGroupRelations.map(
           (relation) => {
             return this.employees.find(
-              (employee) => employee.id === relation.employeeId
+              (employee) => employee.id === relation.EmployeeId
             );
           }
         );
