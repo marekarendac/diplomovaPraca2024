@@ -12,8 +12,8 @@ const findAll = async (req, res) => {
 const post = async (req, res) => {
   const attendance = await req.context.models.Attendance.create({
     date: req.body.date,
-    projectId: req.body.projectId,
-    employeeId: req.body.employeeId,
+    ProjectId: req.body.projectId,
+    EmployeeId: req.body.employeeId,
     workedHours: req.body.workedHours,
     workDescription: req.body.workDescription,
   });

@@ -25,7 +25,7 @@ const project = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      customerId: {
+      CustomerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

@@ -44,15 +44,15 @@ const applyRelations = () => {
   });
 
   // Associations from EmployeeWorkGroup to Employee and WorkGroup
-  EmployeeWorkGroup.belongsTo(Employee, { as: 'employee' });
-  EmployeeWorkGroup.belongsTo(WorkGroup, { as: 'workGroup' });
+  EmployeeWorkGroup.belongsTo(Employee, { as: 'employee', foreignKey: 'EmployeeId' });
+  EmployeeWorkGroup.belongsTo(WorkGroup, { as: 'workGroup', foreignKey: 'WorkGroupId' });
 
   // One-to-many relation between Customer and Project
   Customer.hasMany(Project, {
-    foreignKey: 'customerId',
+    foreignKey: 'CustomerId',
   });
   Project.belongsTo(Customer, {
-    foreignKey: 'customerId',
+    foreignKey: 'CustomerId',
     as: 'projectCustomer',
   });
 
@@ -67,19 +67,19 @@ const applyRelations = () => {
 
   // One-to-many relation between Project and Attendance
   Project.hasMany(Attendance, {
-    foreignKey: 'projectId',
+    foreignKey: 'ProjectId',
   });
   Attendance.belongsTo(Project, {
-    foreignKey: 'projectId',
+    foreignKey: 'ProjectId',
     as: 'attendanceProject',
   });
 
   // One-to-many relation between Employee and Attendance
   Employee.hasMany(Attendance, {
-    foreignKey: 'employeeId',
+    foreignKey: 'EmployeeId',
   });
   Attendance.belongsTo(Employee, {
-    foreignKey: 'employeeId',
+    foreignKey: 'EmployeeId',
     as: 'attendanceEmployee',
   });
 };

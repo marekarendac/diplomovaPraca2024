@@ -13,11 +13,11 @@ const attendance = (sequelize) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      projectId: {
+      ProjectId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      employeeId: {
+      EmployeeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

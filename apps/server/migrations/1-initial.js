@@ -208,7 +208,7 @@ const migrationCommands = [
   {
     fn: 'createTable',
     params: [
-      'Equipments',
+      'Equipment',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -302,11 +302,11 @@ const migrationCommands = [
           field: 'workPlace',
           allowNull: true,
         },
-        customerId: {
+        CustomerId: {
           type: Sequelize.INTEGER,
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
-          field: 'customerId',
+          field: 'CustomerId',
           references: {
             model: 'Customers',
             key: 'id',
@@ -338,23 +338,23 @@ const migrationCommands = [
     params: [
       'EmployeeWorkGroups',
       {
-        employeeId: {
+        EmployeeId: {
           type: Sequelize.INTEGER,
           onUpdate: 'CASCADE',
           onDelete: 'NO ACTION',
           allowNull: true,
-          field: 'employeeId',
+          field: 'EmployeeId',
           references: {
             model: 'Employees',
             key: 'id',
           },
         },
-        workGroupId: {
+        WorkGroupId: {
           type: Sequelize.INTEGER,
           onUpdate: 'CASCADE',
           onDelete: 'NO ACTION',
           allowNull: true,
-          field: 'workGroupId',
+          field: 'WorkGroupId',
           references: {
             model: 'WorkGroups',
             key: 'id',
@@ -380,7 +380,7 @@ const migrationCommands = [
           field: 'date',
           allowNull: false,
         },
-        projectId: {
+        ProjectId: {
           type: Sequelize.INTEGER,
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
@@ -388,10 +388,10 @@ const migrationCommands = [
             model: 'Projects',
             key: 'id',
           },
-          field: 'projectId',
+          field: 'ProjectId',
           allowNull: false,
         },
-        employeeId: {
+        EmployeeId: {
           type: Sequelize.INTEGER,
           onUpdate: 'CASCADE',
           onDelete: 'CASCADE',
@@ -399,7 +399,7 @@ const migrationCommands = [
             model: 'Employees',
             key: 'id',
           },
-          field: 'employeeId',
+          field: 'EmployeeId',
           allowNull: false,
         },
         workedHours: {

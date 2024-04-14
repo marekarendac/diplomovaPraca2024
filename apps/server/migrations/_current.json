@@ -231,9 +231,9 @@
                     "field": "date",
                     "seqType": "Sequelize.DATEONLY"
                 },
-                "projectId": {
+                "ProjectId": {
                     "allowNull": false,
-                    "field": "projectId",
+                    "field": "ProjectId",
                     "references": {
                         "model": "Projects",
                         "key": "id"
@@ -306,28 +306,6 @@
                     "allowNull": true,
                     "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "EmployeeId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "Employees",
-                        "key": "id"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "EmployeeId",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "WorkGroupId": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "WorkGroups",
-                        "key": "id"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "WorkGroupId",
                     "seqType": "Sequelize.INTEGER"
                 }
             },

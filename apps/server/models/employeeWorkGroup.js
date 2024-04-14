@@ -4,14 +4,14 @@ const employeeWorkGroup = (sequelize) => {
   const EmployeeWorkGroup = sequelize.define(
     'EmployeeWorkGroup',
     {
-      employeeId: {
+      EmployeeId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'Employee', // name of Target model
           key: 'id', // key in Target model that we're referencing
         },
       },
-      workGroupId: {
+      WorkGroupId: {
         type: DataTypes.INTEGER,
         references: {
           model: 'WorkGroup', // name of Target model
