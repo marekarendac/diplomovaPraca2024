@@ -15,6 +15,7 @@
             optionLabel="name"
             optionValue="id"
             placeholder="Select a project"
+            showClear
           />
         </div>
         <div class="field col flex flex-column gap-2">
@@ -47,6 +48,7 @@
               placeholder="Nebol zvolený projekt"
               v-model.trim="selectedProject.name"
               readonly
+              disabled
             />
 
             <label for="workPlace">Miesto práce</label>
