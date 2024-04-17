@@ -77,9 +77,91 @@ const update = async (req, res) => {
   }
 };
 
+const getMonthlyEmployeeHours = async (req, res) => {
+  const attendances = await req.context.models.Attendance.findAll({
+    include: [
+      { model: req.context.models.Project, as: 'attendanceProject' },
+      { model: req.context.models.Employee, as: 'attendanceEmployee' },
+    ],
+  });
+
+  const monthlyAttendances = attendances.reduce((acc, cur) => {
+    const currentDate = new Date(cur.date);
+
+    const formattedMonth = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }`;
+
+    const employeeName = `${cur.attendanceEmployee.name} ${cur.attendanceEmployee.surname}`;
+
+    const monthItemIdx = acc.findIndex(
+      (item) => item.month === formattedMonth && item.employee === employeeName,
+    );
+
+    if (monthItemIdx !== -1) {
+      acc[monthItemIdx].hours += parseFloat(cur.workedHours);
+
+      return acc;
+    }
+
+    acc.push({
+      month: formattedMonth,
+      employee: employeeName,
+      hours: parseFloat(cur.workedHours),
+    });
+
+    return acc;
+  }, []);
+
+  res.status(200).send(monthlyAttendances);
+};
+
+const getMonthlyProjectHours = async (req, res) => {
+  const attendances = await req.context.models.Attendance.findAll({
+    include: [
+      { model: req.context.models.Project, as: 'attendanceProject' },
+      { model: req.context.models.Employee, as: 'attendanceEmployee' },
+    ],
+  });
+
+  const monthlyAttendances = attendances.reduce((acc, cur) => {
+    const currentDate = new Date(cur.date);
+
+    const formattedMonth = `${currentDate.getFullYear()}-${
+      currentDate.getMonth() + 1
+    }`;
+
+    const projectName = cur.attendanceProject.name;
+    const projectStatus = cur.attendanceProject.status;
+
+    const monthItemIdx = acc.findIndex(
+      (item) => item.month === formattedMonth && item.project === projectName,
+    );
+
+    if (monthItemIdx !== -1) {
+      acc[monthItemIdx].hours += parseFloat(cur.workedHours);
+
+      return acc;
+    }
+
+    acc.push({
+      month: formattedMonth,
+      project: projectName,
+      status: projectStatus,
+      hours: parseFloat(cur.workedHours),
+    });
+
+    return acc;
+  }, []);
+
+  res.status(200).send(monthlyAttendances);
+};
+
 module.exports = {
   findAll,
   post,
   destroy,
   update,
+  getMonthlyEmployeeHours,
+  getMonthlyProjectHours,
 };

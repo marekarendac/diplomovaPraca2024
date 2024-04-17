@@ -7,49 +7,69 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Global Search"
-              size="50"
+              placeholder="Zadaj klúčové slovo"
+              size="30"
+              class="mr-3"
             />
           </div>
         </div>
-        <Button
-          type="button"
-          icon="pi pi-filter-slash"
-          label="Clear"
-          class="p-button-outlined ml-2"
-          @click="clearFilter1()"
+        <Calendar
+          v-model="filters1.value"
+          view="month"
+          dateFormat="mm/yy"
+          :manualInput="false"
+          showButtonBar
+          showIcon
+          iconDisplay="input"
+          placeholder="Zadaj rozsah"
+          class="mr-3"
         />
       </template>
       <template #empty> No customers found. </template>
-      <template #loading> Loading customers data. Please wait. </template>
+      <template #loading> Loading customers data. Please wait. </template
+      ><template #end>
+        <Button
+          label="Export tabuľky"
+          icon="pi pi-external-link"
+          @click="exportEmployees"
+          class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
+        />
+      </template>
     </Toolbar>
 
     <DataTable
-      :value="postDetails"
-      :filters="filters1"
+      :value="filteredPostDetails"
+      :sortOrder="1"
+      removableSort
       filterMode="lenient"
       :scrollable="true"
-      scrollHeight="70vh"
-      filterDisplay="menu"
-      responsiveLayout="scroll"
+      style="min-height: 100vh"
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
     >
+      <Column field="project" header="Projekt" :sortable="true"> </Column>
+
+      <Column
+        field="status"
+        header="Status projektu"
+        :sortable="true"
+        filterField="date"
+        ;
+      >
+      </Column>
+
       <Column
         field="month"
         header="Mesiac"
-        style="min-width: 5%"
         :sortable="true"
-      ></Column
-      ><Column
-        field="employee"
-        header="Meno"
-        style="min-width: 20%"
-        :sortable="true"
+        filterField="date"
         ;
-      ></Column>
+      >
+      </Column>
       <Column
         field="hours"
         header="Odpracované hodiny celkom"
-        style="min-width: 15%"
         :sortable="true"
         filterField="date"
         ;
@@ -66,8 +86,25 @@ export default {
   data() {
     return {
       postDetails: null,
-      filters1: {},
+      date: null,
+      projects: null,
+      filteredPostDetails: null,
+      filters1: { value: null },
     };
+  },
+  watch: {
+    "filters1.value": function (newVal) {
+      if (newVal) {
+        const selectedMonth = `${newVal.getFullYear()}-${
+          newVal.getMonth() + 1
+        }`;
+        this.filteredPostDetails = this.postDetails.filter(
+          (post) => post.month === selectedMonth
+        );
+      } else {
+        this.filteredPostDetails = this.postDetails;
+      }
+    },
   },
   created() {
     this.initFilters1();
@@ -78,24 +115,17 @@ export default {
   },
   methods: {
     getPostDetails() {
-      Api.get("/attendances/months/employees").then((response) => {
+      Api.get("/attendances/months/projects").then((response) => {
+        console.log("Monthly project hours:", response.data);
         this.postDetails = response.data;
-        console.log(response.data, "employeesTotalHours");
+        this.filteredPostDetails = response.data;
       });
     },
 
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        date: {
-          operator: FilterOperator.AND,
-          constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-        },
       };
-    },
-
-    clearFilter1() {
-      this.initFilters1();
     },
   },
 };

@@ -12,4 +12,8 @@ router.delete('/:id', services.attendances.destroy);
 
 router.put('/:id', services.attendances.update);
 
+router.get('/months/employees', services.attendances.getMonthlyEmployeeHours);
+
+router.get('/months/projects', services.attendances.getMonthlyProjectHours);
+
 module.exports = router;
