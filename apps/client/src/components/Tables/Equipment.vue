@@ -13,7 +13,7 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Klikni a hľadaj"
+              placeholder="Zadaj kľúčové slovo"
               size="50"
             />
             <Button
