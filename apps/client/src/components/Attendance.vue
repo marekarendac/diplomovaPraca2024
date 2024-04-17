@@ -163,7 +163,7 @@
               <Button
                 label="Pridaj"
                 icon="pi pi-check"
-                class="p-button-text"
+                class="p-button-rounded p-button-success mr-2 p-button-raised"
                 @click="handleSubmit"
               />
             </div>
