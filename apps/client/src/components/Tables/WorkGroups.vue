@@ -69,7 +69,7 @@
   <Dialog
     @submit.prevent="handleSubmit"
     v-model:visible="productDialog"
-    :style="{ width: '550px' }"
+    :style="{ width: '43%' }"
     header="Pridaj novú pracovnú skupinu"
     :modal="true"
     class="p-fluid"
@@ -132,7 +132,7 @@
 
   <Dialog
     v-model:visible="productDialogEdit"
-    :style="{ width: '550px' }"
+    :style="{ width: '43%' }"
     header="Edituj skupinu"
     :modal="true"
     class="p-fluid"
@@ -184,13 +184,13 @@
           optionGroupLabel="label"
           optionGroupChildren="items"
           placeholder="Pridaj jedného alebo viacerých členov do skupiny"
-          style="flex-grow: 1; width: auto; max-width: calc(550px - 140px)"
+          style="flex-grow: 1; width: auto; max-width"
           showClear
         />
         <Button
           icon="pi pi-check"
           class="p-button-success"
-          style="margin-left: 20px; flex-shrink: 0"
+          style="margin-left: 10px; flex-shrink: 0"
           disabled
         />
       </div>
@@ -231,7 +231,7 @@
 
   <Dialog
     v-model:visible="deleteProductDialog"
-    :style="{ width: '450px' }"
+    :style="{ width: '43%' }"
     header="Vymaž vybranú pracovnú skupinu"
     :modal="true"
   >

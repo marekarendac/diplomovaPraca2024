@@ -120,7 +120,7 @@
 
   <Dialog
     v-model:visible="showProductDialog"
-    :style="{ width: '450px' }"
+    :style="{ width: '43%' }"
     header="Zobraziť záznam"
     :modal="true"
     class="p-fluid"
@@ -190,7 +190,7 @@
   <Dialog
     @submit.prevent="handleSubmit"
     v-model:visible="productDialog"
-    :style="{ width: '450px' }"
+    :style="{ width: '43%' }"
     header="Pridaj nový projekt"
     :modal="true"
     class="p-fluid"
@@ -311,7 +311,7 @@
 
   <Dialog
     v-model:visible="deleteProductDialog"
-    :style="{ width: '450px' }"
+    :style="{ width: '43%' }"
     header="Vymaž vybraný záznam"
     :modal="true"
   >
@@ -375,7 +375,7 @@
 
   <Dialog
     v-model:visible="productDialogEdit"
-    :style="{ width: '450px' }"
+    :style="{ width: '43%' }"
     header="Edituj vybraný záznam"
     :modal="true"
     class="p-fluid"

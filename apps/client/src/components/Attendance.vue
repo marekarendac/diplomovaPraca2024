@@ -31,8 +31,10 @@
 
         <div>
           <div class="field col flex flex-column gap-2">
-            <label for="project">Zadaj popis odvedenej práce</label>
-            <Textarea v-model="workDescription" />
+            <div class="field col flex flex-column gap-2">
+              <label for="project">Zadaj popis odvedenej práce</label>
+              <Textarea v-model="workDescription" style="height: 300px" />
+            </div>
           </div>
         </div>
       </div>
@@ -57,6 +59,7 @@
               placeholder="Nebol zvolený projekt"
               v-model.trim="selectedProject.workPlace"
               readonly
+              disabled
             />
           </div>
 
@@ -71,6 +74,7 @@
                   : ''
               "
               readonly
+              disabled
             />
 
             <label for="workedHours">Odpracované hodiny na projekte</label>
@@ -79,6 +83,7 @@
               placeholder="Nebol zvolený projekt"
               v-model.trim="selectedProject.workedHours"
               readonly
+              disabled
             />
           </div>
 
@@ -97,6 +102,7 @@
                   : ''
               "
               readonly
+              disabled
             />
 
             <div class="field col flex flex-column gap-2">
@@ -188,7 +194,7 @@
                   icon="pi pi-check"
                   class="p-button-success mr-2 p-button-raised"
                   @click="handleSubmit"
-                />
+                /><Toast />
               </div>
               <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
             </div>
@@ -216,7 +222,6 @@ export default {
       product: {},
       status: null,
       selectedEmployee: null,
-
       statuses: [
         { status: "Otvorený" },
         { status: "Aktívny" },
@@ -272,6 +277,16 @@ export default {
     },
 
     async handleSubmit() {
+      if (!this.workDescription) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Chyba",
+          detail: "Pre uloženie záznamov zadaj popis odvedenej práce.",
+          life: 2500,
+        });
+        return;
+      }
+
       for (const [
         index,
         employeeWorkGroup,
@@ -289,10 +304,21 @@ export default {
         try {
           const response = await Api.post("/attendances", payload);
           console.log(response.data);
+
+          // Show success toast
+          this.$toast.add({
+            severity: "success",
+            summary: "Úspech",
+            detail: "Záznam bol úspešne uložený.",
+            life: 2500,
+          });
         } catch (error) {
           console.error("API call failed:", error);
         }
       }
+      // Reset selectedProjectId and workDescription
+      this.selectedProjectId = null;
+      this.workDescription = "";
     },
 
     editEmployeeWorkGroup(index) {

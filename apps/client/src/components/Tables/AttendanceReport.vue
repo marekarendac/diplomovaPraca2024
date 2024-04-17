@@ -7,17 +7,27 @@
             <i class="pi pi-search"></i>
             <InputText
               v-model="filters1['global'].value"
-              placeholder="Global Search"
-              size="50"
+              placeholder="Zadaj kľúčové slovo"
+              size="40"
+              class="mr-3"
             />
           </div>
-        </div>
+          <Calendar
+            v-model="dates"
+            selectionMode="range"
+            :manualInput="false"
+            showButtonBar
+            showIcon
+            iconDisplay="input"
+            placeholder="Zadaj rozsah"
+          />
+        </div> </template
+      ><template #end>
         <Button
-          class="p-button-outlined ml-2"
-          type="button"
-          icon="pi pi-filter-slash"
-          label="Clear"
-          @click="clearFilter1()"
+          label="Export tabuľky"
+          icon="pi pi-external-link"
+          @click="exportEmployees"
+          class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
         />
       </template>
     </Toolbar>
@@ -26,8 +36,14 @@
       :value="postDetails"
       :filters="filters1"
       filterMode="lenient"
+      sortField="date"
+      :sortOrder="1"
+      removableSort
       :scrollable="true"
-      scrollHeight="70vh"
+      style="min-height: 100vh"
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
       ><Column field="date" header="Dátum" :sortable="true" ;> </Column>
       <Column
         field="fullName"
@@ -47,9 +63,8 @@
         field="workDescription"
         header="Popis práce"
         style="min-width: 35%"
-        :sortable="true"
       ></Column>
-      <Column field="workedHours" header="Hodiny" :sortable="true" ;></Column>
+      <Column field="workedHours" header="Hodiny" ;></Column>
     </DataTable>
   </div>
 </template>
@@ -62,6 +77,7 @@ export default {
     return {
       postDetails: null,
       filters1: {},
+      dates: [],
     };
   },
   created() {
