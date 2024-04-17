@@ -161,9 +161,9 @@
                 </div>
               </div>
               <Button
-                label="Pridaj"
+                label="Ulož záznamy"
                 icon="pi pi-check"
-                class="p-button-rounded p-button-success mr-2 p-button-raised"
+                class="p-button-success mr-2 p-button-raised"
                 @click="handleSubmit"
               />
             </div>
