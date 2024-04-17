@@ -150,6 +150,7 @@
           style="width: 100%"
           autofocus
           @change="handleWorkGroupChange"
+          showClear
         />
       </div>
     </div>
@@ -184,6 +185,7 @@
           optionGroupChildren="items"
           placeholder="Pridaj jedného alebo viacerých členov do skupiny"
           style="flex-grow: 1; width: auto; max-width: calc(550px - 140px)"
+          showClear
         />
         <Button
           icon="pi pi-check"
