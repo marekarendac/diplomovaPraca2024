@@ -120,56 +120,80 @@
         </SplitterPanel>
 
         <SplitterPanel class="flex align-items-center justify-content-center">
-          <div v-if="selectedProjectId">
-            <div v-if="selectedProject.defaultWorkGroupId">
-              <div
-                class="field col"
-                v-for="(employeeWorkGroup, index) in employeeWorkGroups"
-                :key="index"
-              >
-                <label for="employee"
-                  >Člen pracovnej skupiny {{ index + 1 }}</label
-                >
+          <div>
+            <div class="field col" v-if="selectedProjectId">
+              <label for="employees">Pridaj člena do pracovnej aktivity</label>
+              <div style="display: flex; align-items: center">
+                <Button
+                  icon="pi pi-times"
+                  class="p-button-warning"
+                  style="margin-right: 10px"
+                  @click="editEmployeeWorkGroup(index)"
+                />
                 <div style="display: flex; align-items: center">
-                  <Button
-                    icon="pi pi-times"
-                    class="p-button-warning"
-                    style="margin-right: 10px"
-                    @click="editEmployeeWorkGroup(index)"
+                  <MultiSelect
+                    id="employees"
+                    v-model="selectedEmployee"
+                    :options="filteredEmployees"
+                    optionLabel="fullName"
+                    optionValue="id"
+                    filter
+                    placeholder="Pridaj členov do pracovnej aktivity"
                   />
-                  <InputText
-                    id="employee"
-                    v-model="employeeWorkGroup.employee.fullName"
-                    disabled
-                  />
-
-                  <InputNumber
-                    v-model="inputNumberValues[index]"
-                    inputId="horizontal-buttons"
-                    showButtons
-                    buttonLayout="horizontal"
-                    :step="0.5"
-                    style="margin-left: 10px"
-                  >
-                    <template #incrementbuttonicon>
-                      <span class="pi pi-plus" />
-                    </template>
-                    <template #decrementbuttonicon>
-                      <span class="pi pi-minus" />
-                    </template>
-                  </InputNumber>
                 </div>
               </div>
-              <Button
-                label="Ulož záznamy"
-                icon="pi pi-check"
-                class="p-button-success mr-2 p-button-raised"
-                @click="handleSubmit"
-              />
             </div>
-            <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
+            <div v-if="selectedProjectId">
+              <div v-if="selectedProject.defaultWorkGroupId">
+                <div
+                  class="field col"
+                  v-for="(employeeWorkGroup, index) in employeeWorkGroups"
+                  :key="index"
+                >
+                  <label for="employee"
+                    >Člen pracovnej skupiny {{ index + 1 }}</label
+                  >
+                  <div style="display: flex; align-items: center">
+                    <Button
+                      icon="pi pi-times"
+                      class="p-button-warning"
+                      style="margin-right: 10px"
+                      @click="editEmployeeWorkGroup(index)"
+                    />
+                    <InputText
+                      id="employee"
+                      v-model="employeeWorkGroup.employee.fullName"
+                      disabled
+                    />
+
+                    <InputNumber
+                      v-model="inputNumberValues[index]"
+                      inputId="horizontal-buttons"
+                      showButtons
+                      buttonLayout="horizontal"
+                      :step="0.5"
+                      style="margin-left: 10px"
+                    >
+                      <template #incrementbuttonicon>
+                        <span class="pi pi-plus" />
+                      </template>
+                      <template #decrementbuttonicon>
+                        <span class="pi pi-minus" />
+                      </template>
+                    </InputNumber>
+                  </div>
+                </div>
+                <Button
+                  label="Ulož záznamy"
+                  icon="pi pi-check"
+                  class="p-button-success mr-2 p-button-raised"
+                  @click="handleSubmit"
+                />
+              </div>
+              <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
+            </div>
+            <div v-else>Nebol zvolený projekt</div>
           </div>
-          <div v-else>Nebol zvolený projekt</div>
         </SplitterPanel>
       </Splitter>
     </SplitterPanel>
@@ -191,6 +215,8 @@ export default {
       projects: [],
       product: {},
       status: null,
+      selectedEmployee: null,
+
       statuses: [
         { status: "Otvorený" },
         { status: "Aktívny" },
@@ -287,20 +313,14 @@ export default {
     selectedProjectId: {
       immediate: true,
       async handler(newVal) {
-        console.log("selectedProjectId changed:", newVal);
-
         this.selectedProject =
           this.projects.find((project) => project.id === newVal) || {};
-        console.log(
-          "selectedProject:",
-          this.selectedProject.defaultWorkGroupId
-        );
 
         if (this.selectedProject.defaultWorkGroupId) {
           const response = await Api.get(
             `/employeeWorkGroups?workGroupId=${this.selectedProject.defaultWorkGroupId}`
           );
-          console.log("vystup po selektovani projektu:", response);
+
           this.employeeWorkGroups = response.data.map((employeeWorkGroup) => ({
             ...employeeWorkGroup,
             employee: {
@@ -312,6 +332,25 @@ export default {
           this.employeeWorkGroups = [];
         }
       },
+    },
+  },
+  computed: {
+    filteredEmployees() {
+      if (!this.employeeWorkGroups || !this.employees) {
+        return [];
+      }
+
+      // Get the ids of the employees that are already shown
+      const shownEmployeeIds = this.employeeWorkGroups.map(
+        (employeeWorkGroup) => employeeWorkGroup.employee.id
+      );
+
+      // Filter the employees array to exclude the shown employees
+      const filtered = this.employees.filter(
+        (employee) => !shownEmployeeIds.includes(employee.id)
+      );
+
+      return filtered;
     },
   },
 };
