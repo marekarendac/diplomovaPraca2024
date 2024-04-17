@@ -8,4 +8,8 @@ router.get('/', services.attendances.findAll);
 
 router.post('/', services.attendances.post);
 
+router.delete('/:id', services.attendances.destroy);
+
+router.put('/:id', services.attendances.update);
+
 module.exports = router;
