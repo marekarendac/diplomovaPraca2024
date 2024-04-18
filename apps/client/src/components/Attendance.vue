@@ -128,7 +128,7 @@
         <SplitterPanel class="flex align-items-center justify-content-center">
           <div>
             <Button
-              label="Add Employee"
+              label="Pridaj ďalšieho člena"
               @click="addEmployee"
               v-if="selectedProjectId"
             />
@@ -141,7 +141,7 @@
               :key="'additional-' + index"
             >
               <label for="additional-employee"
-                >Additional Employee
+                >Doplnený člen do pracovnej aktivity
                 {{ additionalEmployees.length - index }}</label
               >
               <div style="display: flex; align-items: center">
@@ -162,8 +162,9 @@
                   optionLabel="fullName"
                   optionValue="id"
                   filter
-                  placeholder="Pridaj členov do pracovnej aktivity"
+                  placeholder="Zvoľ člena"
                   showClear
+                  style="width: 203px"
                 />
                 <InputNumber
                   v-model="additionalEmployee.hours"
@@ -190,7 +191,8 @@
                   :key="index"
                 >
                   <label for="employee"
-                    >Člen pracovnej skupiny {{ index + 1 }}</label
+                    >Člen pracovnej skupiny zvoleného projektu
+                    {{ index + 1 }}</label
                   >
                   <div style="display: flex; align-items: center">
                     <Button
@@ -316,6 +318,29 @@ export default {
           severity: "warn",
           summary: "Chyba",
           detail: "Pre uloženie záznamov zadaj popis odvedenej práce.",
+          life: 2500,
+        });
+        return;
+      }
+
+      // Check if any of the additionalEmployees dropdowns are empty
+      if (this.additionalEmployees.some((employee) => !employee.selected)) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Chyba",
+          detail: "Všetky pridané polia zamestnancov musia byť vyplnené.",
+          life: 2500,
+        });
+        return;
+      }
+
+      // Check if any of the inputNumberValues are empty or zero
+      if (this.inputNumberValues.some((value) => !value || value === 0)) {
+        this.$toast.add({
+          severity: "warn",
+          summary: "Chyba",
+          detail:
+            "Všetky hodnoty pre odpracované hodiny musia byť vyplnené a väčšie ako nula.",
           life: 2500,
         });
         return;
