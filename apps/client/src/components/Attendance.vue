@@ -127,26 +127,59 @@
 
         <SplitterPanel class="flex align-items-center justify-content-center">
           <div>
-            <div class="field col" v-if="selectedProjectId">
-              <label for="employees">Pridaj člena do pracovnej aktivity</label>
+            <Button
+              label="Add Employee"
+              @click="addEmployee"
+              v-if="selectedProjectId"
+            />
+
+            <div
+              class="field col"
+              v-for="(additionalEmployee, index) in additionalEmployees
+                .slice()
+                .reverse()"
+              :key="'additional-' + index"
+            >
+              <label for="additional-employee"
+                >Additional Employee
+                {{ additionalEmployees.length - index }}</label
+              >
               <div style="display: flex; align-items: center">
                 <Button
                   icon="pi pi-times"
                   class="p-button-warning"
                   style="margin-right: 10px"
-                  @click="editEmployeeWorkGroup(index)"
+                  @click="
+                    deleteAdditionalEmployee(
+                      additionalEmployees.length - 1 - index
+                    )
+                  "
                 />
-                <div style="display: flex; align-items: center">
-                  <MultiSelect
-                    id="employees"
-                    v-model="selectedEmployee"
-                    :options="filteredEmployees"
-                    optionLabel="fullName"
-                    optionValue="id"
-                    filter
-                    placeholder="Pridaj členov do pracovnej aktivity"
-                  />
-                </div>
+                <Dropdown
+                  id="'additional-employee' + index"
+                  v-model="additionalEmployee.selected"
+                  :options="filteredEmployees"
+                  optionLabel="fullName"
+                  optionValue="id"
+                  filter
+                  placeholder="Pridaj členov do pracovnej aktivity"
+                  showClear
+                />
+                <InputNumber
+                  v-model="additionalEmployee.hours"
+                  inputId="horizontal-buttons"
+                  showButtons
+                  buttonLayout="horizontal"
+                  :step="0.5"
+                  style="margin-left: 10px"
+                >
+                  <template #incrementbuttonicon>
+                    <span class="pi pi-plus" />
+                  </template>
+                  <template #decrementbuttonicon>
+                    <span class="pi pi-minus" />
+                  </template>
+                </InputNumber>
               </div>
             </div>
             <div v-if="selectedProjectId">
@@ -164,7 +197,7 @@
                       icon="pi pi-times"
                       class="p-button-warning"
                       style="margin-right: 10px"
-                      @click="editEmployeeWorkGroup(index)"
+                      @click="deleteEmployeeFromWorkGroup(index)"
                     />
                     <InputText
                       id="employee"
@@ -189,14 +222,14 @@
                     </InputNumber>
                   </div>
                 </div>
-                <Button
-                  label="Ulož záznamy"
-                  icon="pi pi-check"
-                  class="p-button-success mr-2 p-button-raised"
-                  @click="handleSubmit"
-                /><Toast />
               </div>
               <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
+              <Button
+                label="Ulož záznamy"
+                icon="pi pi-check"
+                class="p-button-success mr-2 p-button-raised"
+                @click="handleSubmit"
+              /><Toast />
             </div>
             <div v-else>Nebol zvolený projekt</div>
           </div>
@@ -230,6 +263,7 @@ export default {
       employeeWorkGroups: [],
       inputNumberValues: [],
       employeesToRemove: [],
+      additionalEmployees: [],
     };
   },
 
@@ -287,45 +321,65 @@ export default {
         return;
       }
 
-      for (const [
-        index,
-        employeeWorkGroup,
-      ] of this.employeeWorkGroups.entries()) {
+      // Combine employeeWorkGroups and additionalEmployees into a single array
+      const allEmployees = [
+        ...this.employeeWorkGroups,
+        ...this.additionalEmployees,
+      ];
+
+      for (const [index, employee] of allEmployees.entries()) {
         const payload = {
           date: this.date,
           projectId: this.selectedProjectId,
-          employeeId: employeeWorkGroup.employee.id,
-          workedHours: this.inputNumberValues[index],
+          employeeId: employee.employee
+            ? employee.employee.id
+            : employee.selected,
+          workedHours: employee.hours
+            ? employee.hours
+            : this.inputNumberValues[index],
           workDescription: this.workDescription,
         };
-
         console.log("Sending payload:", payload); // log the payload
+
+        // Show success toast
+        this.$toast.add({
+          severity: "success",
+          summary: "Úspech",
+          detail: "Záznam bol úspešne uložený.",
+          life: 1200,
+        });
+
+        // Wait for 1 second before sending the API request
+        await new Promise((resolve) => setTimeout(resolve, 600));
 
         try {
           const response = await Api.post("/attendances", payload);
           console.log(response.data);
-
-          // Show success toast
-          this.$toast.add({
-            severity: "success",
-            summary: "Úspech",
-            detail: "Záznam bol úspešne uložený.",
-            life: 2500,
-          });
         } catch (error) {
           console.error("API call failed:", error);
         }
       }
-      // Reset selectedProjectId and workDescription
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      // Reset selectedProjectId, workDescription, and additionalEmployees
       this.selectedProjectId = null;
       this.workDescription = "";
+      this.additionalEmployees = [];
     },
 
-    editEmployeeWorkGroup(index) {
+    deleteEmployeeFromWorkGroup(index) {
       const employee = this.employeeWorkGroups[index].employee;
       this.employeesToRemove.push(employee.id);
       this.employeeWorkGroups.splice(index, 1);
       this.inputNumberValues.splice(index, 1);
+    },
+
+    addEmployee() {
+      this.additionalEmployees.push({ selected: null, hours: 8 });
+    },
+
+    deleteAdditionalEmployee(index) {
+      this.additionalEmployees.splice(index, 1);
     },
   },
 
@@ -342,7 +396,9 @@ export default {
         this.selectedProject =
           this.projects.find((project) => project.id === newVal) || {};
 
-        if (this.selectedProject.defaultWorkGroupId) {
+        if (!newVal) {
+          this.additionalEmployees = [];
+        } else if (this.selectedProject.defaultWorkGroupId) {
           const response = await Api.get(
             `/employeeWorkGroups?workGroupId=${this.selectedProject.defaultWorkGroupId}`
           );

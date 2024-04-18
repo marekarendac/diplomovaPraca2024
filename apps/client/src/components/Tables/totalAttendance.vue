@@ -6,8 +6,8 @@
           <div class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <InputText
-              v-model="filters1['global'].value"
-              placeholder="Zadaj klúčové slovo"
+              v-model="filters2['global'].value"
+              placeholder="Zadaj kľúčové slovo"
               size="30"
               class="mr-3"
             />
@@ -21,7 +21,7 @@
           showButtonBar
           showIcon
           iconDisplay="input"
-          placeholder="Zadaj rozsah"
+          placeholder="Zadaj mesiac"
           class="mr-3"
         />
       </template>
@@ -31,7 +31,7 @@
         <Button
           label="Export tabuľky"
           icon="pi pi-external-link"
-          @click="exportEmployees"
+          @click="exportFilterredProjects"
           class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
         />
       </template>
@@ -39,6 +39,7 @@
 
     <DataTable
       :value="filteredPostDetails"
+      :filters="filters2"
       :sortOrder="1"
       removableSort
       filterMode="lenient"
@@ -90,6 +91,7 @@ export default {
       projects: null,
       filteredPostDetails: null,
       filters1: { value: null },
+      filters2: { value: null },
     };
   },
   watch: {
@@ -108,6 +110,7 @@ export default {
   },
   created() {
     this.initFilters1();
+    this.initFilters2();
   },
 
   mounted() {
@@ -122,6 +125,11 @@ export default {
       });
     },
 
+    initFilters2() {
+      this.filters2 = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },

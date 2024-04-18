@@ -2,23 +2,23 @@
   <div class="card">
     <Toolbar class="mb-4">
       <template #start>
-        <Calendar
-          v-model="dates"
-          selectionMode="range"
-          :manualInput="false"
-          showButtonBar
-          showIcon
-          iconDisplay="input"
-          placeholder="Zadaj rozsah"
-          class="mr-3"
-        />
         <div class="text-left">
           <div class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <InputText
-              v-model="filters1['global'].value"
+              v-model="filters2['global'].value"
               placeholder="Zadaj kľúčové slovo"
-              size="40"
+              size="30"
+              class="mr-3"
+            />
+            <Calendar
+              v-model="filters1.value"
+              selectionMode="range"
+              :manualInput="false"
+              showButtonBar
+              showIcon
+              iconDisplay="input"
+              placeholder="Zadaj rozsah"
               class="mr-3"
             />
           </div>
@@ -27,7 +27,7 @@
         <Button
           label="Export tabuľky"
           icon="pi pi-external-link"
-          @click="exportEmployees"
+          @click="exportAttendances"
           class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
         />
       </template>
@@ -35,7 +35,7 @@
 
     <DataTable
       :value="postDetails"
-      :filters="filters1"
+      :filters="filters2"
       filterMode="lenient"
       sortField="date"
       :sortOrder="1"
@@ -45,19 +45,28 @@
       paginator
       :rows="10"
       :rowsPerPageOptions="[5, 10, 20, 50]"
-      ><Column field="date" header="Dátum" :sortable="true" ;> </Column>
+    >
       <Column
         field="fullName"
         header="Meno"
-        style="min-width: 20%"
         :sortable="true"
+        style="min-width: 14%"
         ;
-      ></Column>
+      ></Column
+      ><Column
+        field="date"
+        header="Dátum"
+        :sortable="true"
+        style="min-width: 13%"
+        ;
+      >
+      </Column>
 
       <Column
         field="attendanceProject.name"
         header="Projekt"
         :sortable="true"
+        style="min-width: 19%"
       ></Column>
 
       <Column
@@ -241,9 +250,6 @@
           </template>
         </InputNumber>
       </div>
-      <small class="p-error" v-if="submitted && !product.wage"
-        >Mzda je povinný údaj.</small
-      >
     </div>
 
     <template #footer>
@@ -270,7 +276,8 @@ export default {
   data() {
     return {
       postDetails: null,
-      filters1: {},
+      filters1: { value: null },
+      filters2: { value: null },
       dates: [],
       submitted: false,
       showProductDialog: false,
@@ -280,8 +287,23 @@ export default {
       deleteProductDialog: false,
     };
   },
+
+  watch: {
+    "filters1.value": function (newVal) {
+      if (newVal && newVal.length === 2) {
+        const [startDate, endDate] = newVal;
+        this.postDetails = this.allPostDetails.filter((post) => {
+          const postDate = new Date(post.date);
+          return postDate >= startDate && postDate <= endDate;
+        });
+      } else {
+        this.postDetails = this.allPostDetails;
+      }
+    },
+  },
   created() {
     this.initFilters1();
+    this.initFilters2();
   },
 
   mounted() {
@@ -300,22 +322,14 @@ export default {
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        // date: {
-        //   operator: FilterOperator.AND,
-        //   constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-        // },
       };
     },
-    // formatDate(value) {
-    //   return value.toLocaleDateString("en-US", {
-    //     day: "2-digit",
-    //     month: "2-digit",
-    //     year: "numeric",
-    //   });
-    // },
-    clearFilter1() {
-      this.initFilters1();
+    initFilters2() {
+      this.filters2 = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
     },
+
     hideDialog() {
       this.productDialog = false;
       this.submitted = false;
@@ -359,18 +373,19 @@ export default {
               updatedAttendance;
           }
 
-          Api.get("/attendances").then((response) => {
-            this.postDetails = response.data.map((attendanceEmployee) => ({
-              ...attendanceEmployee,
-              fullName: `${attendanceEmployee.attendanceEmployee.name} ${attendanceEmployee.attendanceEmployee.surname}`,
-            }));
-          });
-
+          // Show the toast message before the API call to get the updated list of attendances
           this.$toast.add({
             severity: "success",
             summary: "Úspech",
             detail: "Záznam bol editovaný!",
             life: 800,
+          });
+
+          Api.get("/attendances").then((response) => {
+            this.postDetails = response.data.map((attendanceEmployee) => ({
+              ...attendanceEmployee,
+              fullName: `${attendanceEmployee.attendanceEmployee.name} ${attendanceEmployee.attendanceEmployee.surname}`,
+            }));
           });
         })
         .catch((error) => console.log(error));
@@ -420,6 +435,35 @@ export default {
           // handle other types of errors or rethrow if you don't want to handle them here
           throw error;
         }
+      }
+    },
+
+    exportAttendances() {
+      if (window.confirm("Do you really want to download the file?")) {
+        console.log("exportAttendances called");
+        Api.get("/exportAttendances", {
+          responseType: "blob", // Important for handling the binary data
+        })
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "attendances.xlsx"; // default filename
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(
+                /filename="?([^"]+)"?\b/
+              );
+              if (fileNameMatch && fileNameMatch[1])
+                fileName = fileNameMatch[1];
+            }
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
   },

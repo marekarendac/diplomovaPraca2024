@@ -868,6 +868,7 @@ export default {
     removeWhitespace(field) {
       this.product[field] = this.product[field].replace(/\s/g, "");
     },
+
     exportEmployees() {
       if (window.confirm("Do you really want to download the file?")) {
         console.log("exportEmployees called");
