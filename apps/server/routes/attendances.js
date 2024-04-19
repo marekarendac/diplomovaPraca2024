@@ -16,4 +16,9 @@ router.get('/months/employees', services.attendances.getMonthlyEmployeeHours);
 
 router.get('/months/projects', services.attendances.getMonthlyProjectHours);
 
+router.get(
+  '/projects/employees',
+  services.attendances.getTotalEmployeeHoursForAllProjects,
+);
+
 module.exports = router;

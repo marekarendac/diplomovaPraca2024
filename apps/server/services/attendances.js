@@ -157,6 +157,50 @@ const getMonthlyProjectHours = async (req, res) => {
   res.status(200).send(monthlyAttendances);
 };
 
+const getTotalEmployeeHoursForAllProjects = async (req, res) => {
+  const projects = await req.context.models.Project.findAll({
+    include: [
+      {
+        model: req.context.models.Attendance,
+        include: [
+          { model: req.context.models.Employee, as: 'attendanceEmployee' },
+        ],
+      },
+    ],
+  });
+
+  const result = projects.map((project) => {
+    const employeeHours = project.Attendances.reduce((acc, cur) => {
+      const employeeFullName = `${cur.attendanceEmployee.name} ${cur.attendanceEmployee.surname}`;
+
+      const employeeItemIdx = acc.findIndex(
+        (item) => item.employee === employeeFullName,
+      );
+
+      if (employeeItemIdx !== -1) {
+        acc[employeeItemIdx].hours += parseFloat(cur.workedHours);
+
+        return acc;
+      }
+
+      acc.push({
+        employee: employeeFullName,
+        hours: parseFloat(cur.workedHours),
+      });
+
+      return acc;
+    }, []);
+
+    return {
+      projectId: project.id,
+      projectName: project.name, // assuming the project name is stored in a 'name' field
+      employees: employeeHours,
+    };
+  });
+
+  res.status(200).send(result);
+};
+
 module.exports = {
   findAll,
   post,
@@ -164,4 +208,5 @@ module.exports = {
   update,
   getMonthlyEmployeeHours,
   getMonthlyProjectHours,
+  getTotalEmployeeHoursForAllProjects,
 };
