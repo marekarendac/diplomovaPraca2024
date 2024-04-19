@@ -136,9 +136,19 @@ export default {
 
     exportFilterredProjects() {
       if (window.confirm("Do you really want to download the file?")) {
-        Api.get("/exportFilterredProjects", {
-          responseType: "blob", // Important for handling the binary data
-        })
+        let dates = this.dates.map((dateString) => {
+          let date = new Date(dateString);
+          date.setDate(date.getDate() + 1); // add one day to the date
+          return date.toISOString();
+        });
+
+        Api.post(
+          "/exportFilterredProjects",
+          { dates: dates }, // send the modified dates in the request body
+          {
+            responseType: "blob", // Important for handling the binary data
+          }
+        )
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
