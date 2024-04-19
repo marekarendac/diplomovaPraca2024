@@ -137,15 +137,18 @@ export default {
     exportEmployeesMonthlyWages() {
       if (window.confirm("Do you really want to download the file?")) {
         console.log("exportEmployees called");
-        Api.post(
-          "/exportEmployeesMonthlyWages",
-          {
-            month: this.filters1.value, // send the month value in the request body
-          },
-          {
-            responseType: "blob", // Important for handling the binary data
-          }
-        )
+        let requestBody = {};
+
+        if (this.filters1.value) {
+          let date = new Date(this.filters1.value);
+          date.setDate(date.getDate() + 1); // add one day to the date
+          let month = date.toISOString();
+          requestBody = { month: month };
+        }
+
+        Api.post("/exportEmployeesMonthlyWages", requestBody, {
+          responseType: "blob", // Important for handling the binary data
+        })
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
