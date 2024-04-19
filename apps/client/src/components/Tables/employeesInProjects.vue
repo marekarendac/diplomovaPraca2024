@@ -136,25 +136,15 @@ export default {
 
     exportFilterredProjects() {
       if (window.confirm("Do you really want to download the file?")) {
-        let dates = this.dates.map((dateString) => {
-          let date = new Date(dateString);
-          date.setDate(date.getDate() + 1); // add one day to the date
-          return date.toISOString();
-        });
-
-        Api.post(
-          "/exportFilterredProjects",
-          { dates: dates }, // send the modified dates in the request body
-          {
-            responseType: "blob", // Important for handling the binary data
-          }
-        )
+        Api.get("/exportFilterredProjects", {
+          responseType: "blob", // Important for handling the binary data
+        })
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
             link.href = url;
             const contentDisposition = response.headers["content-disposition"];
-            let fileName = "filterredProjects.xlsx"; // default filename
+            let fileName = "filterredEmployeesByProjects.xlsx"; // default filename
             if (contentDisposition) {
               const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
               if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
