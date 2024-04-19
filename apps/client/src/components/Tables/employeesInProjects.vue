@@ -21,7 +21,7 @@
           showButtonBar
           showIcon
           iconDisplay="input"
-          placeholder="Zadaj mesiac"
+          placeholder="Zadaj hľadaný mesiac"
           class="mr-3"
           disabled
         /><Button
@@ -31,9 +31,7 @@
           @click="clearFilter1()"
         />
       </template>
-      <template #empty> No customers found. </template>
-      <template #loading> Loading customers data. Please wait. </template
-      ><template #end>
+      <template #end>
         <Button
           label="Export tabuľky"
           icon="pi pi-external-link"

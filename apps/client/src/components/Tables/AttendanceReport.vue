@@ -12,9 +12,8 @@
               class="mr-3"
             />
             <Calendar
-              v-model="filters1.value"
+              v-model="dates"
               selectionMode="range"
-              :manualInput="false"
               showButtonBar
               showIcon
               iconDisplay="input"
@@ -39,7 +38,7 @@
     </Toolbar>
 
     <DataTable
-      :value="postDetails"
+      :value="filteredPostDetails"
       :filters="filters2"
       filterMode="lenient"
       sortField="date"
@@ -64,6 +63,7 @@
         :sortable="true"
         style="min-width: 13%"
         ;
+        filterField="date"
       >
       </Column>
 
@@ -276,14 +276,14 @@
 
 <script>
 import Api from "@/services/Api.js";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 export default {
   data() {
     return {
-      postDetails: null,
+      postDetails: [],
       filters1: { value: null },
       filters2: { value: null },
-      dates: [],
+      dates: null,
       submitted: false,
       showProductDialog: false,
       productDialog: false,
@@ -292,21 +292,12 @@ export default {
       deleteProductDialog: false,
     };
   },
-
   watch: {
-    "filters1.value": function (newVal) {
-      console.log("filters1.value changed to", newVal);
-      if (newVal && newVal.length === 2) {
-        const [startDate, endDate] = newVal;
-        this.postDetails = this.allPostDetails.filter((post) => {
-          const postDate = new Date(post.date);
-          return postDate >= startDate && postDate <= endDate;
-        });
-      } else {
-        this.postDetails = this.allPostDetails;
-      }
+    dates(newVal) {
+      console.log(newVal);
     },
   },
+
   created() {
     this.initFilters1();
     this.initFilters2();
@@ -328,6 +319,7 @@ export default {
     clearFilter1() {
       this.initFilters1();
       this.initFilters2();
+      this.dates = null;
     },
 
     initFilters1() {
@@ -452,9 +444,13 @@ export default {
     exportAttendances() {
       if (window.confirm("Do you really want to download the file?")) {
         console.log("exportAttendances called");
-        Api.get("/exportAttendances", {
-          responseType: "blob", // Important for handling the binary data
-        })
+        Api.post(
+          "/exportAttendances",
+          { dates: this.dates }, // send the dates in the request body
+          {
+            responseType: "blob", // Important for handling the binary data
+          }
+        )
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
@@ -476,6 +472,20 @@ export default {
             console.error(error);
           });
       }
+    },
+  },
+  computed: {
+    filteredPostDetails() {
+      if (!this.dates || this.dates.length !== 2) {
+        return this.postDetails;
+      }
+
+      const [startDate, endDate] = this.dates;
+
+      return this.postDetails.filter((post) => {
+        const postDate = new Date(post.date);
+        return postDate >= startDate && postDate <= endDate;
+      });
     },
   },
 };

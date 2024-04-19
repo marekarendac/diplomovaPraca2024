@@ -21,7 +21,7 @@
           showButtonBar
           showIcon
           iconDisplay="input"
-          placeholder="Zadaj mesiac"
+          placeholder="Zadaj hľadaný mesiac"
           class="mr-3"
         /><Button
           class="p-button-outlined"
@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       postDetails: null,
-      date: null,
+      dates: [],
       projects: null,
       filteredPostDetails: null,
       filters1: { value: null },

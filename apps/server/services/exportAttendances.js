@@ -1,17 +1,29 @@
+const { Op } = require('sequelize');
 const xlsx = require('xlsx');
 
 const getExportAttendances = async (req, res) => {
+  const { dates } = req.body;
+
+  const whereClause = {};
+  if (dates && dates.length === 2) {
+    const [startDate, endDate] = dates;
+    whereClause.date = {
+      [Op.between]: [new Date(startDate), new Date(endDate)],
+    };
+  }
+
   const attendances = await req.context.models.Attendance.findAll({
+    where: whereClause,
     include: [
       {
         model: req.context.models.Project,
-        as: 'attendanceProject', // Corrected alias
+        as: 'attendanceProject',
         attributes: ['name'],
       },
       {
         model: req.context.models.Employee,
-        as: 'attendanceEmployee', // Corrected alias
-        attributes: ['name', 'surname'], // Include 'surname'
+        as: 'attendanceEmployee',
+        attributes: ['name', 'surname'],
       },
     ],
   });

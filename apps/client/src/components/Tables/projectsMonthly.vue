@@ -21,7 +21,7 @@
           showButtonBar
           showIcon
           iconDisplay="input"
-          placeholder="Zadaj mesiac"
+          placeholder="Zadaj hľadaný mesiac"
           class="mr-3"
         /><Button
           class="p-button-outlined"
