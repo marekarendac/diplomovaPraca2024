@@ -137,10 +137,15 @@ export default {
     exportEmployeesMonthlyWages() {
       if (window.confirm("Do you really want to download the file?")) {
         console.log("exportEmployees called");
+
+        let date = new Date(this.filters1.value);
+        date.setDate(date.getDate() + 1); // add one day to the date
+        let month = date.toISOString();
+
         Api.post(
           "/exportEmployeesMonthlyWages",
           {
-            month: this.filters1.value, // send the month value in the request body
+            month: month, // send the modified month value in the request body
           },
           {
             responseType: "blob", // Important for handling the binary data
