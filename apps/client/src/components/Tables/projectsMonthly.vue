@@ -139,19 +139,18 @@ export default {
 
     exportProjectsMonthly() {
       if (window.confirm("Do you really want to download the file?")) {
-        let date = new Date(this.filters1.value);
-        date.setDate(date.getDate() + 1); // add one day to the date
-        let month = date.toISOString();
+        let requestBody = {};
 
-        Api.post(
-          "/exportProjectsMonthly",
-          {
-            month: month, // send the modified month value in the request body
-          },
-          {
-            responseType: "blob", // Important for handling the binary data
-          }
-        )
+        if (this.filters1.value) {
+          let date = new Date(this.filters1.value);
+          date.setDate(date.getDate() + 1); // add one day to the date
+          let month = date.toISOString();
+          requestBody = { month: month };
+        }
+
+        Api.post("/exportProjectsMonthly", requestBody, {
+          responseType: "blob", // Important for handling the binary data
+        })
           .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement("a");
