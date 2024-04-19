@@ -21,8 +21,9 @@ const employeeWorkGroupsRouter = require('./routes/employeeWorkGroups');
 const projectsRouter = require('./routes/projects');
 const exportProjectsRouter = require('./routes/exportProjects');
 const exportAttendancesRouter = require('./routes/exportAttendances');
-
-// const { populateDB } = require('./src/helpers');
+const exportEmployeesMonthlyWagesRouter = require('./routes/exportEmployeesMonthlyWages');
+const exportFilterredProjectsRouter = require('./routes/exportFilterredProjects');
+const exportProjectsMonthlyRouter = require('./routes/exportProjectsMonthly');
 
 const app = express();
 const port = process.env.SERVICE_PORT;
@@ -55,6 +56,9 @@ app.use('/employeeWorkGroups', employeeWorkGroupsRouter);
 app.use('/projects', projectsRouter);
 app.use('/exportProjects', exportProjectsRouter);
 app.use('/exportAttendances', exportAttendancesRouter);
+app.use('/exportEmployeesMonthlyWages', exportEmployeesMonthlyWagesRouter);
+app.use('/exportFilterredProjects', exportFilterredProjectsRouter);
+app.use('/exportProjectsMonthly', exportProjectsMonthlyRouter);
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}!`);

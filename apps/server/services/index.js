@@ -14,6 +14,9 @@ const employeeWorkGroups = require('./employeeWorkGroups');
 const projects = require('./projects');
 const exportProjects = require('./exportProjects');
 const exportAttendances = require('./exportAttendances');
+const exportEmployeesMonthlyWages = require('./exportEmployeesMonthlyWages');
+const exportFilterredProjects = require('./exportFilterredProjects');
+const exportProjectsMonthly = require('./exportProjectsMonthly');
 
 module.exports = {
   employees,
@@ -32,4 +35,7 @@ module.exports = {
   projects,
   exportProjects,
   exportAttendances,
+  exportEmployeesMonthlyWages,
+  exportFilterredProjects,
+  exportProjectsMonthly,
 };

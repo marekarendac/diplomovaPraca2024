@@ -81,7 +81,11 @@ const getMonthlyEmployeeHours = async (req, res) => {
   const attendances = await req.context.models.Attendance.findAll({
     include: [
       { model: req.context.models.Project, as: 'attendanceProject' },
-      { model: req.context.models.Employee, as: 'attendanceEmployee' },
+      {
+        model: req.context.models.Employee,
+        as: 'attendanceEmployee',
+        attributes: ['name', 'surname', 'wage'], // include the 'wage' attribute
+      },
     ],
   });
 
@@ -108,6 +112,7 @@ const getMonthlyEmployeeHours = async (req, res) => {
       month: formattedMonth,
       employee: employeeName,
       hours: parseFloat(cur.workedHours),
+      wage: cur.attendanceEmployee.wage, // add the 'wage' attribute to the response
     });
 
     return acc;
@@ -169,34 +174,30 @@ const getTotalEmployeeHoursForAllProjects = async (req, res) => {
     ],
   });
 
-  const result = projects.map((project) => {
-    const employeeHours = project.Attendances.reduce((acc, cur) => {
-      const employeeFullName = `${cur.attendanceEmployee.name} ${cur.attendanceEmployee.surname}`;
+  const result = projects.reduce((acc, project) => {
+    const employeeHours = project.Attendances.reduce((acc, attendance) => {
+      const employeeFullName = `${attendance.attendanceEmployee.name} ${attendance.attendanceEmployee.surname}`;
 
       const employeeItemIdx = acc.findIndex(
         (item) => item.employee === employeeFullName,
       );
 
       if (employeeItemIdx !== -1) {
-        acc[employeeItemIdx].hours += parseFloat(cur.workedHours);
-
-        return acc;
+        acc[employeeItemIdx].hours += parseFloat(attendance.workedHours);
+      } else {
+        acc.push({
+          projectId: project.id,
+          projectName: project.name, // assuming the project name is stored in a 'name' field
+          employee: employeeFullName,
+          hours: parseFloat(attendance.workedHours),
+        });
       }
-
-      acc.push({
-        employee: employeeFullName,
-        hours: parseFloat(cur.workedHours),
-      });
 
       return acc;
     }, []);
 
-    return {
-      projectId: project.id,
-      projectName: project.name, // assuming the project name is stored in a 'name' field
-      employees: employeeHours,
-    };
-  });
+    return [...acc, ...employeeHours];
+  }, []);
 
   res.status(200).send(result);
 };

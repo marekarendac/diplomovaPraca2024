@@ -30,6 +30,8 @@ import InputMask from "primevue/inputmask";
 import MultiSelect from "primevue/multiselect";
 import Splitter from "primevue/splitter";
 import SplitterPanel from "primevue/splitterpanel";
+import TabView from "primevue/tabview";
+import TabPanel from "primevue/tabpanel";
 
 import "primeicons/primeicons.css";
 import "primevue/resources/themes/saga-blue/theme.css";
@@ -66,6 +68,8 @@ app.component("InputMask", InputMask);
 app.component("MultiSelect", MultiSelect);
 app.component("Splitter", Splitter);
 app.component("SplitterPanel", SplitterPanel);
+app.component("TabView", TabView);
+app.component("TabPanel", TabPanel);
 
 //AUTENTICACION PLUGIN
 
@@ -77,7 +81,7 @@ app.use(
       redirect_uri: window.location.origin,
     },
     useRefreshTokens: true,
-    cacheLocation: "localstorage"
+    cacheLocation: "localstorage",
   })
 );
 

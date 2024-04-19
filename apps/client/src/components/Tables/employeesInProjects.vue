@@ -23,6 +23,12 @@
           iconDisplay="input"
           placeholder="Zadaj mesiac"
           class="mr-3"
+          disabled
+        /><Button
+          class="p-button-outlined"
+          type="button"
+          icon="pi pi-filter-slash"
+          @click="clearFilter1()"
         />
       </template>
       <template #empty> No customers found. </template>
@@ -49,22 +55,13 @@
       :rows="10"
       :rowsPerPageOptions="[5, 10, 20, 50]"
     >
-      <Column field="project" header="Projekt" :sortable="true"> </Column>
-
-      <Column
-        field="status"
-        header="Status projektu"
-        :sortable="true"
-        filterField="date"
-        ;
-      >
+      <Column field="projectName" header="Názov projektu" :sortable="true" ;>
       </Column>
 
       <Column
-        field="month"
-        header="Mesiac"
+        field="employee"
+        header="Zamestnanec na projekte"
         :sortable="true"
-        filterField="date"
         ;
       >
       </Column>
@@ -72,7 +69,6 @@
         field="hours"
         header="Odpracované hodiny celkom"
         :sortable="true"
-        filterField="date"
         ;
       >
       </Column>
@@ -118,11 +114,15 @@ export default {
   },
   methods: {
     getPostDetails() {
-      Api.get("/attendances/months/projects").then((response) => {
-        console.log("Monthly project hours:", response.data);
+      Api.get("/attendances/projects/employees").then((response) => {
         this.postDetails = response.data;
         this.filteredPostDetails = response.data;
       });
+    },
+
+    clearFilter1() {
+      this.initFilters1();
+      this.initFilters2();
     },
 
     initFilters2() {
@@ -134,6 +134,31 @@ export default {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+    },
+
+    exportFilterredProjects() {
+      if (window.confirm("Do you really want to download the file?")) {
+        Api.get("/exportFilterredProjects", {
+          responseType: "blob", // Important for handling the binary data
+        })
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "filterredProjects.xlsx"; // default filename
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
+              if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+            }
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
   },
 };

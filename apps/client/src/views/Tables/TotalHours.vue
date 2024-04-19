@@ -1,22 +1,24 @@
 <script setup>
-import AttendanceReport from "@/components/Tables/totalAttendance.vue";
-import Total from "@/components/Cards/Total.vue";
+import ProjectsMonthly from "@/components/Tables/projectsMonthly.vue";
+import EmployeesMonthly from "@/components/Tables/employeesMonthly.vue";
+import EmployeesInProjects from "@/components/Tables/employeesInProjects.vue";
 </script>
 <template>
-  <div class="card">
-    <div class="flex card-container indigo-container">
-      <div class="flex-1">
-        <AttendanceReport />
+  <TabView>
+    <TabPanel header="PROJEKTY">
+      <div>
+        <ProjectsMonthly />
       </div>
-      <div class="card">
-        <div>
-          <div class="inline-block text-left w-20rem ml-4">
-            <Total />
-          </div>
-        </div>
+    </TabPanel>
+    <TabPanel header="ZAMESTNANCI">
+      <div>
+        <EmployeesMonthly />
       </div>
-    </div>
-  </div>
+    </TabPanel>
+    <TabPanel header="ZAMESTNANCI V PROJEKTOCH">
+      <div><EmployeesInProjects /></div>
+    </TabPanel>
+  </TabView>
 </template>
 
 <style></style>

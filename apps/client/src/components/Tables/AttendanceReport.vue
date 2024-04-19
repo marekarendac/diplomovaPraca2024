@@ -20,6 +20,11 @@
               iconDisplay="input"
               placeholder="Zadaj rozsah"
               class="mr-3"
+            /><Button
+              class="p-button-outlined"
+              type="button"
+              icon="pi pi-filter-slash"
+              @click="clearFilter1()"
             />
           </div>
         </div> </template
@@ -290,6 +295,7 @@ export default {
 
   watch: {
     "filters1.value": function (newVal) {
+      console.log("filters1.value changed to", newVal);
       if (newVal && newVal.length === 2) {
         const [startDate, endDate] = newVal;
         this.postDetails = this.allPostDetails.filter((post) => {
@@ -317,6 +323,11 @@ export default {
           fullName: `${attendanceEmployee.attendanceEmployee.name} ${attendanceEmployee.attendanceEmployee.surname}`,
         }));
       });
+    },
+
+    clearFilter1() {
+      this.initFilters1();
+      this.initFilters2();
     },
 
     initFilters1() {

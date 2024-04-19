@@ -2,14 +2,17 @@
   <div class="card">
     <Toolbar class="mb-4">
       <template #start>
-        <!--  <div class="text-left">
+        <div class="text-left">
           <div class="p-input-icon-left">
             <i class="pi pi-search"></i>
             <InputText
-              v-model="filters1['global'].value"
-              placeholder="2022-mesiac"
-              size="25"
-            /> -->
+              v-model="filters2['global'].value"
+              placeholder="Zadaj kľúčové slovo"
+              size="30"
+              class="mr-3"
+            />
+          </div>
+        </div>
         <Calendar
           v-model="filters1.value"
           view="month"
@@ -18,24 +21,28 @@
           showButtonBar
           showIcon
           iconDisplay="input"
-          placeholder="Zadaj rozsah"
+          placeholder="Zadaj mesiac"
           class="mr-3"
-          style="width: 50%"
+        /><Button
+          class="p-button-outlined"
+          type="button"
+          icon="pi pi-filter-slash"
+          @click="clearFilter1()"
         />
-
+      </template>
+      <template #end>
         <Button
-          label="Export tabuľky"
+          label="Export výplat"
           icon="pi pi-external-link"
-          @click="exportEmployees"
+          @click="exportEmployeesMonthlyWages"
           class="p-button-rounded p-button-secondary p-button-raised p-button-outlined mr-2"
         />
-        <!-- </div> -->
-        <!--  </div> -->
       </template>
     </Toolbar>
 
     <DataTable
       :value="filteredPostDetails"
+      :filters="filters2"
       :sortOrder="1"
       removableSort
       filterMode="lenient"
@@ -46,12 +53,17 @@
       :rowsPerPageOptions="[5, 10, 20, 50]"
     >
       <Column field="employee" header="Meno" :sortable="true"></Column
-      ><Column field="month" header="Mesiac" :sortable="true"></Column>
+      ><Column field="wage" header="Plat [€]" :sortable="true"></Column
+      ><Column
+        field="month"
+        header="Mesiac"
+        :sortable="true"
+        filterField="date"
+      ></Column>
       <Column
         field="hours"
         header="Odpracované hodiny celkom"
         :sortable="true"
-        filterField="date"
         ;
       >
       </Column>
@@ -61,17 +73,22 @@
 
 <script>
 import Api from "@/services/Api.js";
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 export default {
   data() {
     return {
       postDetails: null,
-      filters1: { value: null },
+      date: null,
+      projects: null,
       filteredPostDetails: null,
+      filters1: { value: null },
+      filters2: { value: null },
     };
   },
+
   watch: {
     "filters1.value": function (newVal) {
+      console.log("filters1.value changed to", newVal); // Added console.log here
       if (newVal) {
         const selectedMonth = `${newVal.getFullYear()}-${
           newVal.getMonth() + 1
@@ -84,8 +101,10 @@ export default {
       }
     },
   },
+
   created() {
     this.initFilters1();
+    this.initFilters2();
   },
 
   mounted() {
@@ -99,10 +118,55 @@ export default {
       });
     },
 
+    clearFilter1() {
+      this.initFilters1();
+      this.initFilters2();
+    },
+
     initFilters1() {
       this.filters1 = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
+    },
+    initFilters2() {
+      this.filters2 = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      };
+    },
+
+    exportEmployeesMonthlyWages() {
+      if (window.confirm("Do you really want to download the file?")) {
+        console.log("exportEmployees called");
+        Api.post(
+          "/exportEmployeesMonthlyWages",
+          {
+            month: this.filters1.value, // send the month value in the request body
+          },
+          {
+            responseType: "blob", // Important for handling the binary data
+          }
+        )
+          .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            const contentDisposition = response.headers["content-disposition"];
+            let fileName = "employeesMonthlyWages.xlsx"; // default filename
+            if (contentDisposition) {
+              const fileNameMatch = contentDisposition.match(
+                /filename="?([^"]+)"?\b/
+              );
+              if (fileNameMatch && fileNameMatch[1])
+                fileName = fileNameMatch[1];
+            }
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     },
   },
 };
