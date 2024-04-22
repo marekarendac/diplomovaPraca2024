@@ -158,7 +158,8 @@
                 <Dropdown
                   id="'additional-employee' + index"
                   v-model="additionalEmployee.selected"
-                  :options="filteredEmployees"
+                  :options="filteredEmployees()"
+                  :optionDisabled="(option) => option.disabled"
                   optionLabel="fullName"
                   optionValue="id"
                   filter
@@ -173,6 +174,8 @@
                   buttonLayout="horizontal"
                   :step="0.5"
                   style="margin-left: 10px"
+                  :min="0.5"
+                  :max="24"
                 >
                   <template #incrementbuttonicon>
                     <span class="pi pi-plus" />
@@ -214,6 +217,8 @@
                       buttonLayout="horizontal"
                       :step="0.5"
                       style="margin-left: 10px"
+                      :min="0.5"
+                      :max="24"
                     >
                       <template #incrementbuttonicon>
                         <span class="pi pi-plus" />
@@ -406,6 +411,30 @@ export default {
     deleteAdditionalEmployee(index) {
       this.additionalEmployees.splice(index, 1);
     },
+
+    filteredEmployees() {
+      if (!this.employeeWorkGroups || !this.employees) {
+        return [];
+      }
+
+      // Get the ids of the employees that are already shown
+      const shownEmployeeIds = this.employeeWorkGroups.map(
+        (employeeWorkGroup) => employeeWorkGroup.employee.id
+      );
+
+      // Map the employees array to add a disabled property to the shown employees
+      const mapped = this.employees.map((employee) => ({
+        ...employee,
+        disabled:
+          shownEmployeeIds.includes(employee.id) ||
+          this.additionalEmployees.some(
+            (additionalEmployee) => additionalEmployee.selected === employee.id
+          ),
+      }));
+
+      console.log("additionalEmployees", this.additionalEmployees);
+      return mapped;
+    },
   },
 
   watch: {
@@ -439,25 +468,6 @@ export default {
           this.employeeWorkGroups = [];
         }
       },
-    },
-  },
-  computed: {
-    filteredEmployees() {
-      if (!this.employeeWorkGroups || !this.employees) {
-        return [];
-      }
-
-      // Get the ids of the employees that are already shown
-      const shownEmployeeIds = this.employeeWorkGroups.map(
-        (employeeWorkGroup) => employeeWorkGroup.employee.id
-      );
-
-      // Filter the employees array to exclude the shown employees
-      const filtered = this.employees.filter(
-        (employee) => !shownEmployeeIds.includes(employee.id)
-      );
-
-      return filtered;
     },
   },
 };

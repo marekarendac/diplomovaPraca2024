@@ -22,7 +22,7 @@ const attendance = (sequelize) => {
         allowNull: false,
       },
       workedHours: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(7, 2),
         allowNull: true,
       },
       workDescription: {
