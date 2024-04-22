@@ -126,7 +126,7 @@
         </SplitterPanel>
 
         <SplitterPanel class="flex align-items-center justify-content-center">
-          <div>
+          <div style="margin-top: 20px">
             <Button
               label="Pridaj ďalšieho člena"
               @click="addEmployee"
@@ -230,7 +230,9 @@
                   </div>
                 </div>
               </div>
-              <div v-else>Projekt nemá pridelenú pracovnú skupinu</div>
+              <div v-else style="border: 20px solid transparent">
+                Projekt nemá pridelenú pracovnú skupinu
+              </div>
               <Button
                 label="Ulož záznamy"
                 icon="pi pi-check"
