@@ -14,7 +14,7 @@
             :options="projects"
             optionLabel="name"
             optionValue="id"
-            placeholder="Select a project"
+            placeholder="Zvoľ projekt"
             showClear
           />
         </div>

@@ -2,6 +2,7 @@
 import CardEq from "@/components/Cards/CardEquipment.vue";
 import CardEm from "@/components/Cards/CardEmployee.vue";
 import CardVe from "@/components/Cards/CardVehicle.vue";
+import CardAt from "@/components/Cards/CardAttendance.vue";
 </script>
 
 <template>

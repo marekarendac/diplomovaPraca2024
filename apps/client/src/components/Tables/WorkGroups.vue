@@ -42,6 +42,7 @@
       </template>
     </Toolbar>
     <DataTable
+      :filters="filters1"
       :value="mappedPostDetails"
       rowGroupMode="rowspan"
       groupRowsBy="workGroupFullName"
