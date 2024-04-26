@@ -8,22 +8,6 @@
           class="p-button-rounded p-button-success mr-2 p-button-raised"
           @click="openNew"
         />
-        <div class="text-left">
-          <div class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <InputText
-              v-model="filters1['global'].value"
-              placeholder="Zadaj kľúčové slovo"
-              size="50"
-            />
-            <Button
-              class="p-button-outlined ml-2"
-              type="button"
-              icon="pi pi-filter-slash"
-              @click="clearFilter1()"
-            />
-          </div>
-        </div>
       </template>
       <template #end>
         <Button
@@ -42,7 +26,6 @@
       </template>
     </Toolbar>
     <DataTable
-      :filters="filters1"
       :value="mappedPostDetails"
       rowGroupMode="rowspan"
       groupRowsBy="workGroupFullName"
@@ -86,9 +69,6 @@
           autofocus
           :class="{ 'p-invalid': submitted && !product.workGroup }"
         />
-        <small class="p-error" v-if="submitted && !product.workGroup"
-          >Názov pracovnej skupiny je povinné pole.</small
-        >
       </div>
     </div>
 
@@ -167,9 +147,6 @@
           :class="{ 'p-invalid': submitted && !selectedWorkGroup.name }"
           placeholder="Pracovná skupina"
         />
-        <small class="p-error" v-if="submitted && !selectedWorkGroup.name"
-          >Názov pracovnej skupiny je povinné pole.</small
-        >
       </div>
     </div>
 
@@ -279,7 +256,6 @@
 
 <script>
 import Api from "@/services/Api.js";
-import { FilterMatchMode } from "primevue/api";
 
 export default {
   data() {
@@ -291,16 +267,12 @@ export default {
       productDialogEdit: false,
       product: {},
       deleteProductDialog: false,
-      filters1: {},
+
       selectedEmployees: [],
       selectedWorkGroupEmployees: [],
       employeesToRemove: [],
       selectedWorkGroup: null,
     };
-  },
-
-  created() {
-    this.initFilters1();
   },
 
   mounted() {
@@ -331,10 +303,6 @@ export default {
       console.log("First element of postDetails:", this.postDetails[0]);
       console.log("First element of employees:", this.employees[0]);
       console.log("First element of worgroups:", this.workGroups[0]);
-    },
-
-    clearFilter1() {
-      this.initFilters1();
     },
 
     openNew() {
@@ -519,17 +487,6 @@ export default {
       }
 
       return index;
-    },
-    initFilters1() {
-      this.filters1 = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      };
-    },
-    clearFilter1() {
-      this.initFilters1();
-    },
-    removeWhitespace(field) {
-      this.product[field] = this.product[field].replace(/\s/g, "");
     },
 
     handleWorkGroupChange(selectedWorkGroup) {
